@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
@@ -55,6 +56,10 @@ namespace WebCadastrador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Nome,Id,Preco,Fabricante")] Produto produto)
         {
+            if (!produto.Preco.ToString().EndsWith("3"))
+            {
+                ModelState.AddModelError("Preco", "O preço deve terminar em 3.");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(produto);
@@ -93,10 +98,13 @@ namespace WebCadastrador.Controllers
             {
                 return NotFound();
             }
-
             if (id != produto.Id)
             {
                 return NotFound();
+            }
+            if (!produto.Preco.ToString().EndsWith("3"))
+            {
+                ModelState.AddModelError("Preco", "O preço deve terminar em 3.");
             }
 
             if (ModelState.IsValid)
