@@ -55,6 +55,10 @@ namespace WebCadastrador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,CNPJ,Endereco")] Fabricante fabricante)
         {
+            if (!fabricante.IsCnpj())
+            {
+                ModelState.AddModelError("CNPJ", "O CNPJ é inválido");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(fabricante);

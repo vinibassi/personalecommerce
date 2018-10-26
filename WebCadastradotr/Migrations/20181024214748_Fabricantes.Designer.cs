@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebCadastrador.Models;
 
 namespace WebCadastrador.Migrations
 {
     [DbContext(typeof(WebCadastradorContext))]
-    partial class WebCadastradorContextModelSnapshot : ModelSnapshot
+    [Migration("20181024214748_Fabricantes")]
+    partial class Fabricantes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,9 +26,8 @@ namespace WebCadastrador.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CNPJ")
-                        .IsRequired()
-                        .HasMaxLength(18);
+                    b.Property<int>("CNPJ")
+                        .HasMaxLength(14);
 
                     b.Property<string>("Endereco")
                         .IsRequired();
