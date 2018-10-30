@@ -1,4 +1,4 @@
-﻿@model WebCadastrador.Models.Produto
+﻿@model WebCadastrador.Models.ProdutoCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -19,7 +19,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Fabricante" class="control-label"></label>
-                <input asp-for="Fabricante" class="form-control" />
+                <select asp-for="Fabricante"
+                        asp-items="@ViewBag.Fabricantes"></select>
                 <span asp-validation-for="Fabricante" class="text-danger"></span>
             </div>
             <div class="form-group">

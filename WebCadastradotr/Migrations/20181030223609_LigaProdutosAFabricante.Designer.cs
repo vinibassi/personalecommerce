@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebCadastrador.Models;
 
 namespace WebCadastrador.Migrations
 {
     [DbContext(typeof(WebCadastradorContext))]
-    partial class WebCadastradorContextModelSnapshot : ModelSnapshot
+    [Migration("20181030223609_LigaProdutosAFabricante")]
+    partial class LigaProdutosAFabricante
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

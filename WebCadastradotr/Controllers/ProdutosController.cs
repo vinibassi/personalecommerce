@@ -46,6 +46,8 @@ namespace WebCadastrador.Controllers
         // GET: Produtos/Create
         public IActionResult Create()
         {
+            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
+            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
             return View();
         }
 
@@ -54,20 +56,28 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nome,Id,Preco,Fabricante")] Produto produto)
+        public async Task<IActionResult> Create(ProdutoCreateViewModel produtoCreateViewModel)
         {
-            if (!produto.Preco.ToString().EndsWith("3"))
+            if (!produtoCreateViewModel.Preco.ToString().EndsWith("3"))
             {
                 ModelState.AddModelError("Preco", "O preço deve terminar em 3.");
             }
             if (ModelState.IsValid)
             {
+                var fabricante = _context.Fabricante.FirstOrDefault(p => p.Id == produtoCreateViewModel.Fabricante);
+                var produto = new Produto
+                {
+                    Nome = produtoCreateViewModel.Nome,
+                    Preco = produtoCreateViewModel.Preco,
+                    Fabricante = fabricante
+                };
                 _context.Add(produto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
-            return View(produto);
+            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
+            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+            return View(produtoCreateViewModel);
         }
 
         // GET: Produtos/Edit/5
