@@ -29,6 +29,21 @@
             @Html.DisplayFor(model => model.Endereco)
         </dd>
     </dl>
+    @if (Model.Produtos.Any())
+    {
+    <div>
+        <h4>
+            @Html.DisplayNameFor(model => model.Produtos)
+        </h4>
+        <ul>
+            @foreach (var p in Model.Produtos)
+            {
+                <li>@p.Nome</li>
+            }
+        </ul>
+    </div>
+    }
+    
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

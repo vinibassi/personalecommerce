@@ -38,7 +38,7 @@ namespace WebCadastrador.Controllers
             {
                 return NotFound();
             }
-
+            var produtos = fabricante.Produtos;
             return View(fabricante);
         }
 
