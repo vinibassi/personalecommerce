@@ -14,7 +14,8 @@ namespace WebCadastrador.Models
         public string Nome { get; set; }
         [Required]
         [MinLength(14, ErrorMessage = "O CNPJ do fabricante deve ter no mínimo 14 caracteres.")]
-        [MaxLength(18, ErrorMessage = "O CNPJ do fabricante deve ter no máximo 18 caracteres.")]
+        [RegularExpression(@"\d+", ErrorMessage ="Apenas números são permitidos.")]
+        [MaxLength(14, ErrorMessage = "O CNPJ do fabricante deve ter no máximo 14 caracteres.")]
         public string CNPJ { get; set; }
         [Required]
         public string Endereco { get; set; }

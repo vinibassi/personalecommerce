@@ -57,7 +57,11 @@ namespace WebCadastrador.Controllers
         {
             if (!fabricante.IsCnpj())
             {
-                ModelState.AddModelError("CNPJ", "O CNPJ é inválido");
+                ModelState.AddModelError("CNPJ", "O CNPJ é inválido.");
+            }
+            if (_context.Fabricante.Any(r => r.CNPJ == fabricante.CNPJ))
+            {
+                ModelState.AddModelError("CNPJ", "Este CNPJ já está cadastrado.");
             }
             if (ModelState.IsValid)
             {
@@ -95,7 +99,14 @@ namespace WebCadastrador.Controllers
             {
                 return NotFound();
             }
-
+            if (!fabricante.IsCnpj())
+            {
+                ModelState.AddModelError("CNPJ", "O CNPJ é inválido.");
+            }
+            if (_context.Fabricante.Any(r => r.CNPJ == fabricante.CNPJ && r.Id != fabricante.Id))
+            {
+                ModelState.AddModelError("CNPJ", "Este CNPJ já está cadastrado.");
+            }
             if (ModelState.IsValid)
             {
                 try

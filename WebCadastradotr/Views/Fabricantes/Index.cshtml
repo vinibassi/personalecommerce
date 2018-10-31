@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<WebCadastrador.Models.Fabricante>
-
+@using WebCadastrador.Models
 @{
     ViewData["Title"] = "Index";
 }
@@ -31,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CNPJ)
+                @Formatador.CNPJ(item.CNPJ)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Endereco)
