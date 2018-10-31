@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace WebCadastrador.Models
 {
-    public class Produto
+    public class ProdutoEditViewModel
     {
         public int Id { get; set; }
+        [Required]
+        [MaxLength(50, ErrorMessage = "O nome do produto deve ter no máximo 50 caracteres.")]
         public string Nome { get; set; }
-        public virtual Fabricante Fabricante { get; set; }
+        [Required]
+        public int FabricanteId { get; set; }
+        [Required]
         public decimal Preco { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model WebCadastrador.Models.Produto
+﻿@model WebCadastrador.Models.ProdutoDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -20,7 +20,7 @@
             @Html.DisplayNameFor(model => model.Fabricante)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fabricante)
+            @Html.DisplayFor(model => model.Fabricante.Nome)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Preco)

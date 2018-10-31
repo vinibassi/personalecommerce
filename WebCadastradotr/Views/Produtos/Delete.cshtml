@@ -1,5 +1,4 @@
-﻿@model WebCadastrador.Models.Produto
-
+﻿@model WebCadastrador.Models.Produto 
 @{
     ViewData["Title"] = "Delete";
 }
@@ -20,7 +19,7 @@
             @Html.DisplayNameFor(model => model.Fabricante)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fabricante)
+            @Html.DisplayFor(model => model.Fabricante.Nome)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Preco)
@@ -29,7 +28,7 @@
             @Html.DisplayFor(model => model.Preco)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Deletar" class="btn btn-default" /> |

@@ -18,9 +18,9 @@ namespace WebCadastrador.Controllers
         {
             _context = context;
         }
-        
-    // GET: Produtos
-    public async Task<IActionResult> Index()
+
+        // GET: Produtos
+        public async Task<IActionResult> Index()
         {
             return View(await _context.Produto.ToListAsync());
         }
@@ -33,14 +33,19 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Produto
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var produto = await _context.Produto.FirstOrDefaultAsync(m => m.Id == id);
             if (produto == null)
             {
                 return NotFound();
             }
 
-            return View(produto);
+            var pDetailsViewModel = new ProdutoDetailsViewModel();
+            pDetailsViewModel.Nome = produto.Nome;
+            pDetailsViewModel.Preco = produto.Preco;
+            pDetailsViewModel.Fabricante = produto.Fabricante;
+            pDetailsViewModel.Id = produto.Id;
+
+            return View(pDetailsViewModel);
         }
 
         // GET: Produtos/Create
@@ -77,23 +82,34 @@ namespace WebCadastrador.Controllers
             }
             ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
             { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+
             return View(produtoCreateViewModel);
         }
 
         // GET: Produtos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var pEditViewModel = new ProdutoEditViewModel();
+            var produto = await _context.Produto.FindAsync(id);
+
             if (id == null)
             {
                 return NotFound();
             }
-
-            var produto = await _context.Produto.FindAsync(id);
             if (produto == null)
             {
                 return NotFound();
             }
-            return View(produto);
+
+            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
+            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+
+            pEditViewModel.Nome = produto.Nome;
+            pEditViewModel.Preco = produto.Preco;
+            pEditViewModel.FabricanteId = produto.Fabricante.Id;
+            pEditViewModel.Id = produto.Id;
+
+            return View(pEditViewModel);
         }
 
         // POST: Produtos/Edit/5
@@ -101,24 +117,29 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Nome,Id,Preco,Fabricante")] Produto produto)
+        public async Task<IActionResult> Edit(ProdutoEditViewModel produtoEditViewModel)
         {
-            string n = produto.Nome;
-            if (string.IsNullOrWhiteSpace(n))
+            if (produtoEditViewModel.Id == 0)
             {
                 return NotFound();
             }
-            if (id != produto.Id)
-            {
-                return NotFound();
-            }
-            if (!produto.Preco.ToString().EndsWith("3"))
+            if (!produtoEditViewModel.Preco.ToString().EndsWith("3"))
             {
                 ModelState.AddModelError("Preco", "O preço deve terminar em 3.");
             }
 
             if (ModelState.IsValid)
             {
+                var fabricante = _context.Fabricante.FirstOrDefault(p => p.Id == produtoEditViewModel.FabricanteId);
+                var produto = await _context.Produto.FindAsync(produtoEditViewModel.Id);
+                if(produto == null)
+                {
+                    return NotFound();
+                }
+                produto.Nome = produtoEditViewModel.Nome;
+                produto.Preco = produtoEditViewModel.Preco;
+                produto.Fabricante = fabricante;
+
                 try
                 {
                     _context.Update(produto);
@@ -126,7 +147,7 @@ namespace WebCadastrador.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProdutoExists(produto.Id))
+                    if (!ProdutoExists(produtoEditViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -137,7 +158,11 @@ namespace WebCadastrador.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(produto);
+
+            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
+            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+
+            return View(produtoEditViewModel);
         }
 
         // GET: Produtos/Delete/5

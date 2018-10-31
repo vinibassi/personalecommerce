@@ -18,7 +18,7 @@ namespace WebCadastrador.Models
         public string CNPJ { get; set; }
         [Required]
         public string Endereco { get; set; }
-        public IList<Produto> Produtos { get; set; }
+        public virtual IList<Produto> Produtos { get; set; }
 
         public bool IsCnpj()
         {
