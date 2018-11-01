@@ -38,7 +38,9 @@
         <ul>
             @foreach (var p in Model.Produtos)
             {
-                <li>@p.Nome</li>
+                <a href="/Produtos/Details/@p.Id">
+                     <li>  @p.Nome </li>
+                </a>
             }
         </ul>
     </div>

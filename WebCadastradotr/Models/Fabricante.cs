@@ -31,7 +31,6 @@ namespace WebCadastrador.Models
             string tempCnpj;
 
             CNPJ = CNPJ.Trim();
-            CNPJ = CNPJ.Replace(".", "").Replace("-", "").Replace("/", "");
 
             if (CNPJ.Length != 14)
                 return false;
