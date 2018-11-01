@@ -17,5 +17,7 @@ namespace WebCadastrador.Models
         public DbSet<Produto> Produto { get; set; }
 
         public DbSet<WebCadastrador.Models.Fabricante> Fabricante { get; set; }
+
+        public DbSet<WebCadastrador.Models.Clientes> Clientes { get; set; }
     }
 }

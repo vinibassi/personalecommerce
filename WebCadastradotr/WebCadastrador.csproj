@@ -10,12 +10,18 @@
     <Compile Remove="Migrations\20181022210447_Produto.Designer.cs" />
     <Compile Remove="Migrations\20181023172022_Produtos.cs" />
     <Compile Remove="Migrations\20181023172022_Produtos.Designer.cs" />
+    <Compile Remove="Migrations\20181101195900_Clientes.cs" />
+    <Compile Remove="Migrations\20181101195900_Clientes.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
   </ItemGroup>
 
