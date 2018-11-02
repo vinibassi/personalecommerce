@@ -39,11 +39,14 @@
                 <span asp-validation-for="Idade" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EstadoCivil" class="control-label">Estado Civil</label>
+                <label asp-for="EstadoCivil" class="control-label"></label>
                 <div>
-                    <input type="radio" name="EstadoCivil" value="@((byte)EstadoCivil.Solteiro)"> Solteiro
-                    <input type="radio" name="EstadoCivil" value="@((byte)EstadoCivil.Casado)"> Casado
-                    <input type="radio" name="EstadoCivil" value="@((byte)EstadoCivil.Divorciado)"> Divorciado
+                    @Html.RadioButtonFor(m => m.EstadoCivil, EstadoCivil.Solteiro)
+                    <span>@EstadoCivil.Solteiro</span>
+                    @Html.RadioButtonFor(m => m.EstadoCivil, EstadoCivil.Casado)
+                    <span>@EstadoCivil.Casado</span>
+                    @Html.RadioButtonFor(m => m.EstadoCivil, EstadoCivil.Divorciado)
+                    <span>@EstadoCivil.Divorciado</span>
                 </div>
             </div>
             <div class="form-group">
