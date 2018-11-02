@@ -1,5 +1,5 @@
 ﻿@model WebCadastrador.Models.Clientes
-
+@using WebCadastrador.Models
 @{
     ViewData["Title"] = "Create";
 }
@@ -37,10 +37,13 @@
                 <input asp-for="Idade" class="form-control" />
                 <span asp-validation-for="Idade" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EstadoCivil" class="control-label">Estado Civil</label>
-                <input asp-for="EstadoCivil" class="form-control" />
-                <span asp-validation-for="EstadoCivil" class="text-danger"></span>
+            <div>
+                <label asp-for="Estado_Civil" class="control-label">Estado Civil</label>
+                <div>
+                    <input type="radio" name="Estado_Civil" value="@((byte)EstadoCivil.Solteiro)"> Solteiro
+                    <input type="radio" name="Estado_Civil" value="@((byte)EstadoCivil.Casado)"> Casado
+                    <input type="radio" name="Estado_Civil" value="@((byte)EstadoCivil.Divorciado)"> Divorciado
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

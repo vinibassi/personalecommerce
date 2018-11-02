@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace WebCadastrador.Models
 {
     public class Clientes
@@ -21,8 +21,10 @@ namespace WebCadastrador.Models
         public string Endereco { get; set; }
         [Required]
         public int Idade { get; set; }
-        [Required]
-        public string EstadoCivil { get; set; }
+        public EstadoCivil Estado_Civil { get; set; }
+
+
+
 
         public bool IsCpf()
         {
@@ -66,5 +68,11 @@ namespace WebCadastrador.Models
 
             return CPF.EndsWith(digito);
         }
+    }
+    public enum EstadoCivil : byte
+    {
+        Solteiro,
+        Casado,
+        Divorciado
     }
 }
