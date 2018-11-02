@@ -20,14 +20,14 @@ namespace WebCadastrador.Models
 
             modelBuilder
                 .Entity<Clientes>()
-                .Property(e => e.Estado_Civil)
+                .Property(e => e.EstadoCivil)
                 .HasConversion(converter);
         }
 
         public DbSet<Produto> Produto { get; set; }
 
-        public DbSet<WebCadastrador.Models.Fabricante> Fabricante { get; set; }
+        public DbSet<Fabricante> Fabricante { get; set; }
 
-        public DbSet<WebCadastrador.Models.Clientes> Clientes { get; set; }
+        public DbSet<Clientes> Clientes { get; set; }
     }
 }

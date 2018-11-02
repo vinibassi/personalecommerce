@@ -21,10 +21,7 @@ namespace WebCadastrador.Models
         public string Endereco { get; set; }
         [Required]
         public int Idade { get; set; }
-        public EstadoCivil Estado_Civil { get; set; }
-
-
-
+        public EstadoCivil EstadoCivil { get; set; }
 
         public bool IsCpf()
         {

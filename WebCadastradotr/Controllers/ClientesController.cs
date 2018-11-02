@@ -53,7 +53,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Sobrenome,CPF,Endereco,Idade,Estado_Civil")] Clientes cliente)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Sobrenome,CPF,Endereco,Idade,EstadoCivil")] Clientes cliente)
         {
 
             if (!cliente.IsCpf())
