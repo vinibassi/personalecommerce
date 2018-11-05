@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Validations;
 
 namespace WebCadastrador.Controllers
 {
@@ -55,7 +56,8 @@ namespace WebCadastrador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,CNPJ,Endereco")] Fabricante fabricante)
         {
-            if (!fabricante.IsCnpj())
+            var fabricanteValidator = new FabricanteValidator();
+            if (!fabricanteValidator.IsCnpj(fabricante.CNPJ))
             {
                 ModelState.AddModelError("CNPJ", "O CNPJ é inválido.");
             }
@@ -99,7 +101,8 @@ namespace WebCadastrador.Controllers
             {
                 return NotFound();
             }
-            if (!fabricante.IsCnpj())
+            var fabricanteValidator = new FabricanteValidator();
+            if (!fabricanteValidator.IsCnpj(fabricante.CNPJ))
             {
                 ModelState.AddModelError("CNPJ", "O CNPJ é inválido.");
             }

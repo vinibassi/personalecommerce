@@ -9,12 +9,8 @@ namespace WebCadastrador.Models
     public class ProdutoEditViewModel
     {
         public int Id { get; set; }
-        [Required]
-        [MaxLength(50, ErrorMessage = "O nome do produto deve ter no máximo 50 caracteres.")]
         public string Nome { get; set; }
-        [Required]
         public int FabricanteId { get; set; }
-        [Required]
         public decimal Preco { get; set; }
     }
 }

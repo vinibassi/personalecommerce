@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Validations;
 
 namespace WebCadastrador.Controllers
 {
@@ -56,7 +57,8 @@ namespace WebCadastrador.Controllers
         public async Task<IActionResult> Create([Bind("Id,Nome,Sobrenome,CPF,Endereco,Idade,EstadoCivil")] Clientes cliente)
         {
 
-            if (!cliente.IsCpf())
+            var clientesValidator = new ClientesValidator();
+            if (!clientesValidator.IsCpf(cliente.CPF))
             {
                 ModelState.AddModelError("CPF", "O CPF é inválido.");
             }
@@ -100,7 +102,8 @@ namespace WebCadastrador.Controllers
             {
                 return NotFound();
             }
-            if (!cliente.IsCpf())
+            var clientesValidator = new ClientesValidator();
+            if (!clientesValidator.IsCpf(cliente.CPF))
             {
                 ModelState.AddModelError("CPF", "O CPF é inválido.");
             }
