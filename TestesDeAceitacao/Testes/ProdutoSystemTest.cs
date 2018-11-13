@@ -14,20 +14,12 @@ namespace TestesDeAceitacao.Testes
 {
     class ProdutoSystemTest
     {
-        private readonly NewProdutoPage page;
-        private readonly ChromeDriver driver;
-
-        public ProdutoSystemTest()
-        {
-            driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-            page = new NewProdutoPage(driver);
-        }
         [Test]
         public void CadastraProduto()
         {
+            var page = new NewProdutoPage();
             page.Visita();
             page.Cadastra("Ração", 20);
-            driver.Close();
         }
 
 

@@ -14,20 +14,12 @@ namespace TestesDeAceitacao.Testes
 {
     class FabricanteSystemTest
     {
-        private readonly NewFabricantePage page;
-        private readonly ChromeDriver driver;
-
-        public FabricanteSystemTest()
-        {
-            driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-            page = new NewFabricantePage(driver);
-        }
         [Test]
         public void CadastraFabricante()
         {
+            var page = new NewFabricantePage();
             page.Visita();
             page.Cadastra("Bassi LTDA", "94170922000190", "Rua abcdxyz, 23");
-            driver.Close();
         }
     }
 }

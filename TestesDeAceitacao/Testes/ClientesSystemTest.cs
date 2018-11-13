@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using TestesDeAceitacao.Pages;
@@ -15,23 +16,34 @@ namespace TestesDeAceitacao.Testes
     [TestFixture]
     class ClientesSystemTest
     {
-        private ChromeOptions options;
-        private NewClientesPage page;
-        private IWebDriver driver; 
-        public ClientesSystemTest()
-        {
-            //options = new ChromeOptions();
-            //options.AddArgument("--headless");
-            driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)/*, options*/);
-            page = new NewClientesPage(driver);
-        }
+        //private ChromeOptions options;
+        //private IWebDriver driver; 
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    //options = new ChromeOptions();
+        //    //options.AddArgument("--headless");
+        //    driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)/*, options*/);
+        //}
+
+        //[TearDown]
+        //public void TearDown()
+        //{
+        //    driver?.Close();
+        //}
 
         [Test]
         public void CadastraCliente()
         {
-            page.Visita();
+            //arrange
+            var page = new NewClientesPage();
+            page.Navigate();
+            //act
             page.Cadastra("Paulo", "Guedes", "00870021087", "Rua abcdwxyz, 14", 15);
-            driver.Close();
+            //assert
+            var clientListPage = new ClientesListPage();
+            var novoCliente = clientListPage.Clientes.FirstOrDefault(c =>c.Nome == "Paulo" && c.Sobrenome == "Guedes" && c.CPF == "008.700.210-87");
+            Assert.IsNotNull(novoCliente);
         }
     }
 }

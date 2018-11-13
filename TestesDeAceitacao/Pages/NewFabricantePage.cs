@@ -8,18 +8,14 @@ namespace TestesDeAceitacao.Pages
 {
     class NewFabricantePage
     {
-        readonly IWebDriver driver;
-        public NewFabricantePage(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
         public void Visita()
         {
-            driver.Navigate().GoToUrl("https://localhost:44305/Fabricantes/Create");
+            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:44305/Fabricantes/Create");
         }
 
         public void Cadastra(string nome, string cnpj, string endereco)
         {
+            var driver = SetupGlobal.Driver;
             IWebElement nomeFabricante = driver.FindElement(By.Id("Nome"));
             IWebElement cnpjFabricante = driver.FindElement(By.Id("CNPJ"));
             IWebElement enderecoFabricante = driver.FindElement(By.Id("Endereco"));

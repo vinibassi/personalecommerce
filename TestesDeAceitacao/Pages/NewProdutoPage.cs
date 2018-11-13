@@ -8,18 +8,15 @@ namespace TestesDeAceitacao.Pages
 {
     class NewProdutoPage
     {
-        readonly IWebDriver driver;
-        public NewProdutoPage(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+        
         public void Visita()
         {
-            driver.Navigate().GoToUrl("https://localhost:44305/Produtos/Create");
+            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:44305/Produtos/Create");
         }
 
         public void Cadastra(string nome, int preco)
         {
+            var driver = SetupGlobal.Driver;
             IWebElement nomeProduto = driver.FindElement(By.Id("Nome"));
             IWebElement precoProduto = driver.FindElement(By.Id("Preco"));
             IWebElement produtoFabricante = driver.FindElement(By.Id("Fabricante"));
