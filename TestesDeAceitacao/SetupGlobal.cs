@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -14,6 +15,7 @@ namespace TestesDeAceitacao
     public class SetupGlobal
     {
         public static IWebDriver Driver { get; private set; }
+        private static HttpWebAppFactory<Startup> factory;
         private ChromeOptions options;
 
         [OneTimeSetUp]
@@ -22,7 +24,8 @@ namespace TestesDeAceitacao
             //options = new ChromeOptions();
             //options.AddArgument("--headless");
             Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)/*, options*/);
-            //var factory = new WebApplicationFactory<Startup>();
+            factory = new HttpWebAppFactory<Startup>();
+            factory.CreateDefaultClient();
         }
 
 
@@ -30,6 +33,7 @@ namespace TestesDeAceitacao
         public static void TearDown()
         {
             Driver?.Close();
+            factory?.Dispose();
         }
     }
 }

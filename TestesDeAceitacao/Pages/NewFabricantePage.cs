@@ -10,7 +10,7 @@ namespace TestesDeAceitacao.Pages
     {
         public void Visita()
         {
-            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:44305/Fabricantes/Create");
+            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Fabricantes/Create");
         }
 
         public void Cadastra(string nome, string cnpj, string endereco)

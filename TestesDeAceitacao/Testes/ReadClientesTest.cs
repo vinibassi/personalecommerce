@@ -19,7 +19,7 @@ namespace TestesDeAceitacao.Testes
         public void ReadClientes()
         {
             var page = new ClientesListPage();
-            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:44305/Clientes");
+            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Clientes");
             var clienteCadastrado = page.Clientes.FirstOrDefault(c => c.CPF == "008.700.210-87");
             Assert.AreEqual("Guedes", clienteCadastrado.Sobrenome);
         }

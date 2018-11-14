@@ -11,7 +11,7 @@ namespace TestesDeAceitacao.Pages
         
         public void Visita()
         {
-            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:44305/Produtos/Create");
+            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Produtos/Create");
         }
 
         public void Cadastra(string nome, int preco)
