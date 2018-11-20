@@ -31,31 +31,27 @@ namespace TestesDeAceitacao.Testes.ClienteTests
 
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
+            context.Clientes.Add(new Clientes
+            {
+                Nome = "Paulo",
+                Sobrenome = "Guedes",
+                CPF = "00870021087",
+                Endereco = "Rua abcdwxyz, 14",
+                Idade = 15,
+                EstadoCivil = EstadoCivil.Casado
+            });
             context.SaveChanges();
-            var test = new NewClientesPage();
-            test.Navigate();
-            //act
-            test.Cadastra("Paulo", "Guedes", "00870021087", "Rua abcdwxyz, 14", 15, EstadoCivil.Casado);
-            //cliente = context.Clientes.FirstOrDefault();
             var page = new UpdateClientePage();
-            page.ClicaEmEdit();
+            var id = context.Clientes.First().Id;
+            page.NavegaToEdit(id);
             page.ModificaCliente("Paulo", "Guedes", "00870021087", "Rua dos Bobos, no. O", 15, EstadoCivil.Divorciado);
-            cliente = context.Clientes.FirstOrDefault();
+            context = new WebCadastradorContext(builder.Options);
+            cliente = context.Clientes.First();
         }
-        [Test]
-        public void IsNullUpdtdCliente() => Assert.IsNotNull(cliente);
         [Test]
         public void QuantidadeDeClientes() => Assert.AreEqual(1, context.Clientes.Count());
         [Test]
-        public void TestaNewNome() => Assert.AreEqual("Paulo", cliente.Nome);
-        [Test]
-        public void TestaNewSobrenome() => Assert.AreEqual("Guedes", cliente.Sobrenome);
-        [Test]
-        public void TestaNewCPF() => Assert.AreEqual("00870021087", cliente.CPF);
-        [Test]
         public void TestaNewEndereco() => Assert.AreEqual("Rua dos Bobos, no. O", cliente.Endereco);
-        [Test]
-        public void TestaNewIdade() => Assert.AreEqual(15, cliente.Idade);
         [Test]
         public void TestaNewEstadoCivil() => Assert.AreEqual(EstadoCivil.Divorciado, cliente.EstadoCivil);
 

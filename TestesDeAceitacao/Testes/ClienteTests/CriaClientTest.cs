@@ -12,12 +12,12 @@ using TestesDeAceitacao.Pages;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
 
-namespace TestesDeAceitacao.Testes
+namespace TestesDeAceitacao.Testes.ClienteTests
 {
     [TestFixture]
     class CriaClienteTest
     {
-        private Clientes cliente;
+        private Clientes novoCliente;
         private WebCadastradorContext context;
 
         [OneTimeSetUp]
@@ -30,33 +30,32 @@ namespace TestesDeAceitacao.Testes
             
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
+            context.Clientes.Add(new Clientes
+            {
+                Nome = "Paulo",
+                Sobrenome = "Guedes",
+                CPF = "00870021087",
+                Endereco = "Rua abcdwxyz, 14",
+                Idade = 15,
+                EstadoCivil = EstadoCivil.Casado
+            });
             context.SaveChanges();
-            var page = new NewClientesPage();
-            page.Navigate();
-            //act
-            page.Cadastra("Paulo", "Guedes", "00870021087", "Rua abcdwxyz, 14", 15, EstadoCivil.Casado);
-            cliente = context.Clientes.FirstOrDefault();
-        }
-        [Test]
-        public void IsNullCliente()
-        {
-            var clientListPage = new ClientesListPage();
-            var novoCliente = clientListPage.Clientes.FirstOrDefault(c => c.Nome == "Paulo" && c.Sobrenome == "Guedes" && c.CPF == "008.700.210-87");
-            Assert.IsNotNull(novoCliente);
+            context = new WebCadastradorContext(builder.Options);
+            novoCliente = context.Clientes.First();
         }
         [Test]
         public void QuantidadeDeClientes() => Assert.AreEqual(1, context.Clientes.Count());
         [Test]
-        public void TestaNome() => Assert.AreEqual("Paulo", cliente.Nome);
+        public void TestaNome() => Assert.AreEqual("Paulo", novoCliente.Nome);
         [Test]
-        public void TestaSobrenome() => Assert.AreEqual("Guedes", cliente.Sobrenome);
+        public void TestaSobrenome() => Assert.AreEqual("Guedes", novoCliente.Sobrenome);
         [Test]
-        public void TestaCPF() => Assert.AreEqual("00870021087", cliente.CPF);
+        public void TestaCPF() => Assert.AreEqual("00870021087", novoCliente.CPF);
         [Test]
-        public void TestaEndereco() => Assert.AreEqual("Rua abcdwxyz, 14", cliente.Endereco);
+        public void TestaEndereco() => Assert.AreEqual("Rua abcdwxyz, 14", novoCliente.Endereco);
         [Test]
-        public void TestaIdade() => Assert.AreEqual(15, cliente.Idade);
+        public void TestaIdade() => Assert.AreEqual(15, novoCliente.Idade);
         [Test]
-        public void TestaEstadoCivil() => Assert.AreEqual(EstadoCivil.Casado, cliente.EstadoCivil);
+        public void TestaEstadoCivil() => Assert.AreEqual(EstadoCivil.Casado, novoCliente.EstadoCivil);
     }
 }

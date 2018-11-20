@@ -11,7 +11,7 @@ namespace TestesDeAceitacao.Pages.FabricantePages
 {
     class FabricanteListPage
     {
-        public List<FabricantesCadastrados> Fabricantes
+        public List<FabricantesCadastrados> Fabricante
         {
             get
             {

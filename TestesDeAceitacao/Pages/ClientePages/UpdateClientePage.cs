@@ -10,9 +10,9 @@ namespace TestesDeAceitacao.Pages.ClientePages
 {
     class UpdateClientePage
     {
-        public void ClicaEmEdit()
+        public void NavegaToEdit(int id)
         {
-            SetupGlobal.Driver.FindElement(By.CssSelector("#clientes > tbody > tr > td:nth-child(7) > a:nth-child(1)")).Click();
+            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:44305/Clientes/Edit/{id}");
         }
 
         public void ModificaCliente(string nome, string sobrenome, string cpf, string endereco, int idade, EstadoCivil estadoCivil)

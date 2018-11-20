@@ -12,12 +12,12 @@ using TestesDeAceitacao.Pages;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
 
-namespace TestesDeAceitacao.Testes
+namespace TestesDeAceitacao.Testes.ClienteTests
 {
     [TestFixture]
     class ReadClientesTest
     {
-        private Clientes cliente;
+        private ClienteCadastrado cliente;
         private WebCadastradorContext context;
 
         [OneTimeSetUp]
@@ -30,20 +30,21 @@ namespace TestesDeAceitacao.Testes
 
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
+            context.Clientes.Add(new Clientes
+            {
+                Nome = "Paulo",
+                Sobrenome = "Guedes",
+                CPF = "00870021087",
+                Endereco = "Rua abcdwxyz, 14",
+                Idade = 15,
+                EstadoCivil = EstadoCivil.Casado
+            });
             context.SaveChanges();
-            var page = new NewClientesPage();
-            page.Navigate();
-            //act
-            page.Cadastra("Paulo", "Guedes", "00870021087", "Rua abcdwxyz, 14", 15, EstadoCivil.Casado);
-            cliente = context.Clientes.FirstOrDefault();
-        }
-        [Test]
-        public void ReadClientes()
-        {
             var page = new ClientesListPage();
             SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Clientes");
-            var clienteCadastrado = page.Clientes.FirstOrDefault(c => c.CPF == "008.700.210-87");
-            Assert.AreEqual("Guedes", clienteCadastrado.Sobrenome);
+            cliente = page.Clientes.FirstOrDefault(c => c.CPF == "008.700.210-87");
         }
+        [Test]
+        public void ReadClientes() => Assert.AreEqual("Guedes", cliente.Sobrenome);
     }
 }

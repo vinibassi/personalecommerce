@@ -21,7 +21,7 @@ namespace TestesDeAceitacao.Pages
             nomeFabricante.SendKeys(nome);
             cnpjFabricante.SendKeys(cnpj);
             enderecoFabricante.SendKeys(endereco);
-            nomeFabricante.Submit();
+            driver.FindElement(By.XPath("/html/body/div/div[1]/div/form/div[4]/input")).Click();
         }
     }
 }

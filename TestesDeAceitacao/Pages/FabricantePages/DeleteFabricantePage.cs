@@ -6,15 +6,15 @@ using OpenQA.Selenium.Chrome;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
 
-namespace TestesDeAceitacao.Pages.ClientePages
+namespace TestesDeAceitacao.Pages.FabricantePages
 {
-    class DeleteClientPage
+    class DeleteFabricantePage
     {
         public void NavigateToDeletePage(int id)
         {
-            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Clientes/Delete/{id}");
+            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Fabricantes/Delete/{id}");
         }
-        public void DeletaCliente()
+        public void DeletaFabricante()
         {
             SetupGlobal.Driver.FindElement(By.XPath("/html/body/div/div/form/input[2]")).Click();
         }

@@ -41,7 +41,7 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
         public void IsNullFabricante()
         {
             var fabricanteListPage = new FabricanteListPage();
-            var novoFabricante = fabricanteListPage.Fabricantes.FirstOrDefault(c => c.Nome == "Bassi LTDA" && c.CNPJ == "94.170.922/0001-90" && c.Endereco == "Rua abcdxyz, 23");
+            var novoFabricante = fabricanteListPage.Fabricante.FirstOrDefault(c => c.Nome == "Bassi LTDA" && c.CNPJ == "94.170.922/0001-90" && c.Endereco == "Rua abcdxyz, 23");
             Assert.IsNotNull(novoFabricante);
         }
         [Test]
