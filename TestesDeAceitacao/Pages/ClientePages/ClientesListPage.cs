@@ -11,7 +11,6 @@ namespace TestesDeAceitacao.Pages
 {
     class ClientesListPage
     {
-
         public List<ClienteCadastrado> Clientes
         {
             get

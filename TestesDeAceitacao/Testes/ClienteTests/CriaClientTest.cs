@@ -15,7 +15,7 @@ using WebCadastrador.ViewModels;
 namespace TestesDeAceitacao.Testes
 {
     [TestFixture]
-    class ClientesSystemTest
+    class CriaClienteTest
     {
         private Clientes cliente;
         private WebCadastradorContext context;

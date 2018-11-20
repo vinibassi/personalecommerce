@@ -12,14 +12,17 @@ using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes
 {
-    class FabricanteSystemTest
+    class ProdutoSystemTest
     {
-        [Test]
-        public void CadastraFabricante()
-        {
-            var page = new NewFabricantePage();
-            page.Visita();
-            page.Cadastra("Bassi LTDA", "94170922000190", "Rua abcdxyz, 23");
-        }
+        //[Test]
+        //public void CadastraProduto()
+        //{
+        //    var page = new NewProdutoPage();
+        //    page.Visita();
+        //    page.Cadastra("Ração", 20);
+        //}
+
+
+
     }
 }
