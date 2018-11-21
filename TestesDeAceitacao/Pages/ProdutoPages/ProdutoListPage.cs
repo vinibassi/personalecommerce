@@ -7,29 +7,28 @@ using OpenQA.Selenium.Chrome;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
 
-namespace TestesDeAceitacao.Pages.FabricantePages
+namespace TestesDeAceitacao.Pages.ProdutoPages
 {
-    class FabricanteListPage
+    class ProdutoListPage
     {
-        public List<FabricanteCadastrado> Fabricante
+        public List<ProdutoCadastrado> Produtos
         {
             get
             {
-                var fabricantesCadastrados = new List<FabricanteCadastrado>();
+                var produtosCadastrados = new List<ProdutoCadastrado>();
                 var linhas = SetupGlobal.Driver.FindElements(By.CssSelector("body > div > table > tbody > tr"));
                 foreach (var linha in linhas)
                 {
                     var colunas = linha.FindElements(By.CssSelector("td"));
-                    var fabricanteCadastrado = new FabricanteCadastrado
+                    var produtoCadastrado = new ProdutoCadastrado
                     {
-                        Nome = colunas[0].Text,
-                        CNPJ = colunas[1].Text,
-                        Endereco = colunas[2].Text
+                        Nome = colunas[0].Text
                     };
-                    fabricantesCadastrados.Add(fabricanteCadastrado);
+                    produtosCadastrados.Add(produtoCadastrado);
                 }
-                return fabricantesCadastrados;
+                return produtosCadastrados;
             }
         }
     }
 }
+

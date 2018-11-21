@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium.Support.UI;
 
-namespace TestesDeAceitacao.Pages
+namespace TestesDeAceitacao.Pages.ProdutoPages
 {
     class NewProdutoPage
     {

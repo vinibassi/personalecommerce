@@ -10,18 +10,20 @@ using System.Reflection;
 using System.Text;
 using TestesDeAceitacao.Pages;
 using TestesDeAceitacao.Pages.FabricantePages;
+using TestesDeAceitacao.Pages.ProdutoPages;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
 
-namespace TestesDeAceitacao.Testes.FabricanteTests
+namespace TestesDeAceitacao.Testes.ProdutoTests
 {
-    class CriaFabricanteTest
+    class UpdateProdutoTest
     {
-        private Fabricante fabricante;
+        private Produto produto;
         private WebCadastradorContext context;
+        private Fabricante fabricante;
 
         [OneTimeSetUp]
-        public void CadastraFabricante()
+        public void CadastraProduto()
         {
             //arrange
             var builder = new DbContextOptionsBuilder<WebCadastradorContext>()
@@ -39,14 +41,24 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             });
             context.SaveChanges();
             fabricante = context.Fabricante.First();
+            context.Produto.Add(new Produto
+            {
+                Nome = "Picanha",
+                Fabricante = context.Fabricante.First(),
+                Preco = 40
+            });
+            context.SaveChanges();
+            produto = context.Produto.First();
+            var page = new UpdateProdutoPage();
+            var id = context.Produto.First().Id;
+            page.NavegaToEdit(id);
+            page.ModificaProduto("Picanha", $"{context.Fabricante.First().Nome}", 33);
+            context = new WebCadastradorContext(builder.Options);
+            produto = context.Produto.First();
         }
         [Test]
-        public void QuantidadeDeFabricantes() => Assert.AreEqual(1, context.Fabricante.Count());
+        public void QuantidadeDeProdutos() => Assert.AreEqual(1, context.Produto.Count());
         [Test]
-        public void TestaNome() => Assert.AreEqual("Bassi LTDA", fabricante.Nome);
-        [Test]
-        public void TestaCNPJ() => Assert.AreEqual("94170922000190", fabricante.CNPJ);
-        [Test]
-        public void TestaEndereco() => Assert.AreEqual("Rua abcdxyz, 23", fabricante.Endereco);
+        public void TestaNewPreco() => Assert.AreEqual(33, produto.Preco);
     }
 }

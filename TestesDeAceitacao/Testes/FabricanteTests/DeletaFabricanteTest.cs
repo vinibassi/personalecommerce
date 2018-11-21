@@ -28,6 +28,7 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
 
             context = new WebCadastradorContext(builder.Options);
+            context.Produto.Clear();
             context.Fabricante.Clear();
             context.Fabricante.Add(new Fabricante
             {

@@ -4,10 +4,10 @@ using System.Text;
 
 namespace TestesDeAceitacao
 {
-    class FabricanteCadastrado
+    class ProdutoCadastrado
     {
         public string Nome { get; set; }
-        public string CNPJ { get; set; }
-        public string Endereco { get; set; }
+        public string Fabricante { get; set; }
+        public double Preco { get; set; }
     }
 }
