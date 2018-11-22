@@ -85,7 +85,6 @@ namespace WebCadastrador.Controllers
 
             return View(produtoCreateViewModel);
         }
-
         // GET: Produtos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -130,15 +129,18 @@ namespace WebCadastrador.Controllers
 
             if (ModelState.IsValid)
             {
-                var fabricante = _context.Fabricante.FirstOrDefault(p => p.Id == produtoEditViewModel.FabricanteId);
-                var produto = await _context.Produto.FindAsync(produtoEditViewModel.Id);
-                if(produto == null)
+                var fabricanteTask = _context.Fabricante.FirstOrDefaultAsync(p => p.Id == produtoEditViewModel.FabricanteId);
+                var produtoTask = _context.Produto.FindAsync(produtoEditViewModel.Id);
+
+                var produto = await produtoTask;
+
+                if (produto == null)
                 {
                     return NotFound();
                 }
                 produto.Nome = produtoEditViewModel.Nome;
                 produto.Preco = produtoEditViewModel.Preco;
-                produto.Fabricante = fabricante;
+                produto.Fabricante = await fabricanteTask;
 
                 try
                 {
