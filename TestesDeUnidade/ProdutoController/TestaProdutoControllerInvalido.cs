@@ -10,26 +10,25 @@ using System.Threading.Tasks;
 using TestesDeAceitacao;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Repositories;
 
 namespace TestesDeUnidade.TestesDeProduto
-
 {
-    class TestaProdutoController
+    public class TestaProdutoControllerInvalido
     {
         private ProdutoCreateViewModel produtoCreateVM;
         private IActionResult result;
         private Fabricante fabricante;
-        private WebCadastradorContext context;
+        private MockFabricanteRepository mockFabricanteRepository;
+        private MockProdutoRepositorio mockProdutoRepositorio;
         private ProdutosController controller;
 
         [SetUp]
         public async Task Setup()
         {
-            var builder = new DbContextOptionsBuilder<WebCadastradorContext>()
-                   .UseLazyLoadingProxies()
-                   .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
-            context = new WebCadastradorContext(builder.Options);
-            controller = new ProdutosController(context);
+            mockProdutoRepositorio = new MockProdutoRepositorio();
+            mockFabricanteRepository = new MockFabricanteRepository();
+            controller = new ProdutosController(null, mockProdutoRepositorio, mockFabricanteRepository);
             // act
             produtoCreateVM = new ProdutoCreateViewModel
             {
@@ -46,16 +45,23 @@ namespace TestesDeUnidade.TestesDeProduto
             Assert.AreEqual(produtoCreateVM, view.Model);
         }
         [Test]
-        public void TestaModelState()
-        {
-            controller.ModelState.IsValid.Should().BeFalse();
-        }
+        public void TestaModelState() => controller.ModelState.IsValid.Should().BeFalse();
         [Test]
         public void TestaErroPreco()
         {
             var error = controller.ModelState.Single();
             error.Key.Should().Be("Preco");
             error.Value.Errors.Single().ErrorMessage.Should().Be("O preço deve terminar em 3.");
+        }
+        [Test]
+        public void AddAsyncNãoFoiChamado()
+        {
+            mockProdutoRepositorio.AddAsyncFoiChamado.Should().BeFalse();
+        }
+        [Test]
+        public void ListaFabricantesFoiExibida()
+        {
+            ((int)controller.ViewBag.Fabricantes.Count).Should().Be(1);
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
 using FluentValidation.AspNetCore;
-
+using WebCadastrador.Models.Repositories;
 
 namespace WebCadastradotr
 {
@@ -43,6 +43,9 @@ namespace WebCadastradotr
             {
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("WebCadastradorContext"));
             });
+            services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
+            services.AddScoped<IFabricanteRepository, FabricanteRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

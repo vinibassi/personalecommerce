@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TestesDeAceitacao;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Repositories;
 
 namespace TestesDeIntegracao.TestesDeProduto
 
@@ -27,7 +28,7 @@ namespace TestesDeIntegracao.TestesDeProduto
 
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
-            var controller = new ProdutosController(context);
+            var controller = new ProdutosController(context, new ProdutoRepositorio(context), new FabricanteRepository(context));
             // act
             fabricante = new Fabricante
             {
@@ -46,7 +47,6 @@ namespace TestesDeIntegracao.TestesDeProduto
             context = new WebCadastradorContext(builder.Options);
             var result = await controller.Create(produtoCreateVM);
             produto = context.Produto.FirstOrDefault();
-
         }
         [Test]
         public void TestaId() => Assert.IsNotNull(produto.Id);

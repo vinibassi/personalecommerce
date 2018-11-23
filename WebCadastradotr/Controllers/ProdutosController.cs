@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Repositories;
 
 namespace WebCadastrador.Controllers
 {
     public class ProdutosController : Controller
     {
         private readonly WebCadastradorContext _context;
+        private readonly IProdutoRepositorio produtoRepositorio;
+        private readonly IFabricanteRepository fabricanteRepository;
 
-        public ProdutosController(WebCadastradorContext context)
+        public ProdutosController(WebCadastradorContext context, IProdutoRepositorio produtoRepositorio, IFabricanteRepository fabricanteRepository)
         {
             _context = context;
+            this.produtoRepositorio = produtoRepositorio;
+            this.fabricanteRepository = fabricanteRepository;
         }
 
         // GET: Produtos
@@ -69,22 +74,22 @@ namespace WebCadastrador.Controllers
             }
             if (ModelState.IsValid)
             {
-                var fabricante = _context.Fabricante.FirstOrDefault(p => p.Id == produtoCreateViewModel.Fabricante);
+                var fabricante = await fabricanteRepository.FindByIdAsync(produtoCreateViewModel.Fabricante);
                 var produto = new Produto
                 {
                     Nome = produtoCreateViewModel.Nome,
                     Preco = produtoCreateViewModel.Preco,
                     Fabricante = fabricante
                 };
-                _context.Add(produto);
-                await _context.SaveChangesAsync();
+                await produtoRepositorio.AddAsync(produto);
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
-            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+            ViewBag.Fabricantes = (await fabricanteRepository.ListaFabricantesAsync())
+                .Select(c => new SelectListItem(){ Text = c.Nome, Value = c.Id.ToString() }).ToList();
 
             return View(produtoCreateViewModel);
         }
+
         // GET: Produtos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
