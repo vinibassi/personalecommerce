@@ -12,14 +12,16 @@ using TestesDeAceitacao.Pages;
 using TestesDeAceitacao.Pages.FabricantePages;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
+using WebCadastrador.Controllers;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {
-    class CriaFabricanteTest
+    class CadastraFabricanteMesmoCNPJTeste
     {
-        private Fabricante fabricante;
         private WebCadastradorContext context;
-        // private NewFabricantePage page;
+        private NewFabricantePage page;
+        private FabricantesController controller;
+
         [OneTimeSetUp]
         public void CadastraFabricante()
         {
@@ -31,20 +33,20 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
             context.Fabricante.Clear();
+            context.Fabricante.Add(new Fabricante
+            {
+                Nome = "Bassi LTDA",
+                CNPJ = "94170922000190",
+                Endereco = "Rua abcdxyz, 23"
+            });
             context.SaveChanges();
-            //act
-            var page = new NewFabricantePage();
+            page = new NewFabricantePage();
             page.Navigate();
-            page.Cadastra("Bassi LTDA","94170922000190","Rua abcdxyz, 23");
-            fabricante = context.Fabricante.FirstOrDefault();
+            page.Cadastra("Jajjajada", "94170922000190", "rua wxyz, 32");
         }
         [Test]
         public void QuantidadeDeFabricantes() => Assert.AreEqual(1, context.Fabricante.Count());
         [Test]
-        public void TestaNome() => Assert.AreEqual("Bassi LTDA", fabricante.Nome);
-        [Test]
-        public void TestaCNPJ() => Assert.AreEqual("94170922000190", fabricante.CNPJ);
-        [Test]
-        public void TestaEndereco() => Assert.AreEqual("Rua abcdxyz, 23", fabricante.Endereco);
+        public void MensagemDeErroApareceu() => Assert.AreEqual("Este CNPJ já está cadastrado.", page.LeCNPJError());
     }
 }

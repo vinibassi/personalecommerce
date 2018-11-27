@@ -8,17 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestesDeAceitacao;
+using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
 
-namespace TestesDeUnidade.TestesDeProduto
+namespace TestesDeUnidade.ProdutoController
 {
-    public class TestaProdutoControllerInvalido
+    class TestaCreateProdutoValido
     {
         private ProdutoCreateViewModel produtoCreateVM;
         private IActionResult result;
-        private Fabricante fabricante;
         private MockFabricanteRepository mockFabricanteRepository;
         private MockProdutoRepositorio mockProdutoRepositorio;
         private ProdutosController controller;
@@ -34,34 +34,32 @@ namespace TestesDeUnidade.TestesDeProduto
             {
                 Nome = "abc",
                 Fabricante = 1,
-                Preco = 49.99m
+                Preco = 49.93m
             };
             result = await controller.Create(produtoCreateVM);
         }
         [Test]
         public void TestaResult()
         {
-            var view = (ViewResult)result;
-            Assert.AreEqual(produtoCreateVM, view.Model);
+            var view = (RedirectToActionResult)result;
+            view.ActionName.Should().Be("Index");
         }
         [Test]
-        public void TestaModelState() => controller.ModelState.IsValid.Should().BeFalse();
+        public void TestaModelState() => controller.ModelState.IsValid.Should().BeTrue();
         [Test]
-        public void TestaErroPreco()
+        public void TestaSemErro()
         {
-            var error = controller.ModelState.Single();
-            error.Key.Should().Be("Preco");
-            error.Value.Errors.Single().ErrorMessage.Should().Be("O preço deve terminar em 3.");
+            controller.ModelState.Should().BeEmpty();
         }
         [Test]
-        public void AddAsyncNãoFoiChamado()
+        public void AddAsyncChamado()
         {
-            mockProdutoRepositorio.AddAsyncFoiChamado.Should().BeFalse();
+            mockProdutoRepositorio.AddAsyncFoiChamado.Should().BeTrue();
         }
         [Test]
-        public void ListaFabricantesFoiExibida()
+        public void ListaFabricantesNãoFoiExibida()
         {
-            ((int)controller.ViewBag.Fabricantes.Count).Should().Be(1);
+            mockFabricanteRepository.ListaFoiChamada.Should().BeFalse();
         }
     }
 }

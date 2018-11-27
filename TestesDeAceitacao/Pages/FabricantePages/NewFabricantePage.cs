@@ -21,7 +21,13 @@ namespace TestesDeAceitacao.Pages
             nomeFabricante.SendKeys(nome);
             cnpjFabricante.SendKeys(cnpj);
             enderecoFabricante.SendKeys(endereco);
-            driver.FindElement(By.XPath("/html/body/div/div[1]/div/form/div[4]/input")).Click();
+            driver.FindElement(By.Id("createFabricante")).Click();
+        }
+        public string LeCNPJError()
+        {
+            var driver = SetupGlobal.Driver;
+            var erro = driver.FindElement(By.CssSelector("[data-valmsg-for=CNPJ]"));
+            return erro.Text;
         }
     }
 }

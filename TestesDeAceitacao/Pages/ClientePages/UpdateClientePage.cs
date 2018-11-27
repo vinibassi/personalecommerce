@@ -12,7 +12,7 @@ namespace TestesDeAceitacao.Pages.ClientePages
     {
         public void NavegaToEdit(int id)
         {
-            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:44305/Clientes/Edit/{id}");
+            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Clientes/Edit/{id}");
         }
 
         public void ModificaCliente(string nome, string sobrenome, string cpf, string endereco, int idade, EstadoCivil estadoCivil)

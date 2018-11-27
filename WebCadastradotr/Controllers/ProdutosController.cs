@@ -134,23 +134,19 @@ namespace WebCadastrador.Controllers
 
             if (ModelState.IsValid)
             {
-                var fabricanteTask = _context.Fabricante.FirstOrDefaultAsync(p => p.Id == produtoEditViewModel.FabricanteId);
-                var produtoTask = _context.Produto.FindAsync(produtoEditViewModel.Id);
-
-                var produto = await produtoTask;
-
+                var fabricanteTask = await fabricanteRepository.FindByIdAsync(produtoEditViewModel.FabricanteId);
+                var produto = await produtoRepositorio.FindProdutoByIdAsync(produtoEditViewModel.Id); 
                 if (produto == null)
                 {
                     return NotFound();
                 }
                 produto.Nome = produtoEditViewModel.Nome;
                 produto.Preco = produtoEditViewModel.Preco;
-                produto.Fabricante = await fabricanteTask;
+                produto.Fabricante = fabricanteTask;
 
                 try
                 {
-                    _context.Update(produto);
-                    await _context.SaveChangesAsync();
+                    await produtoRepositorio.UpdateAsync(produto);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -166,8 +162,7 @@ namespace WebCadastrador.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
-            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+            await fabricanteRepository.ListaFabricantesAsync();
 
             return View(produtoEditViewModel);
         }
@@ -195,9 +190,10 @@ namespace WebCadastrador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var produto = await _context.Produto.FindAsync(id);
-            _context.Produto.Remove(produto);
-            await _context.SaveChangesAsync();
+            var produto = await produtoRepositorio.FindProdutoByIdAsync(id);
+            await produtoRepositorio.RemoveAsync(produto);
+            //_context.Produto.Remove(produto);
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -20,7 +20,7 @@ namespace TestesDeAceitacao.Pages.ProdutoPages
     {
         public void NavegaToEdit(int id)
         {
-            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:44305/Produtos/Edit/{id}");
+            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Produtos/Edit/{id}");
         }
 
         public void ModificaProduto(string nome, string fabricante, int preco)

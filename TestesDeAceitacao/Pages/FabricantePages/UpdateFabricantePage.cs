@@ -12,7 +12,7 @@ namespace TestesDeAceitacao.Pages.FabricantePages
     {
         public void NavegaToEdit(int id)
         {
-            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:44305/Fabricantes/Edit/{id}");
+            SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Fabricantes/Edit/{id}");
         }
 
         public void ModificaFabricante(string nome, string cnpj, string endereco)

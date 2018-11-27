@@ -18,10 +18,31 @@ namespace WebCadastrador.Models.Repositories
             context.Add(produto);
             await context.SaveChangesAsync();
         }
+
+        public async Task<Produto> FindProdutoByIdAsync(int id)
+        {
+            var produto = await context.Produto.FindAsync(id);
+            return produto;
+        }
+
+        public async Task RemoveAsync(Produto produto)
+        {
+           context.Produto.Remove(produto);
+           await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Produto produto)
+        {
+            context.Update(produto);
+            await context.SaveChangesAsync();
+        }
     }
 
     public interface IProdutoRepositorio
     {
+        Task UpdateAsync(Produto produto);
         Task AddAsync(Produto produto);
+        Task<Produto> FindProdutoByIdAsync(int id);
+        Task RemoveAsync(Produto produto);
     }
 }
