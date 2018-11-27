@@ -28,7 +28,7 @@ namespace TestesDeIntegracao.TestesDeProduto
 
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
-            var controller = new ProdutosController(context, new ProdutoRepositorio(context), new FabricanteRepository(context));
+            var controller = new ProdutosController(context, new ProdutoRepository(context), new FabricanteRepository(context));
             // act
             fabricante = new Fabricante
             {

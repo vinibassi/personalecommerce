@@ -30,18 +30,11 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
-            context.Clientes.Add(new Clientes
-            {
-                Nome = "Paulo",
-                Sobrenome = "Guedes",
-                CPF = "00870021087",
-                Endereco = "Rua abcdwxyz, 14",
-                Idade = 15,
-                EstadoCivil = EstadoCivil.Casado
-            });
             context.SaveChanges();
-            context = new WebCadastradorContext(builder.Options);
-            novoCliente = context.Clientes.First();
+            var page = new NewClientesPage();
+            page.Navigate();
+            page.Cadastra("Paulo", "Guedes", "00870021087", "Rua abcdwxyz, 14", 15, EstadoCivil.Divorciado);
+            novoCliente = context.Clientes.FirstOrDefault();
         }
         [Test]
         public void QuantidadeDeClientes() => Assert.AreEqual(1, context.Clientes.Count());
@@ -56,6 +49,6 @@ namespace TestesDeAceitacao.Testes.ClienteTests
         [Test]
         public void TestaIdade() => Assert.AreEqual(15, novoCliente.Idade);
         [Test]
-        public void TestaEstadoCivil() => Assert.AreEqual(EstadoCivil.Casado, novoCliente.EstadoCivil);
+        public void TestaEstadoCivil() => Assert.AreEqual(EstadoCivil.Divorciado, novoCliente.EstadoCivil);
     }
 }

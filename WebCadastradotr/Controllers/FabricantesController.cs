@@ -108,19 +108,17 @@ namespace WebCadastrador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(FabricantesViewModel fabricanteViewModel)
         {
-            if (fabricanteViewModel.Id == 0)
-            {
-                return NotFound();
-            }
             var fabricante = new Fabricante();
             var fabricanteValidator = new FabricanteValidator();
             if (!fabricanteValidator.IsCnpj(fabricanteViewModel.CNPJ))
             {
                 ModelState.AddModelError("CNPJ", "O CNPJ é inválido.");
             }
-            if (fabricante.CNPJ == fabricanteViewModel.CNPJ)
+            var (exists, errorExists) = await fabricanteRepository.ExistsAsync(fabricante);
+            if (exists)
             {
-                ModelState.AddModelError("CNPJ", "Este CNPJ já está cadastrado.");
+                foreach (var error in errorExists)
+                    ModelState.AddModelError(error.Key, error.Value);
             }
             if (ModelState.IsValid)
             {

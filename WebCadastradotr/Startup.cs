@@ -43,9 +43,9 @@ namespace WebCadastradotr
             {
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("WebCadastradorContext"));
             });
-            services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
+            services.AddScoped<IProdutoRepositorio, ProdutoRepository>();
             services.AddScoped<IFabricanteRepository, FabricanteRepository>();
-
+            services.AddScoped<IClienteRepository, ClienteRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

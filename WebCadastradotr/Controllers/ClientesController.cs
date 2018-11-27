@@ -6,17 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Repositories;
 using WebCadastrador.Models.Validations;
+using WebCadastrador.ViewModels;
 
 namespace WebCadastrador.Controllers
 {
     public class ClientesController : Controller
     {
         private readonly WebCadastradorContext _context;
+        private IClienteRepository clienteRepository;
 
-        public ClientesController(WebCadastradorContext context)
+        public ClientesController(WebCadastradorContext context, IClienteRepository clienteRepository)
         {
             _context = context;
+            this.clienteRepository = clienteRepository;
         }
 
         // GET: Clientes
@@ -54,25 +58,35 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Sobrenome,CPF,Endereco,Idade,EstadoCivil")] Clientes cliente)
+        public async Task<IActionResult> Create(ClientesViewModel clientesViewModel)
         {
-
             var clientesValidator = new ClientesValidator();
-            if (!clientesValidator.IsCpf(cliente.CPF))
+            if (!clientesValidator.IsCpf(clientesViewModel.CPF))
             {
                 ModelState.AddModelError("CPF", "O CPF é inválido.");
             }
-            if (_context.Clientes.Any(r => r.CPF == cliente.CPF))
+
+            var cliente = new Clientes();
+            cliente.Id = clientesViewModel.Id;
+            cliente.Nome = clientesViewModel.Nome;
+            cliente.Sobrenome = clientesViewModel.Sobrenome;
+            cliente.CPF = clientesViewModel.CPF;
+            cliente.Endereco = clientesViewModel.Endereco;
+            cliente.Idade = clientesViewModel.Idade;
+            cliente.EstadoCivil = clientesViewModel.estadoCivil;
+
+            var (exists, errorExists) = await clienteRepository.ExistsAsync(cliente);
+            if (exists)
             {
-                ModelState.AddModelError("CPF", "Este CPF já está cadastrado.");
+                foreach (var error in errorExists)
+                    ModelState.AddModelError(error.Key, error.Value);
             }
             if (ModelState.IsValid)
             {
-                _context.Add(cliente);
-                await _context.SaveChangesAsync();
+                await clienteRepository.AddClienteAsync(cliente);
                 return RedirectToAction(nameof(Index));
             }
-            return View(cliente);
+            return View(clientesViewModel);
         }
 
         // GET: Clientes/Edit/5
@@ -96,32 +110,37 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Sobrenome,CPF,Endereco,Idade,EstadoCivil")] Clientes cliente)
+        public async Task<IActionResult> Edit(ClientesViewModel clientesViewModel)
         {
-            if (id != cliente.Id)
-            {
-                return NotFound();
-            }
+            var cliente = new Clientes();
             var clientesValidator = new ClientesValidator();
-            if (!clientesValidator.IsCpf(cliente.CPF))
+            if (!clientesValidator.IsCpf(clientesViewModel.CPF))
             {
                 ModelState.AddModelError("CPF", "O CPF é inválido.");
             }
-            if (_context.Clientes.Any(r => r.CPF == cliente.CPF && r.Id != cliente.Id))
+            var (exists, errorExists) = await clienteRepository.ExistsAsync(cliente);
+            if (exists)
             {
-                ModelState.AddModelError("CPF", "Este CPF já está cadastrado.");
+                foreach (var error in errorExists)
+                    ModelState.AddModelError(error.Key, error.Value);
             }
-
             if (ModelState.IsValid)
             {
+                cliente.Id = clientesViewModel.Id;
+                cliente.Nome = clientesViewModel.Nome;
+                cliente.Sobrenome = clientesViewModel.Sobrenome;
+                cliente.CPF = clientesViewModel.CPF;
+                cliente.Endereco = clientesViewModel.Endereco;
+                cliente.Idade = clientesViewModel.Idade;
+                cliente.EstadoCivil = clientesViewModel.estadoCivil;
+
                 try
                 {
-                    _context.Update(cliente);
-                    await _context.SaveChangesAsync();
+                    await clienteRepository.UpdateClienteAsync(cliente);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientesExists(cliente.Id))
+                    if (!ClientesExists(clientesViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -132,7 +151,7 @@ namespace WebCadastrador.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(cliente);
+            return View(clientesViewModel);
         }
 
         // GET: Clientes/Delete/5
@@ -156,11 +175,10 @@ namespace WebCadastrador.Controllers
         // POST: Clientes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(ClientesViewModel clientesViewModel)
         {
-            var clientes = await _context.Clientes.FindAsync(id);
-            _context.Clientes.Remove(clientes);
-            await _context.SaveChangesAsync();
+            var cliente = await clienteRepository.FindClienteByIdAsync(clientesViewModel.Id);
+            await clienteRepository.RemoveClienteAsync(cliente);
             return RedirectToAction(nameof(Index));
         }
 

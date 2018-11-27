@@ -16,7 +16,7 @@ namespace TestesDeAceitacao.Pages.ClientePages
         }
         public void DeletaCliente()
         {
-            SetupGlobal.Driver.FindElement(By.XPath("/html/body/div/div/form/input[2]")).Click();
+            SetupGlobal.Driver.FindElement(By.Id("DeletaCliente")).Click();
         }
     }
 }

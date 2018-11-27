@@ -59,7 +59,7 @@ namespace TestesDeUnidade.FabricanteControllerTests
         [Test]
         public void AddFabricanteNãoFoiChamado()
         {
-            mockFabricanteRepository.AddFabricanteFoiChamado.Should().BeFalse();
+            mockFabricanteRepository.UpdateFoiChamado.Should().BeFalse();
         }
     }
 }

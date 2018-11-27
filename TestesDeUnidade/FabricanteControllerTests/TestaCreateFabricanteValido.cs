@@ -1,17 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestesDeAceitacao;
 using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
-using WebCadastrador.Models.Repositories;
 using WebCadastrador.ViewModels;
 
 namespace TestesDeUnidade.FabricanteControllerTests

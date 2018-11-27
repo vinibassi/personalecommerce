@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace WebCadastrador.Models.Repositories
 {
-    public class ProdutoRepositorio : IProdutoRepositorio
+    public class ProdutoRepository : IProdutoRepositorio
     {
         private readonly WebCadastradorContext context;
 
-        public ProdutoRepositorio(WebCadastradorContext context)
+        public ProdutoRepository(WebCadastradorContext context)
         {
             this.context = context;
         }
