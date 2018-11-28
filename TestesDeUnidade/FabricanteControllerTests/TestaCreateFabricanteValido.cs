@@ -23,7 +23,7 @@ namespace TestesDeUnidade.FabricanteControllerTests
         {
             mockProdutoRepositorio = new MockProdutoRepositorio();
             mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new FabricantesController(null, mockProdutoRepositorio, mockFabricanteRepository);
+            controller = new FabricantesController(mockProdutoRepositorio, mockFabricanteRepository);
             // act
             fabricanteViewModel = new FabricantesViewModel
             {

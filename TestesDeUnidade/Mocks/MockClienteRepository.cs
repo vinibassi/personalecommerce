@@ -14,13 +14,20 @@ namespace TestesDeUnidade.Mocks
         public bool AddClienteFoiChamado;
         public bool FindClienteFoiChamado;
         public bool RemoveClienteFoiChamado;
-        private int Id;
+        public int Id;
+        public bool ListaFoiChamada;
 
         public Task AddClienteAsync(Clientes cliente)
         {
             AddClienteFoiChamado = true;
             Cliente = cliente;
             return Task.CompletedTask;
+        }
+
+        public Task<bool> ClientesExists(int id)
+        {
+            Id = id;
+            return Task.FromResult<bool>(true);
         }
 
         public Task<(bool Exists, IDictionary<string, string> Errors)> ExistsAsync(Clientes cliente)
@@ -33,6 +40,12 @@ namespace TestesDeUnidade.Mocks
             FindClienteFoiChamado = true;
             Id = id;
             return Task.FromResult(Cliente);
+        }
+
+        public Task<List<Clientes>> ListaClientesAsync()
+        {
+            ListaFoiChamada = true;
+            return Task.FromResult(new List<Clientes> { new Clientes() });
         }
 
         public Task RemoveClienteAsync(Clientes cliente)

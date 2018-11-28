@@ -21,7 +21,7 @@ namespace TestesDeUnidade.ClienteControllerTests
         public async Task Setup()
         {
             mockClienteRepository = new MockClienteRepository();
-            controller = new ClientesController(null, mockClienteRepository);
+            controller = new ClientesController(mockClienteRepository);
             // act
             clienteViewModel = new ClientesViewModel
             {

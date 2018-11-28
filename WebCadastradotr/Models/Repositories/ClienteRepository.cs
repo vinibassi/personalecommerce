@@ -43,14 +43,25 @@ namespace WebCadastrador.Models.Repositories
             context.Update(cliente);
             await context.SaveChangesAsync();
         }
+        public async Task<bool> ClientesExists(int id)
+        {
+            var clienteExists =  await context.Clientes.AnyAsync(e => e.Id == id);
+            return clienteExists;
+        }
+        public Task<List<Clientes>> ListaClientesAsync()
+        {
+            return context.Clientes.ToListAsync();
+        }
     }
-
+    
     public interface IClienteRepository
     {
+        Task<List<Clientes>> ListaClientesAsync();
         Task RemoveClienteAsync(Clientes cliente);
         Task UpdateClienteAsync(Clientes cliente);
         Task<Clientes> FindClienteByIdAsync(int id);
         Task AddClienteAsync(Clientes cliente);
+        Task<bool> ClientesExists(int id);
         Task<(bool Exists, IDictionary<string, string> Errors)> ExistsAsync(Clientes cliente);
     }
 }

@@ -21,7 +21,7 @@ namespace TestesDeUnidade.ProdutoController
         {
             mockProdutoRepositorio = new MockProdutoRepositorio();
             mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new ProdutosController(null, mockProdutoRepositorio, mockFabricanteRepository);
+            controller = new ProdutosController(mockProdutoRepositorio, mockFabricanteRepository);
             // act
             produtoEditVM = new ProdutoEditViewModel
             {

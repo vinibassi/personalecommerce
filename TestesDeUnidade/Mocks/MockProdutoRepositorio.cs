@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
 
@@ -6,6 +7,7 @@ namespace TestesDeUnidade.Mocks
 {
     public class MockProdutoRepositorio : IProdutoRepositorio
     {
+        public bool ListaFoiChamada;
         public Produto Produto { get; private set; } = new Produto();
         public bool AddAsyncFoiChamado { get; set; }
         public bool RemoveAsyncFoiChamado { get; set; }
@@ -24,6 +26,18 @@ namespace TestesDeUnidade.Mocks
             FindProdutoFoiChamado = true;
             Produto.Id = id;
             return Task.FromResult(Produto);
+        }
+
+        public Task<List<Produto>> ListaProdutosAsync()
+        {
+            ListaFoiChamada = true;
+            return Task.FromResult(new List<Produto> { new Produto() });
+        }
+
+        public Task<bool> ProdutoExists(int id)
+        {
+            Produto.Id = id;
+            return Task.FromResult<bool>(true);
         }
 
         public Task RemoveAsync(Produto produto)

@@ -14,13 +14,11 @@ namespace WebCadastrador.Controllers
 {
     public class FabricantesController : Controller
     {
-        private readonly WebCadastradorContext _context;
         private readonly IProdutoRepositorio produtoRepositorio;
         private readonly IFabricanteRepository fabricanteRepository;
 
-        public FabricantesController(WebCadastradorContext context, IProdutoRepositorio produtoRepositorio, IFabricanteRepository fabricanteRepository)
+        public FabricantesController(IProdutoRepositorio produtoRepositorio, IFabricanteRepository fabricanteRepository)
         {
-            _context = context;
             this.produtoRepositorio = produtoRepositorio;
             this.fabricanteRepository = fabricanteRepository;
         }
@@ -28,7 +26,7 @@ namespace WebCadastrador.Controllers
         // GET: Fabricantes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Fabricante.ToListAsync());
+            return View(await fabricanteRepository.ListaFabricantesAsync());
         }
 
         // GET: Fabricantes/Details/5
@@ -38,9 +36,7 @@ namespace WebCadastrador.Controllers
             {
                 return NotFound();
             }
-
-            var fabricante = await _context.Fabricante
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var fabricante = await fabricanteRepository.FindByIdAsync(id.Value);
             if (fabricante == null)
             {
                 return NotFound();
@@ -93,7 +89,7 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var fabricante = await _context.Fabricante.FindAsync(id);
+            var fabricante = await fabricanteRepository.FindByIdAsync(id.Value);
             if (fabricante == null)
             {
                 return NotFound();
@@ -133,7 +129,7 @@ namespace WebCadastrador.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FabricanteExists(fabricanteViewModel.Id))
+                    if (!await fabricanteRepository.FabricanteExists(fabricanteViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -155,8 +151,7 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var fabricante = await _context.Fabricante
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var fabricante = await fabricanteRepository.FindByIdAsync(id.Value);
             if (fabricante == null)
             {
                 return NotFound();
@@ -175,9 +170,10 @@ namespace WebCadastrador.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FabricanteExists(int id)
+        private async Task<bool> FabricanteExists(int id)
         {
-            return _context.Fabricante.Any(e => e.Id == id);
+            var fabricanteExiste = await fabricanteRepository.FabricanteExists(id);
+            return fabricanteExiste;
         }
     }
 }

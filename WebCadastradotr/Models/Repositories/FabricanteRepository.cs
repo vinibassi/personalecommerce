@@ -26,6 +26,11 @@ namespace WebCadastrador.Models.Repositories
             return (false, new Dictionary<string, string>());
         }
 
+        public async Task<bool> FabricanteExists(int id)
+        {
+            var fabricanteExiste = await context.Fabricante.AnyAsync(e => e.Id == id);
+            return fabricanteExiste;
+        }
 
         public async Task<Fabricante> FindByIdAsync(int id)
         {
@@ -58,6 +63,7 @@ namespace WebCadastrador.Models.Repositories
         Task<(bool Exists, IDictionary<string, string> Errors)> ExistsAsync(Fabricante fabricante);
         Task AddFabricanteAsync(Fabricante fabricante);
         Task<Fabricante> FindByIdAsync(int id);
+        Task<bool> FabricanteExists(int id);
         Task<List<Fabricante>> ListaFabricantesAsync();
     }
 }

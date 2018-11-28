@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,13 +37,25 @@ namespace WebCadastrador.Models.Repositories
             context.Update(produto);
             await context.SaveChangesAsync();
         }
+        public async Task<bool> ProdutoExists(int id)
+        {
+            var p = await context.Produto.AnyAsync(e => e.Id == id);
+            return p;
+        }
+
+        public Task<List<Produto>> ListaProdutosAsync()
+        {
+            return context.Produto.ToListAsync();
+        }
     }
 
     public interface IProdutoRepositorio
     {
+        Task<bool> ProdutoExists(int id);
         Task UpdateAsync(Produto produto);
         Task AddAsync(Produto produto);
         Task<Produto> FindProdutoByIdAsync(int id);
         Task RemoveAsync(Produto produto);
+        Task<List<Produto>> ListaProdutosAsync();
     }
 }

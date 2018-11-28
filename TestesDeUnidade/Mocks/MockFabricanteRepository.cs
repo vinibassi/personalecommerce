@@ -28,6 +28,12 @@ namespace TestesDeUnidade.Mocks
             return Task.FromResult<(bool, IDictionary<string,string>)>((false, new Dictionary<string, string>()));
         }
 
+        public Task<bool> FabricanteExists(int id)
+        {
+            Id = id;
+            return Task.FromResult<bool>(true);
+        }
+
         public Task<Fabricante> FindByIdAsync(int id)
         {
             FindFabricanteFoiChamado = true;

@@ -13,13 +13,11 @@ namespace WebCadastrador.Controllers
 {
     public class ProdutosController : Controller
     {
-        private readonly WebCadastradorContext _context;
         private readonly IProdutoRepositorio produtoRepositorio;
         private readonly IFabricanteRepository fabricanteRepository;
 
-        public ProdutosController(WebCadastradorContext context, IProdutoRepositorio produtoRepositorio, IFabricanteRepository fabricanteRepository)
+        public ProdutosController(IProdutoRepositorio produtoRepositorio, IFabricanteRepository fabricanteRepository)
         {
-            _context = context;
             this.produtoRepositorio = produtoRepositorio;
             this.fabricanteRepository = fabricanteRepository;
         }
@@ -27,7 +25,7 @@ namespace WebCadastrador.Controllers
         // GET: Produtos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Produto.ToListAsync());
+            return View(await produtoRepositorio.ListaProdutosAsync());
         }
 
         // GET: Produtos/Details/5
@@ -38,7 +36,7 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Produto.FirstOrDefaultAsync(m => m.Id == id);
+            var produto = await produtoRepositorio.FindProdutoByIdAsync(id.Value);
             if (produto == null)
             {
                 return NotFound();
@@ -56,8 +54,7 @@ namespace WebCadastrador.Controllers
         // GET: Produtos/Create
         public IActionResult Create()
         {
-            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
-            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+            ViewBag.Fabricantes = fabricanteRepository.ListaFabricantesAsync();
             return View();
         }
 
@@ -94,7 +91,7 @@ namespace WebCadastrador.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             var pEditViewModel = new ProdutoEditViewModel();
-            var produto = await _context.Produto.FindAsync(id);
+            var produto = await produtoRepositorio.FindProdutoByIdAsync(id.Value);
 
             if (id == null)
             {
@@ -105,8 +102,8 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            ViewBag.Fabricantes = _context.Fabricante.Select(c => new SelectListItem()
-            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+            ViewBag.Fabricantes = (await fabricanteRepository.ListaFabricantesAsync()).Select(c => new SelectListItem()
+            { Text = c.Nome, Value = c.Id.ToString() });
 
             pEditViewModel.Nome = produto.Nome;
             pEditViewModel.Preco = produto.Preco;
@@ -150,7 +147,7 @@ namespace WebCadastrador.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProdutoExists(produtoEditViewModel.Id))
+                    if (!await produtoRepositorio.ProdutoExists(produtoEditViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -175,8 +172,7 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Produto
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var produto = await produtoRepositorio.FindProdutoByIdAsync(id.Value);
             if (produto == null)
             {
                 return NotFound();
@@ -192,14 +188,13 @@ namespace WebCadastrador.Controllers
         {
             var produto = await produtoRepositorio.FindProdutoByIdAsync(id);
             await produtoRepositorio.RemoveAsync(produto);
-            //_context.Produto.Remove(produto);
-            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProdutoExists(int id)
+        private async Task<bool> ProdutoExists(int id)
         {
-            return _context.Produto.Any(e => e.Id == id);
+            var produto = await produtoRepositorio.ProdutoExists(id);
+            return produto;
         }
     }
 }

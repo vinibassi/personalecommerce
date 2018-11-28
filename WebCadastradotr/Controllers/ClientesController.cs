@@ -14,19 +14,17 @@ namespace WebCadastrador.Controllers
 {
     public class ClientesController : Controller
     {
-        private readonly WebCadastradorContext _context;
         private IClienteRepository clienteRepository;
 
-        public ClientesController(WebCadastradorContext context, IClienteRepository clienteRepository)
+        public ClientesController(IClienteRepository clienteRepository)
         {
-            _context = context;
             this.clienteRepository = clienteRepository;
         }
 
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clientes.ToListAsync());
+            return View(await clienteRepository.ListaClientesAsync());
         }
 
         // GET: Clientes/Details/5
@@ -37,8 +35,7 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var clientes = await _context.Clientes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var clientes = await clienteRepository.FindClienteByIdAsync(id.Value);
             if (clientes == null)
             {
                 return NotFound();
@@ -97,7 +94,7 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var clientes = await _context.Clientes.FindAsync(id);
+            var clientes = await clienteRepository.FindClienteByIdAsync(id.Value);
             if (clientes == null)
             {
                 return NotFound();
@@ -140,7 +137,7 @@ namespace WebCadastrador.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientesExists(clientesViewModel.Id))
+                    if (!await clienteRepository.ClientesExists(clientesViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -162,8 +159,7 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var clientes = await _context.Clientes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var clientes = await clienteRepository.FindClienteByIdAsync(id.Value);
             if (clientes == null)
             {
                 return NotFound();
@@ -182,9 +178,10 @@ namespace WebCadastrador.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientesExists(int id)
+        private async Task<bool> ClientesExists(int id)
         {
-            return _context.Clientes.Any(e => e.Id == id);
+            var clienteExists = await clienteRepository.ClientesExists(id);
+            return clienteExists;
         }
     }
 }
