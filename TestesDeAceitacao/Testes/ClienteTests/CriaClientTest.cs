@@ -1,16 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using TestesDeAceitacao.Pages;
 using WebCadastrador.Models;
-using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes.ClienteTests
 {

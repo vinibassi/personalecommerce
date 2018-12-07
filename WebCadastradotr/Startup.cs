@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,7 +38,7 @@ namespace WebCadastradotr
             {
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("WebCadastradorContext"));
             });
-            services.AddScoped<IProdutoRepositorio, ProdutoRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IFabricanteRepository, FabricanteRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
         }

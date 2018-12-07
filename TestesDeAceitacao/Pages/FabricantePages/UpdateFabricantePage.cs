@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using WebCadastrador.Models;
-using WebCadastrador.ViewModels;
+﻿using OpenQA.Selenium;
 
 namespace TestesDeAceitacao.Pages.FabricantePages
 {

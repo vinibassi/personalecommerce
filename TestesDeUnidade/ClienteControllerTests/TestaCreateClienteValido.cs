@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Repositories;
 using WebCadastrador.ViewModels;
 
 namespace TestesDeUnidade.ClienteControllerTests
@@ -13,15 +14,15 @@ namespace TestesDeUnidade.ClienteControllerTests
     {
         private ClientesController controller;
         private IActionResult result;
-        private MockClienteRepository mockClienteRepository;
-
+        private Mock<IClienteRepository> mockClientes;
+        private ClientesViewModel clienteViewModel;
         [SetUp]
         public async Task Setup()
         {
-            mockClienteRepository = new MockClienteRepository();
-            controller = new ClientesController(mockClienteRepository);
+            mockClientes = new Mock<IClienteRepository>();
+            controller = new ClientesController(mockClientes.Object);
             // act
-            var clienteViewModel = new ClientesViewModel
+            clienteViewModel = new ClientesViewModel
             {
                 Id = 1,
                 Nome = "abc",
@@ -44,6 +45,11 @@ namespace TestesDeUnidade.ClienteControllerTests
         [Test]
         public void TestaSemErro() => controller.ModelState.Should().BeEmpty();
         [Test]
-        public void AddAsyncChamado() => mockClienteRepository.AddClienteFoiChamado.Should().BeTrue();
+        public void AddAsyncChamado() => mockClientes.Verify(c => c.AddClienteAsync(It.Is<Clientes>(cl => cl.Nome == clienteViewModel.Nome && 
+                                                                                                          cl.Sobrenome == clienteViewModel.Sobrenome && 
+                                                                                                          cl.CPF == clienteViewModel.CPF && 
+                                                                                                          cl.Endereco == clienteViewModel.Endereco &&
+                                                                                                          cl.Idade == clienteViewModel.Idade && 
+                                                                                                          cl.EstadoCivil == clienteViewModel.estadoCivil)), Times.Once);
     }
 }

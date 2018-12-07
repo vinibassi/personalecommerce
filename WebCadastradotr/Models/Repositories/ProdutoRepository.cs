@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebCadastrador.Models.Repositories
 {
-    public class ProdutoRepository : IProdutoRepositorio
+    public class ProdutoRepository : IProdutoRepository
     {
         private readonly WebCadastradorContext context;
 
@@ -49,7 +47,7 @@ namespace WebCadastrador.Models.Repositories
         }
     }
 
-    public interface IProdutoRepositorio
+    public interface IProdutoRepository
     {
         Task<bool> ProdutoExists(int id);
         Task UpdateAsync(Produto produto);

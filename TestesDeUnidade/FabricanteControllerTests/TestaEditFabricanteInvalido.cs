@@ -1,14 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestesDeAceitacao;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
@@ -21,16 +16,17 @@ namespace TestesDeUnidade.FabricanteControllerTests
         private FabricantesController controller;
         private IActionResult result;
         private Fabricante fabricante;
-        private MockFabricanteRepository mockFabricanteRepository;
-        private MockProdutoRepositorio mockProdutoRepositorio;
+        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<IProdutoRepository> mockProdutos;
         private FabricantesViewModel fabricanteViewModel;
 
         [SetUp]
         public async Task Setup()
         {
-            mockProdutoRepositorio = new MockProdutoRepositorio();
-            mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new FabricantesController(mockProdutoRepositorio, mockFabricanteRepository);
+            fabricante = new Fabricante();
+            mockProdutos = new Mock<IProdutoRepository>();
+            mockFabricantes = new Mock<IFabricanteRepository>();
+            controller = new FabricantesController(mockProdutos.Object, mockFabricantes.Object);
             // act
             fabricanteViewModel = new FabricantesViewModel
             {
@@ -39,6 +35,7 @@ namespace TestesDeUnidade.FabricanteControllerTests
                 CNPJ = "59478a198",
                 Endereco = "Rua ABCDXYZ, 123"
             };
+            mockFabricantes.Setup(f => f.UpdateFabricanteAsync(fabricante));
             result = await controller.Edit(fabricanteViewModel);
         }
         [Test]
@@ -59,7 +56,9 @@ namespace TestesDeUnidade.FabricanteControllerTests
         [Test]
         public void AddFabricanteNãoFoiChamado()
         {
-            mockFabricanteRepository.UpdateFoiChamado.Should().BeFalse();
+            mockFabricantes.Verify(f => f.UpdateFabricanteAsync(It.Is<Fabricante>(fab => fab.Nome == fabricanteViewModel.Nome &&
+                                                                                      fab.CNPJ == fabricanteViewModel.CNPJ &&
+                                                                                      fab.Endereco == fabricanteViewModel.Endereco)), Times.Never);
         }
     }
 }

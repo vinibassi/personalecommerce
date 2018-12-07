@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
@@ -10,26 +13,28 @@ using WebCadastrador.ViewModels;
 
 namespace TestesDeUnidade.FabricanteControllerTests
 {
-    class TestaCreateFabricanteValido
+    class TestaCreateFabricanteValidoMOQ
     {
 
         private IActionResult result;
-        private Mock<IProdutoRepository> mockProdutos;
-        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<ProdutoRepository> mockProdutos;
+        private Mock<FabricanteRepository> mockFabricantes;
         private FabricantesController controller;
         private FabricantesViewModel fabricanteViewModel;
-        //private Fabricante fabricante;
+
         [SetUp]
         public async Task Setup()
         {
-            mockFabricantes = new Mock<IFabricanteRepository>();
-            mockProdutos = new Mock<IProdutoRepository>();
+            mockFabricantes = new Mock<FabricanteRepository>();
+            mockProdutos = new Mock<ProdutoRepository>();
+            mockFabricantes.Setup(f => f.AddFabricanteAsync(It.IsAny<Fabricante>())).Returns(Task.CompletedTask).Verifiable();
+
             controller = new FabricantesController(mockProdutos.Object, mockFabricantes.Object);
             fabricanteViewModel = new FabricantesViewModel
             {
                 Id = 1,
                 Nome = "abc",
-                CNPJ = "59478724000198",
+                CNPJ = "594780198",
                 Endereco = "Rua ABCDXYZ, 123"
             };
             // act
@@ -51,10 +56,14 @@ namespace TestesDeUnidade.FabricanteControllerTests
         [Test]
         public void FabricanteFoiAdicionado()
         {
-            mockFabricantes.Verify(f => f.AddFabricanteAsync(It.Is<Fabricante>(fab => fab.Nome == fabricanteViewModel.Nome && 
-                                                                                      fab.CNPJ == fabricanteViewModel.CNPJ &&
-                                                                                      fab.Endereco == fabricanteViewModel.Endereco)));
+            mockFabricantes.Verify(f => f.AddFabricanteAsync
+                                    (It.Is<Fabricante>
+                                    (fab =>fab.Nome == fabricanteViewModel.Nome &&
+                                           fab.Endereco == fabricanteViewModel.Endereco &&
+                                           fab.CNPJ == fabricanteViewModel.CNPJ &&
+                                           fab.Id == fabricanteViewModel.Id)), 
+                                     Times.Once());
         }
+        
     }
 }
-

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
@@ -14,10 +10,10 @@ namespace WebCadastrador.Controllers
 {
     public class FabricantesController : Controller
     {
-        private readonly IProdutoRepositorio produtoRepositorio;
+        private readonly IProdutoRepository produtoRepositorio;
         private readonly IFabricanteRepository fabricanteRepository;
 
-        public FabricantesController(IProdutoRepositorio produtoRepositorio, IFabricanteRepository fabricanteRepository)
+        public FabricantesController(IProdutoRepository produtoRepositorio, IFabricanteRepository fabricanteRepository)
         {
             this.produtoRepositorio = produtoRepositorio;
             this.fabricanteRepository = fabricanteRepository;

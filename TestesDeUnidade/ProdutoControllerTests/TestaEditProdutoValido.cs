@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
+using WebCadastrador.Models.Repositories;
 
 namespace TestesDeUnidade.ProdutoController
 {
@@ -12,17 +13,23 @@ namespace TestesDeUnidade.ProdutoController
     {
         private ProdutoEditViewModel produtoEditVM;
         private IActionResult result;
-        private MockFabricanteRepository mockFabricanteRepository;
-        private MockProdutoRepositorio mockProdutoRepositorio;
+        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<IProdutoRepository> mockProdutos;
         private ProdutosController controller;
+        private Fabricante fabricante;
+        private Produto produto;
 
         [SetUp]
         public async Task Setup()
         {
-            mockProdutoRepositorio = new MockProdutoRepositorio();
-            mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new ProdutosController(mockProdutoRepositorio, mockFabricanteRepository);
-            // act
+            fabricante = new Fabricante();
+            produto = new Produto();
+            mockProdutos = new Mock<IProdutoRepository>();
+            mockFabricantes = new Mock<IFabricanteRepository>();
+            controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
+            mockFabricantes.Setup(f => f.FindByIdAsync(1)).ReturnsAsync(fabricante);
+            mockProdutos.Setup(p => p.FindProdutoByIdAsync(1)).ReturnsAsync(produto);
+            mockProdutos.Setup(p => p.UpdateAsync(produto)).Returns(Task.CompletedTask);
             produtoEditVM = new ProdutoEditViewModel
             {
                 Id = 1,
@@ -30,6 +37,7 @@ namespace TestesDeUnidade.ProdutoController
                 FabricanteId = 1,
                 Preco = 49.93m
             };
+            // act
             result = await controller.Edit(produtoEditVM);
         }
         [Test]
@@ -48,12 +56,12 @@ namespace TestesDeUnidade.ProdutoController
         [Test]
         public void UpdateAsyncChamado()
         {
-            mockProdutoRepositorio.UpdateAsyncFoiChamado.Should().BeTrue();
+            mockProdutos.Verify(f=> f.UpdateAsync(It.Is<Produto>(p => p.Nome == produtoEditVM.Nome)), Times.Once);
         }
         [Test]
         public void ListaFabricantesNãoFoiExibida()
         {
-            mockFabricanteRepository.ListaFoiChamada.Should().BeFalse();
+            Assert.That(controller.ViewBag.Fabricantes, Is.EqualTo(null));
         }
     }
 }

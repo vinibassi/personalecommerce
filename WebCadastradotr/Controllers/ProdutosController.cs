@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
@@ -13,10 +10,10 @@ namespace WebCadastrador.Controllers
 {
     public class ProdutosController : Controller
     {
-        private readonly IProdutoRepositorio produtoRepositorio;
+        private readonly IProdutoRepository produtoRepositorio;
         private readonly IFabricanteRepository fabricanteRepository;
 
-        public ProdutosController(IProdutoRepositorio produtoRepositorio, IFabricanteRepository fabricanteRepository)
+        public ProdutosController(IProdutoRepository produtoRepositorio, IFabricanteRepository fabricanteRepository)
         {
             this.produtoRepositorio = produtoRepositorio;
             this.fabricanteRepository = fabricanteRepository;
@@ -131,7 +128,7 @@ namespace WebCadastrador.Controllers
 
             if (ModelState.IsValid)
             {
-                var fabricanteTask = await fabricanteRepository.FindByIdAsync(produtoEditViewModel.FabricanteId);
+                var fabricante = await fabricanteRepository.FindByIdAsync(produtoEditViewModel.FabricanteId);
                 var produto = await produtoRepositorio.FindProdutoByIdAsync(produtoEditViewModel.Id); 
                 if (produto == null)
                 {
@@ -139,7 +136,7 @@ namespace WebCadastrador.Controllers
                 }
                 produto.Nome = produtoEditViewModel.Nome;
                 produto.Preco = produtoEditViewModel.Preco;
-                produto.Fabricante = fabricanteTask;
+                produto.Fabricante = fabricante;
 
                 try
                 {

@@ -1,14 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestesDeAceitacao;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
@@ -20,16 +16,17 @@ namespace TestesDeUnidade.ProdutoController
         private ProdutoCreateViewModel produtoCreateVM;
         private IActionResult result;
         private Fabricante fabricante;
-        private MockFabricanteRepository mockFabricanteRepository;
-        private MockProdutoRepositorio mockProdutoRepositorio;
+        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<IProdutoRepository> mockProdutos;
         private ProdutosController controller;
 
         [SetUp]
         public async Task Setup()
         {
-            mockProdutoRepositorio = new MockProdutoRepositorio();
-            mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new ProdutosController(mockProdutoRepositorio, mockFabricanteRepository);
+            mockProdutos = new Mock<IProdutoRepository>();
+            mockFabricantes = new Mock<IFabricanteRepository>();
+            mockFabricantes.Setup(f => f.ListaFabricantesAsync()).ReturnsAsync(new List<Fabricante> { new Fabricante { Id = 999 } }).Verifiable();
+            controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
             // act
             produtoCreateVM = new ProdutoCreateViewModel
             {
@@ -57,12 +54,18 @@ namespace TestesDeUnidade.ProdutoController
         [Test]
         public void AddAsyncNãoFoiChamado()
         {
-            mockProdutoRepositorio.AddAsyncFoiChamado.Should().BeFalse();
+            mockProdutos.Verify(f => f.AddAsync(It.Is<Produto>(p => p.Nome == produtoCreateVM.Nome && 
+                                                                    p.Fabricante == fabricante &&
+                                                                    p.Preco == produtoCreateVM.Preco)), Times.Never);
         }
+        [Test]
+        public void FabricantesForamObtidos() => mockFabricantes.VerifyAll();
+
         [Test]
         public void ListaFabricantesFoiExibida()
         {
-            ((int)controller.ViewBag.Fabricantes.Count).Should().Be(1);
+            Assert.That(controller.ViewBag.Fabricantes, Has.Count.EqualTo(1));
+            Assert.That(controller.ViewBag.Fabricantes[0], Has.Property("Value").EqualTo("999"));
         }
     }
 }

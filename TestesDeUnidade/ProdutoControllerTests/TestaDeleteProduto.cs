@@ -1,14 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestesDeAceitacao;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
@@ -17,28 +11,23 @@ namespace TestesDeUnidade.ProdutoController
 {
     class TestaDeleteProduto
     {
-        private ProdutoDeleteViewModel produtoDeleteVM;
         private IActionResult result;
-        private Fabricante fabricante;
-        private MockFabricanteRepository mockFabricanteRepository;
-        private MockProdutoRepositorio mockProdutoRepositorio;
+        private Produto produto;
+        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<IProdutoRepository> mockProdutos;
         private ProdutosController controller;
 
         [SetUp]
         public async Task Setup()
         {
-            mockProdutoRepositorio = new MockProdutoRepositorio();
-            mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new ProdutosController(mockProdutoRepositorio, mockFabricanteRepository);
+            mockProdutos = new Mock<IProdutoRepository>();
+            produto = new Produto();
+            mockFabricantes = new Mock<IFabricanteRepository>();
+            mockProdutos.Setup(f => f.FindProdutoByIdAsync(1)).ReturnsAsync(produto);
+            controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
             // act
-            produtoDeleteVM = new ProdutoDeleteViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                Fabricante = 1,
-                Preco = 49.99m
-            };
-            result = await controller.DeleteConfirmed(produtoDeleteVM.Id);
+            mockProdutos.Setup(f => f.RemoveAsync(produto)).Returns(Task.CompletedTask);
+            result = await controller.DeleteConfirmed(1);
         }
         [Test]
         public void TestaResult()
@@ -47,8 +36,6 @@ namespace TestesDeUnidade.ProdutoController
             view.ActionName.Should().Be("Index");
         }
         [Test]
-        public void RemoveAsyncChamado() => mockProdutoRepositorio.RemoveAsyncFoiChamado.Should().BeTrue();
-        [Test]
-        public void FindProdutoFoiChamado() => mockProdutoRepositorio.FindProdutoFoiChamado.Should().BeTrue();
+        public void RemoveAsyncChamado() => mockProdutos.Verify(f => f.RemoveAsync(produto), Times.Once);
     }
 }

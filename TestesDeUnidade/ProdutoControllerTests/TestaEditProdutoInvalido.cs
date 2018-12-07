@@ -1,14 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestesDeAceitacao;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
@@ -21,16 +16,16 @@ namespace TestesDeUnidade.ProdutoController
         private ProdutoEditViewModel produtoEditViewModel;
         private IActionResult result;
         private Fabricante fabricante;
-        private MockFabricanteRepository mockFabricanteRepository;
-        private MockProdutoRepositorio mockProdutoRepositorio;
+        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<IProdutoRepository> mockProdutos;
         private ProdutosController controller;
 
         [SetUp]
         public async Task Setup()
         {
-            mockProdutoRepositorio = new MockProdutoRepositorio();
-            mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new ProdutosController(mockProdutoRepositorio, mockFabricanteRepository);
+            mockProdutos = new Mock<IProdutoRepository>();
+            mockFabricantes = new Mock<IFabricanteRepository>();
+            controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
             // act
             produtoEditViewModel = new ProdutoEditViewModel
             {
@@ -59,12 +54,9 @@ namespace TestesDeUnidade.ProdutoController
         [Test]
         public void AddAsyncNãoFoiChamado()
         {
-            mockProdutoRepositorio.AddAsyncFoiChamado.Should().BeFalse();
+            mockProdutos.Verify(p => p.AddAsync(It.Is<Produto>(prod => prod.Nome == produtoEditViewModel.Nome)), Times.Never);
         }
         [Test]
-        public void ListaFabricantesFoiExibida()
-        {
-            mockFabricanteRepository.ListaFoiChamada.Should().BeTrue();
-        }
+        public void ListaFabricantesFoiExibida() => Assert.That(controller.ViewBag.Fabricantes, Is.EqualTo(null));
     }
 }

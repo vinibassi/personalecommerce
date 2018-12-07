@@ -12,13 +12,13 @@ namespace WebCadastrador.Models.Repositories
             this.context = context;
         }
 
-        public async Task AddFabricanteAsync(Fabricante fabricante)
+        public virtual async Task AddFabricanteAsync(Fabricante fabricante)
         {
             context.Add(fabricante);
             await context.SaveChangesAsync();
         }
 
-        public async Task<(bool Exists, IDictionary<string, string> Errors)> ExistsAsync(Fabricante fabricante)
+        public virtual async Task<(bool Exists, IDictionary<string, string> Errors)> ExistsAsync(Fabricante fabricante)
         {
             var existeCNPJ = await context.Fabricante.AnyAsync(r => r.CNPJ == fabricante.CNPJ);
             if (existeCNPJ)
@@ -26,30 +26,30 @@ namespace WebCadastrador.Models.Repositories
             return (false, new Dictionary<string, string>());
         }
 
-        public async Task<bool> FabricanteExists(int id)
+        public virtual async Task<bool> FabricanteExists(int id)
         {
             var fabricanteExiste = await context.Fabricante.AnyAsync(e => e.Id == id);
             return fabricanteExiste;
         }
 
-        public async Task<Fabricante> FindByIdAsync(int id)
+        public virtual async Task<Fabricante> FindByIdAsync(int id)
         {
             var fabricante = await context.Fabricante.FirstOrDefaultAsync(p => p.Id == id);
             return fabricante;
         }
 
-        public Task<List<Fabricante>> ListaFabricantesAsync()
+        public virtual Task<List<Fabricante>> ListaFabricantesAsync()
         {
             return context.Fabricante.ToListAsync();
         }
 
-        public async Task RemoveFabricanteAsync(Fabricante fabricante)
+        public virtual async Task RemoveFabricanteAsync(Fabricante fabricante)
         {
             context.Fabricante.Remove(fabricante);
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateFabricanteAsync(Fabricante fabricante)
+        public virtual async Task UpdateFabricanteAsync(Fabricante fabricante)
         {
             context.Update(fabricante);
             await context.SaveChangesAsync();

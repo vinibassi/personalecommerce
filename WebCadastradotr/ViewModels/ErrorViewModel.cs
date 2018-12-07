@@ -1,5 +1,3 @@
-using System;
-
 namespace WebCadastradotr.Models
 {
     public class ErrorViewModel

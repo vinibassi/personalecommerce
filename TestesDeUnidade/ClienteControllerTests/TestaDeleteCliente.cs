@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Threading.Tasks;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
-using System.Linq;
-
+using Moq;
+using WebCadastrador.Models.Repositories;
 
 namespace TestesDeUnidade.ClienteControllerTests
 {
@@ -15,15 +14,19 @@ namespace TestesDeUnidade.ClienteControllerTests
     {
         private ClientesController controller;
         private IActionResult result;
-        private MockClienteRepository mockClienteRepository;
+        private Mock<IClienteRepository> mockClientes;
+        private ClientesViewModel clienteViewModel;
+        private Clientes cliente;
 
         [SetUp]
         public async Task Setup()
         {
-            mockClienteRepository = new MockClienteRepository();
-            controller = new ClientesController(mockClienteRepository);
+            mockClientes = new Mock<IClienteRepository>();
+            cliente = new Clientes();
+            mockClientes.Setup(c => c.FindClienteByIdAsync(1)).ReturnsAsync(cliente);
+            controller = new ClientesController(mockClientes.Object);
             // act
-            var clienteViewModel = new ClientesViewModel
+            clienteViewModel = new ClientesViewModel
             {
                 Id = 1,
                 Nome = "abc",
@@ -42,8 +45,8 @@ namespace TestesDeUnidade.ClienteControllerTests
             view.ActionName.Should().Be("Index");
         }
         [Test]
-        public void RemoveFabricanteFoiChamado() => mockClienteRepository.RemoveClienteFoiChamado.Should().BeTrue();
+        public void RemoveFabricanteFoiChamado() => mockClientes.Verify(c => c.RemoveClienteAsync(cliente), Times.Once);
         [Test]
-        public void FindFabricanteChamado() => mockClienteRepository.FindClienteFoiChamado.Should().BeTrue();
+        public void FindClienteChamado() => mockClientes.Verify(c => c.FindClienteByIdAsync(1), Times.Once);
     }
 }

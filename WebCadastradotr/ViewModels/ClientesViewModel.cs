@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebCadastrador.Models;
+﻿using WebCadastrador.Models;
 
 namespace WebCadastrador.ViewModels
 {

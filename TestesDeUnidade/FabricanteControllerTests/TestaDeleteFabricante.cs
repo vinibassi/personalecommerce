@@ -1,18 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestesDeAceitacao;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
-using WebCadastrador.ViewModels;
 
 namespace TestesDeUnidade.FabricanteControllerTests
 {
@@ -20,26 +13,21 @@ namespace TestesDeUnidade.FabricanteControllerTests
     {
         private FabricantesController controller;
         private IActionResult result;
+        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<IProdutoRepository> mockProdutos;
         private Fabricante fabricante;
-        private MockFabricanteRepository mockFabricanteRepository;
-        private MockProdutoRepositorio mockProdutoRepositorio;
-        private FabricantesViewModel fabricanteViewModel;
 
         [SetUp]
         public async Task Setup()
         {
-            mockProdutoRepositorio = new MockProdutoRepositorio();
-            mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new FabricantesController(mockProdutoRepositorio, mockFabricanteRepository);
+            fabricante = new Fabricante();
+            mockFabricantes = new Mock<IFabricanteRepository>();
+            mockFabricantes.Setup(f => f.FindByIdAsync(1)).ReturnsAsync(fabricante);
+            mockProdutos = new Mock<IProdutoRepository>();
+            controller = new FabricantesController(mockProdutos.Object, mockFabricantes.Object);
             // act
-            fabricanteViewModel = new FabricantesViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                CNPJ = "59478724000198",
-                Endereco = "Rua ABCDXYZ, 123"
-            };
-            result = await controller.DeleteConfirmed(fabricanteViewModel.Id);
+            mockFabricantes.Setup(f => f.AddFabricanteAsync(fabricante));
+            result = await controller.DeleteConfirmed(1);
         }
         [Test]
         public void TestaResult()
@@ -48,8 +36,6 @@ namespace TestesDeUnidade.FabricanteControllerTests
             view.ActionName.Should().Be("Index");
         }
         [Test]
-        public void RemoveFabricanteFoiChamado() => mockFabricanteRepository.RemoveFabricanteFoiChamado.Should().BeTrue();
-        [Test]
-        public void FindFabricanteChamado() => mockFabricanteRepository.FindFabricanteFoiChamado.Should().BeTrue();
+        public void RemoveFabricanteFoiChamado() => mockFabricantes.Verify(f => f.RemoveFabricanteAsync(fabricante), Times.Once());
     }
 }

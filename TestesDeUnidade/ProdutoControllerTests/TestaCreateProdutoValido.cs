@@ -1,14 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestesDeAceitacao;
-using TestesDeUnidade.Mocks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
@@ -19,23 +13,29 @@ namespace TestesDeUnidade.ProdutoController
     {
         private ProdutoCreateViewModel produtoCreateVM;
         private IActionResult result;
-        private MockFabricanteRepository mockFabricanteRepository;
-        private MockProdutoRepositorio mockProdutoRepositorio;
+        private Mock<IFabricanteRepository> mockFabricantes;
+        private Mock<IProdutoRepository> mockProdutos;
         private ProdutosController controller;
+        private Fabricante fabricante;
+        private Produto produto;
 
         [SetUp]
         public async Task Setup()
         {
-            mockProdutoRepositorio = new MockProdutoRepositorio();
-            mockFabricanteRepository = new MockFabricanteRepository();
-            controller = new ProdutosController(mockProdutoRepositorio, mockFabricanteRepository);
-            // act
+            mockProdutos = new Mock<IProdutoRepository>();
+            fabricante = new Fabricante();
+            produto = new Produto();
+            mockFabricantes = new Mock<IFabricanteRepository>();
+            mockFabricantes.Setup(f => f.FindByIdAsync(1)).ReturnsAsync(fabricante);
+            mockProdutos.Setup(f => f.AddAsync(produto)).Returns(Task.CompletedTask);
+            controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
             produtoCreateVM = new ProdutoCreateViewModel
             {
                 Nome = "abc",
                 Fabricante = 1,
                 Preco = 49.93m
             };
+            // act
             result = await controller.Create(produtoCreateVM);
         }
         [Test]
@@ -47,19 +47,15 @@ namespace TestesDeUnidade.ProdutoController
         [Test]
         public void TestaModelState() => controller.ModelState.IsValid.Should().BeTrue();
         [Test]
-        public void TestaSemErro()
-        {
-            controller.ModelState.Should().BeEmpty();
-        }
+        public void TestaSemErro() => controller.ModelState.Should().BeEmpty();
         [Test]
         public void AddAsyncChamado()
         {
-            mockProdutoRepositorio.AddAsyncFoiChamado.Should().BeTrue();
+            mockProdutos.Verify(f=>f.AddAsync(It.Is<Produto>(p => p.Nome == produtoCreateVM.Nome && 
+                                                                  p.Fabricante == fabricante && 
+                                                                  p.Preco == produtoCreateVM.Preco)), Times.Once);
         }
         [Test]
-        public void ListaFabricantesNãoFoiExibida()
-        {
-            mockFabricanteRepository.ListaFoiChamada.Should().BeFalse();
-        }
+        public void ListaFabricantesNãoFoiExibida() => Assert.That(controller.ViewBag.Fabricantes, Is.EqualTo(null));
     }
 }
