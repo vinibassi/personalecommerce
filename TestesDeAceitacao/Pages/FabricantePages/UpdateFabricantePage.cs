@@ -1,9 +1,12 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 
 namespace TestesDeAceitacao.Pages.FabricantePages
 {
     class UpdateFabricantePage
     {
+        public string Url => SetupGlobal.Driver.Url;
+
         public void NavegaToEdit(int id)
         {
             SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Fabricantes/Edit/{id}");
@@ -25,6 +28,13 @@ namespace TestesDeAceitacao.Pages.FabricantePages
             enderecoFabricante.SendKeys(endereco);
 
             driver.FindElement(By.CssSelector("body > div > div.row > div > form > div:nth-child(5) > input")).Click();
+        }
+
+        public string LeCnpjError()
+        {
+            var driver = SetupGlobal.Driver;
+            var erro = driver.FindElement(By.CssSelector("[data-valmsg-for=CNPJ]"));
+            return erro.Text;
         }
     }
 }

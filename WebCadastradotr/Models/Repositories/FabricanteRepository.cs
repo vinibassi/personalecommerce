@@ -20,7 +20,7 @@ namespace WebCadastrador.Models.Repositories
 
         public virtual async Task<(bool Exists, IDictionary<string, string> Errors)> ExistsAsync(Fabricante fabricante)
         {
-            var existeCNPJ = await context.Fabricante.AnyAsync(r => r.CNPJ == fabricante.CNPJ);
+            var existeCNPJ = await context.Fabricante.AnyAsync(r => r.CNPJ == fabricante.CNPJ && r.Id != fabricante.Id);
             if (existeCNPJ)
                 return (true, new Dictionary<string, string> { {"CNPJ", "Este CNPJ já está cadastrado." } });
             return (false, new Dictionary<string, string>());

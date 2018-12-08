@@ -107,7 +107,14 @@ namespace WebCadastrador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(FabricantesViewModel fabricanteViewModel)
         {
-            var fabricante = new Fabricante();
+            var fabricante = new Fabricante
+            {
+                Nome = fabricanteViewModel.Nome,
+                CNPJ = fabricanteViewModel.CNPJ,
+                Endereco = fabricanteViewModel.Endereco,
+                Id = fabricanteViewModel.Id
+            };
+
             var fabricanteValidator = new FabricanteValidator();
             if (!fabricanteValidator.IsCnpj(fabricanteViewModel.CNPJ))
             {
@@ -121,11 +128,6 @@ namespace WebCadastrador.Controllers
             }
             if (ModelState.IsValid)
             {
-                fabricante.Nome = fabricanteViewModel.Nome;
-                fabricante.CNPJ = fabricanteViewModel.CNPJ;
-                fabricante.Endereco = fabricanteViewModel.Endereco;
-                fabricante.Id = fabricanteViewModel.Id;
-
                 try
                 {
                     await fabricanteRepository.UpdateFabricanteAsync(fabricante);
