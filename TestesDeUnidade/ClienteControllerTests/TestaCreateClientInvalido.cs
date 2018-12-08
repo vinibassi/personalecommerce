@@ -45,7 +45,7 @@ namespace TestesDeUnidade.ClienteControllerTests
         [Test]
         public void TestaModelState() => controller.ModelState.IsValid.Should().BeFalse();
         [Test]
-        public void AddFabricanteNãoFoiChamado() => mockClientes.Verify(c => c.AddClienteAsync(It.Is<Clientes>(cl => cl.Nome == clienteViewModel.Nome &&
+        public void AddFabricanteNãoFoiChamado() => mockClientes.Verify(c => c.AddClienteAsync(It.Is<Cliente>(cl => cl.Nome == clienteViewModel.Nome &&
                                                                                                           cl.Sobrenome == clienteViewModel.Sobrenome &&
                                                                                                           cl.CPF == clienteViewModel.CPF &&
                                                                                                           cl.Endereco == clienteViewModel.Endereco &&

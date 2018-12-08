@@ -9,7 +9,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
     [TestFixture]
     class UpdateClientTest
     {
-        private Clientes cliente;
+        private Cliente cliente;
         private WebCadastradorContext context;
 
         [OneTimeSetUp]
@@ -22,7 +22,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
 
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
-            context.Clientes.Add(new Clientes
+            context.Clientes.Add(new Cliente
             {
                 Nome = "Paulo",
                 Sobrenome = "Guedes",

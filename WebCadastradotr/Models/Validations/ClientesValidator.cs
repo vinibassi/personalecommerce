@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
+using WebCadastrador.ViewModels;
 
 namespace WebCadastrador.Models.Validations
 {
-    public class ClientesValidator : AbstractValidator<Clientes>
+    public class ClientesValidator : AbstractValidator<ClientesViewModel>
     {
         public ClientesValidator()
         {
@@ -33,7 +34,7 @@ namespace WebCadastrador.Models.Validations
                 .NotEmpty().WithMessage("O campo idade não pode ficar vazio")
                 .NotNull().WithMessage("O campo idade deve ser informado");
 
-            RuleFor(x => x.EstadoCivil)
+            RuleFor(x => x.estadoCivil)
                 .NotEmpty().WithMessage("O campo estado civil não pode ficar vazio")
                 .NotNull().WithMessage("O campo estado civil deve ser informado");
         }

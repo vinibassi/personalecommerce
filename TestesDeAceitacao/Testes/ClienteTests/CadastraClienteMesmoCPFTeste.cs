@@ -6,11 +6,11 @@ using WebCadastrador.Models;
 
 namespace TestesDeAceitacao.Testes.ClienteTests
 {
-    [TestFixture]
-    class ReadClientesTest
+    class CadastraClienteMesmoCPFTeste
     {
-        private ClienteCadastrado cliente;
+        private Cliente novoCliente;
         private WebCadastradorContext context;
+        private NewClientesPage page;
 
         [OneTimeSetUp]
         public void CadastraCliente()
@@ -27,16 +27,18 @@ namespace TestesDeAceitacao.Testes.ClienteTests
                 Nome = "Paulo",
                 Sobrenome = "Guedes",
                 CPF = "00870021087",
-                Endereco = "Rua abcdwxyz, 14",
-                Idade = 15,
+                Endereco = "Rua abcdxyz, 23",
+                Idade = 20,
                 EstadoCivil = EstadoCivil.Casado
             });
             context.SaveChanges();
-            var page = new ClientesListPage();
-            SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Clientes");
-            cliente = page.Clientes.FirstOrDefault(c => c.CPF == "008.700.210-87");
+            page = new NewClientesPage();
+            page.Navigate();
+            page.Cadastra("dasdsadsadsa", "SAKDJASKD", "00870021087", "Rua abcdwxyz, 14", 15, EstadoCivil.Divorciado);
         }
         [Test]
-        public void ReadClientes() => Assert.AreEqual("Guedes", cliente.Sobrenome);
+        public void TestaQuantidadeClientes() => Assert.AreEqual(1, context.Clientes.Count());
+        [Test]
+        public void MensagemDeErroApareceu() => Assert.AreEqual("Este CPF já está cadastrado.", page.LeCPFError());
     }
 }

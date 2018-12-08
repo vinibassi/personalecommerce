@@ -28,11 +28,12 @@ namespace TestesDeUnidade.ClienteControllerTests
                 Id = 1,
                 Nome = "abc",
                 Sobrenome = "defg",
-                CPF = "774050",
-                Endereco = "Rua ABCDXYZ, 123",
-                Idade = 30,
+                CPF = "008700",
+                Endereco = "Rua XYZWABC, 123",
+                Idade = 35,
                 estadoCivil = EstadoCivil.Divorciado
             };
+            //act
             result = await controller.Edit(clienteViewModel);
         }
         [Test]
@@ -51,11 +52,18 @@ namespace TestesDeUnidade.ClienteControllerTests
             error.Value.Errors.Single().ErrorMessage.Should().Be("O CPF é inválido.");
         }
         [Test]
-        public void AddFabricanteNãoFoiChamado() => mockClientes.Verify(c => c.UpdateClienteAsync(It.Is<Clientes>(cl => cl.Nome == clienteViewModel.Nome &&
-                                                                                                                        cl.Sobrenome == clienteViewModel.Sobrenome &&
-                                                                                                                        cl.CPF == clienteViewModel.CPF &&
-                                                                                                                        cl.Endereco == clienteViewModel.Endereco &&
-                                                                                                                        cl.Idade == clienteViewModel.Idade &&
-                                                                                                                        cl.EstadoCivil == clienteViewModel.estadoCivil)), Times.Never);
+        public void AddFabricanteNãoFoiChamado() => mockClientes.Verify(c => c.UpdateClienteAsync(It.IsAny<Cliente>()), Times.Never);
+        //[Test]
+        //public void ClienteJaExiste()
+        //{
+        //    mockClientes.Verify(c => c.ClientesExists(It.Is<Cliente>(cl => 
+        //        cl.Id == 1  &&
+        //        cl.Nome == "abc" &&
+        //        cl.Sobrenome == "defg" &&
+        //        cl.CPF == "00870021087" &&
+        //        cl.Endereco == "Rua ABCDXYZ, 123" &&
+        //        cl.Idade == 30 &&
+        //        cl.estadoCivil == EstadoCivil.Divorciado)));
+        //}
     }
 }

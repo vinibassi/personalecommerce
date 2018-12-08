@@ -16,13 +16,13 @@ namespace TestesDeUnidade.ClienteControllerTests
         private IActionResult result;
         private Mock<IClienteRepository> mockClientes;
         private ClientesViewModel clienteViewModel;
-        private Clientes cliente;
+        private Cliente cliente;
 
         [SetUp]
         public async Task Setup()
         {
             mockClientes = new Mock<IClienteRepository>();
-            cliente = new Clientes();
+            cliente = new Cliente();
             mockClientes.Setup(c => c.FindClienteByIdAsync(1)).ReturnsAsync(cliente);
             controller = new ClientesController(mockClientes.Object);
             // act

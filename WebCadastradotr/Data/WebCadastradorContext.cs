@@ -15,7 +15,7 @@ namespace WebCadastrador.Models
             var converter = new EnumToNumberConverter<EstadoCivil, byte>();
 
             modelBuilder
-                .Entity<Clientes>()
+                .Entity<Cliente>()
                 .Property(e => e.EstadoCivil)
                 .HasConversion(converter);
         }
@@ -24,6 +24,6 @@ namespace WebCadastrador.Models
 
         public DbSet<Fabricante> Fabricante { get; set; }
 
-        public DbSet<Clientes> Clientes { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model WebCadastrador.Models.Clientes
+﻿@model WebCadastrador.ViewModels.ClientesViewModel
 @using WebCadastrador.Models
 @{
     ViewData["Title"] = "Edit";
@@ -39,16 +39,16 @@
                 <span asp-validation-for="Idade" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EstadoCivil" class="control-label"></label>
+                <label asp-for="estadoCivil" class="control-label"></label>
                 <div>
-                    @Html.RadioButtonFor(m => m.EstadoCivil, EstadoCivil.Solteiro)
+                    @Html.RadioButtonFor(m => m.estadoCivil, EstadoCivil.Solteiro)
                     <span>@EstadoCivil.Solteiro</span>
-                    @Html.RadioButtonFor(m => m.EstadoCivil, EstadoCivil.Casado)
+                    @Html.RadioButtonFor(m => m.estadoCivil, EstadoCivil.Casado)
                     <span>@EstadoCivil.Casado</span>
-                    @Html.RadioButtonFor(m => m.EstadoCivil, EstadoCivil.Divorciado)
+                    @Html.RadioButtonFor(m => m.estadoCivil, EstadoCivil.Divorciado)
                     <span>@EstadoCivil.Divorciado</span>
                 </div>
-                <span asp-validation-for="EstadoCivil" class="text-danger"></span>
+                <span asp-validation-for="estadoCivil" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

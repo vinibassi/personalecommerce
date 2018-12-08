@@ -59,14 +59,16 @@ namespace WebCadastrador.Controllers
                 ModelState.AddModelError("CPF", "O CPF é inválido.");
             }
 
-            var cliente = new Clientes();
-            cliente.Id = clientesViewModel.Id;
-            cliente.Nome = clientesViewModel.Nome;
-            cliente.Sobrenome = clientesViewModel.Sobrenome;
-            cliente.CPF = clientesViewModel.CPF;
-            cliente.Endereco = clientesViewModel.Endereco;
-            cliente.Idade = clientesViewModel.Idade;
-            cliente.EstadoCivil = clientesViewModel.estadoCivil;
+            var cliente = new Cliente
+            {
+                Id = clientesViewModel.Id,
+                Nome = clientesViewModel.Nome,
+                Sobrenome = clientesViewModel.Sobrenome,
+                CPF = clientesViewModel.CPF,
+                Endereco = clientesViewModel.Endereco,
+                Idade = clientesViewModel.Idade,
+                EstadoCivil = clientesViewModel.estadoCivil
+            };
 
             var (exists, errorExists) = await clienteRepository.ExistsAsync(cliente);
             if (exists)
@@ -90,12 +92,22 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var clientes = await clienteRepository.FindClienteByIdAsync(id.Value);
-            if (clientes == null)
+            var cliente = await clienteRepository.FindClienteByIdAsync(id.Value);
+            if (cliente == null)
             {
                 return NotFound();
             }
-            return View(clientes);
+            var clienteVM = new ClientesViewModel
+            {
+                Id = cliente.Id,
+                Nome = cliente.Nome,
+                Sobrenome = cliente.Sobrenome,
+                CPF = cliente.CPF,
+                Endereco = cliente.Endereco,
+                Idade = cliente.Idade,
+                estadoCivil = cliente.EstadoCivil
+            };
+            return View(clienteVM);
         }
 
         // POST: Clientes/Edit/5
@@ -105,7 +117,16 @@ namespace WebCadastrador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ClientesViewModel clientesViewModel)
         {
-            var cliente = new Clientes();
+            var cliente = new Cliente
+            {
+                Id = clientesViewModel.Id,
+                Nome = clientesViewModel.Nome,
+                Sobrenome = clientesViewModel.Sobrenome,
+                CPF = clientesViewModel.CPF,
+                Endereco = clientesViewModel.Endereco,
+                Idade = clientesViewModel.Idade,
+                EstadoCivil = clientesViewModel.estadoCivil
+            };
             var clientesValidator = new ClientesValidator();
             if (!clientesValidator.IsCpf(clientesViewModel.CPF))
             {
@@ -119,14 +140,6 @@ namespace WebCadastrador.Controllers
             }
             if (ModelState.IsValid)
             {
-                cliente.Id = clientesViewModel.Id;
-                cliente.Nome = clientesViewModel.Nome;
-                cliente.Sobrenome = clientesViewModel.Sobrenome;
-                cliente.CPF = clientesViewModel.CPF;
-                cliente.Endereco = clientesViewModel.Endereco;
-                cliente.Idade = clientesViewModel.Idade;
-                cliente.EstadoCivil = clientesViewModel.estadoCivil;
-
                 try
                 {
                     await clienteRepository.UpdateClienteAsync(cliente);
@@ -172,12 +185,6 @@ namespace WebCadastrador.Controllers
             var cliente = await clienteRepository.FindClienteByIdAsync(clientesViewModel.Id);
             await clienteRepository.RemoveClienteAsync(cliente);
             return RedirectToAction(nameof(Index));
-        }
-
-        private async Task<bool> ClientesExists(int id)
-        {
-            var clienteExists = await clienteRepository.ClientesExists(id);
-            return clienteExists;
         }
     }
 }

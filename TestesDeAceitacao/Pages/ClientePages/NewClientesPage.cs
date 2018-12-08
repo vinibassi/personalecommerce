@@ -43,6 +43,12 @@ namespace TestesDeAceitacao.Pages
             idadeCliente.SendKeys(idade.ToString());
             nomeCliente.Submit();
         }
+        public string LeCPFError()
+        {
+            var driver = SetupGlobal.Driver;
+            var erro = driver.FindElement(By.CssSelector("[data-valmsg-for=CPF]"));
+            return erro.Text;
+        }
 
     }
 }

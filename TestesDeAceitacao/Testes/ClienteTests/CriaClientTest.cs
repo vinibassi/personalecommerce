@@ -9,7 +9,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
     [TestFixture]
     class CriaClienteTest
     {
-        private Clientes novoCliente;
+        private Cliente novoCliente;
         private WebCadastradorContext context;
 
         [OneTimeSetUp]

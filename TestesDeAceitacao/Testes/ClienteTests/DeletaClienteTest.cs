@@ -20,7 +20,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
-            context.Clientes.Add(new Clientes{
+            context.Clientes.Add(new Cliente{
                 Nome = "Paulo",
                 Sobrenome = "Guedes",
                 CPF = "00870021087",

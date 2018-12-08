@@ -90,7 +90,14 @@ namespace WebCadastrador.Controllers
             {
                 return NotFound();
             }
-            return View(fabricante);
+            var fabricanteVM = new FabricantesViewModel
+            {
+                Id = fabricante.Id,
+                Nome = fabricante.Nome,
+                CNPJ = fabricante.CNPJ,
+                Endereco = fabricante.Endereco,
+            };
+            return View(fabricanteVM);
         }
 
         // POST: Fabricantes/Edit/5

@@ -47,5 +47,14 @@ namespace TestesDeAceitacao.Pages.ClientePages
 
             driver.FindElement(By.CssSelector("body > div > div.row > div > form > div:nth-child(8) > input")).Click();
         }
+
+        public string Url=> SetupGlobal.Driver.Url;
+
+        public string LeCPFError()
+        {
+            var driver = SetupGlobal.Driver;
+            var erro = driver.FindElement(By.CssSelector("[data-valmsg-for=CPF]"));
+            return erro.Text;
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace TestesDeUnidade.ClienteControllerTests
         [Test]
         public void TestaSemErro() => controller.ModelState.Should().BeEmpty();
         [Test]
-        public void UpdateFabricanteFoiChamado() => mockClientes.Verify(c => c.UpdateClienteAsync(It.Is<Clientes>(cl => cl.Nome == clienteViewModel.Nome &&
+        public void UpdateFabricanteFoiChamado() => mockClientes.Verify(c => c.UpdateClienteAsync(It.Is<Cliente>(cl => cl.Nome == clienteViewModel.Nome &&
                                                                                                                         cl.Sobrenome == clienteViewModel.Sobrenome &&
                                                                                                                         cl.CPF == clienteViewModel.CPF &&
                                                                                                                         cl.Endereco == clienteViewModel.Endereco &&

@@ -16,15 +16,15 @@ namespace TestesDeUnidade.ClienteControllerTests
         private ClientesController controller;
         private IActionResult result;
         private Mock<IClienteRepository> mockClientes;
-        private Clientes cliente;
-        private List<Clientes> listaC;
+        private Cliente cliente;
+        private List<Cliente> listaC;
 
         [SetUp]
         public async Task Setup()
         {
             mockClientes = new Mock<IClienteRepository>();
-            cliente = new Clientes();
-            listaC = new List<Clientes>();
+            cliente = new Cliente();
+            listaC = new List<Cliente>();
             mockClientes.Setup(c => c.ListaClientesAsync()).ReturnsAsync(listaC);
             controller = new ClientesController(mockClientes.Object);
             // act
