@@ -61,7 +61,6 @@ namespace WebCadastrador.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProdutoCreateViewModel produtoCreateViewModel)
         {
             if (!produtoCreateViewModel.Preco.ToString().EndsWith("3"))
@@ -116,7 +115,6 @@ namespace WebCadastrador.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ProdutoEditViewModel produtoEditViewModel)
         {
             if (produtoEditViewModel.Id == 0)
@@ -182,7 +180,6 @@ namespace WebCadastrador.Controllers
 
         //// POST: Produtos/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var produto = await produtoRepositorio.FindProdutoByIdAsync(id);
