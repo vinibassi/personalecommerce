@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages.ProdutoPages;
@@ -9,6 +10,7 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
     class ReadProdutoTest
     {
         private Produto produto;
+        private ProdutoListPage page;
         private WebCadastradorContext context;
         private Fabricante fabricante;
 
@@ -35,14 +37,23 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
             {
                 Nome = "Picanha",
                 Fabricante = context.Fabricante.First(),
-                Preco = 40
+                Preco = 13
             });
             context.SaveChanges();
             produto = context.Produto.First();
-            var page = new ProdutoListPage();
+            page = new ProdutoListPage();
             SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Produtos");
         }
         [Test]
+        public void ListaContemProdutoCerto() => page.Produtos.Single().Should().BeEquivalentTo(new ProdutoCadastrado
+        {
+            Nome = "Picanha",
+            Fabricante = context.Fabricante.First().Nome,
+            Preco = 13
+        });
+        [Test]
         public void ReadProdutos() => Assert.AreEqual("Picanha", produto.Nome);
+        [Test]
+        public void ListaContemNumeroCertoDeProdutos() => Assert.AreEqual(1, context.Produto.Count());
     }
 }

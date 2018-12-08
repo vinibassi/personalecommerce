@@ -4,6 +4,6 @@
     {
         public string Nome { get; set; }
         public string Fabricante { get; set; }
-        public double Preco { get; set; }
+        public decimal Preco { get; set; }
     }
 }

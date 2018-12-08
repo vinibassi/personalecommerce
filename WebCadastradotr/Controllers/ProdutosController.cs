@@ -51,9 +51,11 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Produtos/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Fabricantes = fabricanteRepository.ListaFabricantesAsync();
+            ViewBag.Fabricantes = (await fabricanteRepository.ListaFabricantesAsync())
+                                                             .Select(c => new SelectListItem() { Text = c.Nome, Value = c.Id.ToString() })
+                                                             .ToList();
             return View();
         }
 
@@ -80,7 +82,8 @@ namespace WebCadastrador.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.Fabricantes = (await fabricanteRepository.ListaFabricantesAsync())
-                .Select(c => new SelectListItem(){ Text = c.Nome, Value = c.Id.ToString() }).ToList();
+                                                             .Select(c => new SelectListItem(){ Text = c.Nome, Value = c.Id.ToString() })
+                                                             .ToList();
 
             return View(produtoCreateViewModel);
         }
