@@ -39,11 +39,13 @@ namespace WebCadastrador.Controllers
                 return NotFound();
             }
 
-            var pDetailsViewModel = new ProdutoDetailsViewModel();
-            pDetailsViewModel.Nome = produto.Nome;
-            pDetailsViewModel.Preco = produto.Preco;
-            pDetailsViewModel.Fabricante = produto.Fabricante;
-            pDetailsViewModel.Id = produto.Id;
+            var pDetailsViewModel = new ProdutoDetailsViewModel
+            {
+                Nome = produto.Nome,
+                Preco = produto.Preco,
+                Fabricante = produto.Fabricante,
+                Id = produto.Id
+            };
 
             return View(pDetailsViewModel);
         }
