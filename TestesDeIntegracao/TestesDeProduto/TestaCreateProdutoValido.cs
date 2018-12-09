@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WebCadastrador.Controllers;
 using WebCadastrador.Models;
@@ -14,6 +18,7 @@ namespace TestesDeIntegracao.TestesDeProduto
         private Produto produto;
         private ProdutoCreateViewModel produtoCreateVM;
         private Fabricante fabricante;
+        private HttpResponseMessage response;
         private WebCadastradorContext context;
         [OneTimeSetUp]
         public async Task Setup()
@@ -34,16 +39,22 @@ namespace TestesDeIntegracao.TestesDeProduto
             };
             context.Add(fabricante);
             context.SaveChanges();
-            produtoCreateVM = new ProdutoCreateViewModel
-            {
-                Nome = "abc",
-                Fabricante = fabricante.Id,
-                Preco = 49.93m
-            };
+            var content = new FormUrlEncodedContent(new Dictionary<string, string> {
+                {"Nome","abc"},
+                {"Fabricante",fabricante.Id.ToString()},
+                {"Preco","9.93"}
+            });
+            response = await SetupGlobal.HttpClient.PostAsync("http://localhost/Produtos/Create", content);
+            //assert
             context = new WebCadastradorContext(builder.Options);
-            var result = await controller.Create(produtoCreateVM);
             produto = context.Produto.FirstOrDefault();
         }
+
+
+        [Test]
+        public void TestaResponseRedirect() => response.StatusCode.Should().Be(HttpStatusCode.Redirect);
+        [Test]
+        public void TestaEnderecoRedirecionamento() => response.Headers.Location.Should().Be("/Produtos");
         [Test]
         public void TestaId() => Assert.IsNotNull(produto.Id);
         [Test]
