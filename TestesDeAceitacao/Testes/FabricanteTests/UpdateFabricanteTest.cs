@@ -2,14 +2,17 @@
 using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages.FabricantePages;
+using TestesDeUnidade;
 using WebCadastrador.Models;
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {
     class UpdateFabricanteTest
     {
-        private Fabricante fabricante;
+        private Fabricante fabricanteCadastrado;
         private WebCadastradorContext context;
+        private FabricantesViewModel fabricanteEditado;
 
         [OneTimeSetUp]
         public void UpdateFabricante()
@@ -22,23 +25,24 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
             context.Fabricante.Clear();
-            context.Fabricante.Add(new Fabricante
-            {
-                Nome = "Bassi LTDA",
-                CNPJ = "94170922000190",
-                Endereco = "Rua abcdxyz, 23"
-            });
+
+            var f = Generator.ValidFabricante();
+            context.Fabricante.Add(f);
             context.SaveChanges();
+
+            fabricanteEditado = Generator.ValidFabricanteViewModel();
+            fabricanteEditado.CNPJ = f.CNPJ;
             var page = new UpdateFabricantePage();
             var id = context.Fabricante.First().Id;
+            //act
             page.NavegaToEdit(id);
-            page.ModificaFabricante("Bassi LTDA", "94170922000190", "Rua XYZABCD, 32");
+            page.ModificaFabricante(fabricanteEditado);
             context = new WebCadastradorContext(builder.Options);
-            fabricante = context.Fabricante.First();
+            fabricanteCadastrado = context.Fabricante.First();
         }
         [Test]
         public void QuantidadeDeFabricantes() => Assert.AreEqual(1, context.Fabricante.Count());
         [Test]
-        public void TestaNewEndereco() => Assert.AreEqual("Rua XYZABCD, 32", fabricante.Endereco);
+        public void TestaNewEndereco() => Assert.AreEqual(fabricanteEditado.Endereco, fabricanteCadastrado.Endereco);
     }
 }

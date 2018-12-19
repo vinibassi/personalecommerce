@@ -9,7 +9,7 @@ namespace WebCadastrador.ViewModels.Validations
         {
             RuleFor(x => x.Nome).Length(0, 50).NotNull().NotEmpty();
             RuleFor(x => x.Fabricante).NotNull().NotEmpty();
-            RuleFor(x => x.Preco).InclusiveBetween(1, 15).NotNull().NotEmpty();
+            RuleFor(x => x.Preco).NotNull().NotEmpty();
         }
     }
 }

@@ -3,15 +3,18 @@ using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages;
 using TestesDeAceitacao.Pages.ClientePages;
+using TestesDeUnidade;
 using WebCadastrador.Models;
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes.ClienteTests
 {
-    class EditaClienteMesmoCPFTeste
+    class EditaClienteCPFJaExiste
     {
         private DbContextOptionsBuilder<WebCadastradorContext> builder;
         private WebCadastradorContext context;
         private UpdateClientePage page;
+        private ClientesViewModel novoCliente;
         private Cliente cliente1;
 
         [OneTimeSetUp]
@@ -24,36 +27,27 @@ namespace TestesDeAceitacao.Testes.ClienteTests
 
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
-            cliente1 = new Cliente
-            {
-                Nome = "Paulo",
-                Sobrenome = "Guedes",
-                CPF = "00870021087",
-                Endereco = "Rua abcdxyz, 23",
-                Idade = 20,
-                EstadoCivil = EstadoCivil.Solteiro
-            };
+
+            cliente1 = Generator.ValidCliente();
             context.Clientes.Add(cliente1);
-            context.Clientes.Add(new Cliente
-            {
-                Nome = "Gabriel",
-                Sobrenome = "Lopes",
-                CPF = "26021494032",
-                Endereco = "Rua XYZWABC, 5678",
-                Idade = 56,
-                EstadoCivil = EstadoCivil.Casado
-            });
+
+            var c2 = Generator.ValidCliente();
+            context.Clientes.Add(c2);
+
             context.SaveChanges();
             page = new UpdateClientePage();
+            novoCliente = Generator.ValidClienteViewModel();
+            novoCliente.CPF = c2.CPF;
+            //act
             page.NavegaToEdit(cliente1.Id);
-            page.ModificaCliente("Pasdd", "SAKDJASKD", "26021494032", "Rua abcdwxyz, 14", 15, EstadoCivil.Divorciado);
+            page.ModificaCliente(novoCliente);
         }
         [Test]
         public void CPFNaoMudou()
         {
             context = new WebCadastradorContext(builder.Options);
             var cliente = context.Clientes.First(c => c.Id == cliente1.Id);
-            Assert.AreEqual("00870021087", cliente.CPF);
+            Assert.AreEqual(cliente1.CPF, cliente.CPF);
         }
         [Test]
         public void TestaURL() => Assert.AreEqual($"https://localhost:5001/Clientes/Edit/{cliente1.Id}", page.Url);

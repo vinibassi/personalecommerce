@@ -30,13 +30,7 @@ namespace TestesDeUnidade.ProdutoController
             mockFabricantes.Setup(f => f.FindByIdAsync(1)).ReturnsAsync(fabricante);
             mockProdutos.Setup(p => p.FindProdutoByIdAsync(1)).ReturnsAsync(produto);
             mockProdutos.Setup(p => p.UpdateAsync(produto)).Returns(Task.CompletedTask);
-            produtoEditVM = new ProdutoEditViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                FabricanteId = 1,
-                Preco = 49.93m
-            };
+            produtoEditVM = Generator.ValidProdutoEditVM();
             // act
             result = await controller.Edit(produtoEditVM);
         }

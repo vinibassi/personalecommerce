@@ -28,13 +28,7 @@ namespace TestesDeUnidade.FabricanteControllerTests
             mockFabricantes = new Mock<IFabricanteRepository>();
             controller = new FabricantesController(mockProdutos.Object, mockFabricantes.Object);
             // act
-            fabricanteViewModel = new FabricantesViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                CNPJ = "59478a198",
-                Endereco = "Rua ABCDXYZ, 123"
-            };
+            fabricanteViewModel = Generator.InvalidCNPJFabricanteViewModel();
             mockFabricantes.Setup(f => f.UpdateFabricanteAsync(fabricante));
             result = await controller.Edit(fabricanteViewModel);
         }

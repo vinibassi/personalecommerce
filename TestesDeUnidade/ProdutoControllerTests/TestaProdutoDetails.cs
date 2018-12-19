@@ -21,12 +21,7 @@ namespace TestesDeUnidade.ProdutoController
         public async Task Setup()
         {
             mockProdutos = new Mock<IProdutoRepository>();
-            produto = new Produto
-            {
-                Id = 1,
-                Nome = "abc",
-                Preco = 49.93m
-            };
+            produto = Generator.ValidProduto();
             mockFabricantes = new Mock<IFabricanteRepository>();
             mockProdutos.Setup(f => f.FindProdutoByIdAsync(1)).ReturnsAsync(produto);
             controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
@@ -40,9 +35,9 @@ namespace TestesDeUnidade.ProdutoController
             var viewModel = (ProdutoDetailsViewModel)view.Model;
             viewModel.Should().BeEquivalentTo(new ProdutoDetailsViewModel
             {
-                Id = 1,
-                Nome = "abc",
-                Preco = 49.93m
+                Id = produto.Id,
+                Nome = produto.Nome,
+                Preco = produto.Preco
             });
         }
         [Test]

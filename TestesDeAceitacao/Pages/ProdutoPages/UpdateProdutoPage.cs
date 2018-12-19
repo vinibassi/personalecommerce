@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using WebCadastrador.Models;
 
 namespace TestesDeAceitacao.Pages.ProdutoPages
 {
@@ -10,7 +11,7 @@ namespace TestesDeAceitacao.Pages.ProdutoPages
             SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Produtos/Edit/{id}");
         }
 
-        public void ModificaProduto(string nome, string fabricante, int preco)
+        public void ModificaProduto(Produto produtoEditado)
         {
             var driver = SetupGlobal.Driver;
             IWebElement nomeProduto = driver.FindElement(By.Id("Nome"));
@@ -22,9 +23,9 @@ namespace TestesDeAceitacao.Pages.ProdutoPages
             
             var selectFabricante = new SelectElement(fabricanteProduto);
             
-            nomeProduto.SendKeys(nome);
-            selectFabricante.SelectByText(fabricante);
-            precoProduto.SendKeys(preco.ToString());
+            nomeProduto.SendKeys(produtoEditado.Nome);
+            selectFabricante.SelectByText(produtoEditado.Fabricante.Nome);
+            precoProduto.SendKeys(produtoEditado.Preco.ToString());
 
             driver.FindElement(By.Id("salvarProduto")).Click();
         }

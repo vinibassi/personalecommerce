@@ -4,6 +4,8 @@ using System.Linq;
 using TestesDeAceitacao.Pages;
 using WebCadastrador.Models;
 using WebCadastrador.Controllers;
+using TestesDeUnidade;
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {
@@ -11,6 +13,7 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
     {
         private WebCadastradorContext context;
         private NewFabricantePage page;
+        private FabricantesViewModel novoFabricante;
         private FabricantesController controller;
 
         [OneTimeSetUp]
@@ -20,20 +23,21 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             var builder = new DbContextOptionsBuilder<WebCadastradorContext>()
                 .UseLazyLoadingProxies()
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
-
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
             context.Fabricante.Clear();
-            context.Fabricante.Add(new Fabricante
-            {
-                Nome = "Bassi LTDA",
-                CNPJ = "94170922000190",
-                Endereco = "Rua abcdxyz, 23"
-            });
+
+            var f = Generator.ValidFabricante();
+            context.Fabricante.Add(f);
             context.SaveChanges();
+
             page = new NewFabricantePage();
+            novoFabricante = Generator.ValidFabricanteViewModel();
+            novoFabricante.CNPJ = f.CNPJ;
+
+            //act
             page.Navigate();
-            page.Cadastra("Jajjajada", "94170922000190", "rua wxyz, 32");
+            page.Cadastra(novoFabricante);
         }
         [Test]
         public void QuantidadeDeFabricantes() => Assert.AreEqual(1, context.Fabricante.Count());

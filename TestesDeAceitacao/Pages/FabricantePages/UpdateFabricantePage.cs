@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenQA.Selenium;
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Pages.FabricantePages
 {
@@ -12,7 +13,7 @@ namespace TestesDeAceitacao.Pages.FabricantePages
             SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Fabricantes/Edit/{id}");
         }
 
-        public void ModificaFabricante(string nome, string cnpj, string endereco)
+        public void ModificaFabricante(FabricantesViewModel fabricanteEditado)
         {
             var driver = SetupGlobal.Driver;
             IWebElement nomeFabricante = driver.FindElement(By.Id("Nome"));
@@ -23,9 +24,9 @@ namespace TestesDeAceitacao.Pages.FabricantePages
             cnpjFabricante.Clear();
             enderecoFabricante.Clear();
 
-            nomeFabricante.SendKeys(nome);
-            cnpjFabricante.SendKeys(cnpj);
-            enderecoFabricante.SendKeys(endereco);
+            nomeFabricante.SendKeys(fabricanteEditado.Nome);
+            cnpjFabricante.SendKeys(fabricanteEditado.CNPJ);
+            enderecoFabricante.SendKeys(fabricanteEditado.Endereco);
 
             driver.FindElement(By.CssSelector("body > div > div.row > div > form > div:nth-child(5) > input")).Click();
         }

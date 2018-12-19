@@ -5,14 +5,17 @@ using TestesDeAceitacao.Pages;
 using WebCadastrador.Models;
 using WebCadastrador.Controllers;
 using TestesDeAceitacao.Pages.FabricantePages;
+using TestesDeUnidade;
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {
-    class EditaFabricanteMesmoCNPJTeste
+    class EditaFabricanteCNPJExistente
     {
         private DbContextOptionsBuilder<WebCadastradorContext> builder;
         private WebCadastradorContext context;
         private UpdateFabricantePage page;
+        private FabricantesViewModel novoFabricante;
         private Fabricante fabricante1;
 
         [OneTimeSetUp]
@@ -26,30 +29,29 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
             context.Fabricante.Clear();
-            fabricante1 = new Fabricante
-            {
-                Nome = "Bassi LTDA",
-                CNPJ = "94170922000190",
-                Endereco = "Rua abcdxyz, 23"
-            };
+
+            fabricante1 = Generator.ValidFabricante();
             context.Fabricante.Add(fabricante1);
-            context.Fabricante.Add(new Fabricante
-            {
-                Nome = "Bluv  LTDA",
-                CNPJ = "18270411000162",
-                Endereco = "Rua XYZAWABCS, 2232"
-            });
+
+            var f2 = Generator.ValidFabricante();
+            context.Fabricante.Add(f2);
+
             context.SaveChanges();
+
             page = new UpdateFabricantePage();
+            novoFabricante = Generator.ValidFabricanteViewModel();
+            novoFabricante.CNPJ = f2.CNPJ;
+
+            //ACT
             page.NavegaToEdit(fabricante1.Id);
-            page.ModificaFabricante("Jajjajada", "18270411000162", "rua wxyz, 32");
+            page.ModificaFabricante(novoFabricante);
         }
         [Test]
         public void CNPJNaoMudou()
         {
             context = new WebCadastradorContext(builder.Options);
             var cliente = context.Fabricante.First(c => c.Id == fabricante1.Id);
-            Assert.AreEqual("94170922000190", fabricante1.CNPJ);
+            Assert.AreEqual(fabricante1.CNPJ, fabricante1.CNPJ);
         }
         [Test]
         public void TestaURL() => Assert.AreEqual($"https://localhost:5001/Fabricantes/Edit/{fabricante1.Id}", page.Url);

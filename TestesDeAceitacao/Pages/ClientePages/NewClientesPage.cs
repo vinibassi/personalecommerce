@@ -1,19 +1,18 @@
 ﻿using System;
 using OpenQA.Selenium;
+using TestesDeUnidade;
 using WebCadastrador.Models;
-
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Pages
 {
     class NewClientesPage
     {
-
         public void Navigate()
         {
             SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Clientes/Create");
         }
-
-        public void Cadastra(string nome, string sobrenome, string cpf, string endereco, int idade, EstadoCivil estadoCivil)
+        public void Cadastra(ClientesViewModel novoCliente)
         {
             var driver = SetupGlobal.Driver;
             IWebElement nomeCliente = driver.FindElement(By.Id("Nome"));
@@ -21,7 +20,7 @@ namespace TestesDeAceitacao.Pages
             IWebElement cpfCliente = driver.FindElement(By.Id("CPF"));
             IWebElement enderecoCliente = driver.FindElement(By.Id("Endereco"));
             IWebElement idadeCliente = driver.FindElement(By.Id("Idade"));
-            switch (estadoCivil)
+            switch (novoCliente.estadoCivil)
             {
                 case EstadoCivil.Solteiro:
                     driver.FindElement(By.CssSelector("[value=Solteiro]")).Click();
@@ -36,11 +35,11 @@ namespace TestesDeAceitacao.Pages
                     throw new Exception();
             }
 
-            nomeCliente.SendKeys(nome);
-            sobrenomeCliente.SendKeys(sobrenome);
-            cpfCliente.SendKeys(cpf);
-            enderecoCliente.SendKeys(endereco);
-            idadeCliente.SendKeys(idade.ToString());
+            nomeCliente.SendKeys(novoCliente.Nome);
+            sobrenomeCliente.SendKeys(novoCliente.Sobrenome);
+            cpfCliente.SendKeys(novoCliente.CPF);
+            enderecoCliente.SendKeys(novoCliente.Endereco);
+            idadeCliente.SendKeys(novoCliente.Idade.ToString());
             nomeCliente.Submit();
         }
         public string LeCPFError()

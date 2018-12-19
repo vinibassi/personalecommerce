@@ -26,13 +26,7 @@ namespace TestesDeUnidade.FabricanteControllerTests
             mockFabricantes = new Mock<IFabricanteRepository>();
             controller = new FabricantesController(mockProdutos.Object, mockFabricantes.Object);
             // act
-            fabricanteViewModel = new FabricantesViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                CNPJ = "594780198",
-                Endereco = "Rua ABCDXYZ, 123"
-            };
+            fabricanteViewModel = Generator.InvalidCNPJFabricanteViewModel();
             result = await controller.Create(fabricanteViewModel);
         }
         [Test]
@@ -44,7 +38,7 @@ namespace TestesDeUnidade.FabricanteControllerTests
         [Test]
         public void TestaModelState() => controller.ModelState.IsValid.Should().BeFalse();
         [Test]
-        public void AddFabricanteNãoFoiChamado()
+        public void AddFabricanteNaoFoiChamado()
         {
             mockFabricantes.Verify(f=>f.AddFabricanteAsync(It.Is<Fabricante>(fab => fab.Nome == fabricanteViewModel.Nome &&
                                                                                       fab.CNPJ == fabricanteViewModel.CNPJ &&

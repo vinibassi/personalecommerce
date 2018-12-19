@@ -29,12 +29,7 @@ namespace TestesDeUnidade.ProdutoController
             mockFabricantes.Setup(f => f.FindByIdAsync(1)).ReturnsAsync(fabricante);
             mockProdutos.Setup(f => f.AddAsync(produto)).Returns(Task.CompletedTask);
             controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
-            produtoCreateVM = new ProdutoCreateViewModel
-            {
-                Nome = "abc",
-                Fabricante = 1,
-                Preco = 49.93m
-            };
+            produtoCreateVM = Generator.ValidProdutoCreateVM();
             // act
             result = await controller.Create(produtoCreateVM);
         }

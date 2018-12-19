@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages.ProdutoPages;
+using TestesDeUnidade;
 using WebCadastrador.Models;
 
 namespace TestesDeAceitacao.Testes.ProdutoTests
@@ -11,6 +12,7 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
         private Produto produto;
         private WebCadastradorContext context;
         private Fabricante fabricante;
+        private Produto p;
 
         [OneTimeSetUp]
         public void CadastraProduto()
@@ -19,36 +21,34 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
             var builder = new DbContextOptionsBuilder<WebCadastradorContext>()
                 .UseLazyLoadingProxies()
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
-
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
             context.Fabricante.Clear();
-            context.Fabricante.Add(new Fabricante
-            {
-                Nome = "Bassi LTDA",
-                CNPJ = "94170922000190",
-                Endereco = "Rua abcdxyz, 23"
-            });
+            fabricante = Generator.ValidFabricante();
+            context.Fabricante.Add(fabricante);
+
+            p = Generator.ValidProduto();
+            context.Produto.Add(p);
+            p.Fabricante = fabricante;
             context.SaveChanges();
-            fabricante = context.Fabricante.First();
-            context.Produto.Add(new Produto
-            {
-                Nome = "Picanha",
-                Fabricante = context.Fabricante.First(),
-                Preco = 40
-            });
-            context.SaveChanges();
+
             produto = context.Produto.First();
+
+            context = new WebCadastradorContext(builder.Options);
             var page = new UpdateProdutoPage();
             var id = context.Produto.First().Id;
+            //act
             page.NavegaToEdit(id);
-            page.ModificaProduto("Picanha", $"{context.Fabricante.First().Nome}", 33);
-            context = new WebCadastradorContext(builder.Options);
+            page.ModificaProduto(p);
             produto = context.Produto.First();
         }
         [Test]
         public void QuantidadeDeProdutos() => Assert.AreEqual(1, context.Produto.Count());
         [Test]
-        public void TestaNewPreco() => Assert.AreEqual(33, produto.Preco);
+        public void TestaNewPreco() => Assert.AreEqual(p.Preco, produto.Preco);
+        [Test]
+        public void TestaNewNome() => Assert.AreEqual(p.Nome, produto.Nome);
+        [Test]
+        public void TestaNewId() => Assert.AreEqual(p.Id, produto.Id);
     }
 }

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages.ProdutoPages;
+using TestesDeUnidade;
 using WebCadastrador.Models;
 
 namespace TestesDeAceitacao.Testes.ProdutoTests
@@ -11,6 +12,7 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
         private Produto produto;
         private WebCadastradorContext context;
         private Fabricante fabricante;
+        private Produto p;
         private NewProdutoPage page;
 
         [OneTimeSetUp]
@@ -20,31 +22,33 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
             var builder = new DbContextOptionsBuilder<WebCadastradorContext>()
                 .UseLazyLoadingProxies()
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
-            page = new NewProdutoPage();
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
             context.Fabricante.Clear();
-            fabricante = new Fabricante
-            {
-                Nome = "Bassi LTDA",
-                CNPJ = "94170922000190",
-                Endereco = "Rua abcdxyz, 23"
-            };
+
+            fabricante = Generator.ValidFabricante();
             context.Fabricante.Add(fabricante);
             context.SaveChanges();
-            fabricante = context.Fabricante.First();
+
+            p = Generator.ValidProduto();
+            p.Fabricante = fabricante;
+            context.SaveChanges();
+
+            page = new NewProdutoPage();
             //act
             page.Visita();
-            page.Cadastra("Picanha", 13, fabricante.Id);
+            page.Cadastra(p);
+            context = new WebCadastradorContext(builder.Options);
             produto = context.Produto.First();
+
         }
         [Test]
         public void QuantidadeDeProdutos() => Assert.AreEqual(1, context.Produto.Count());
         [Test]
-        public void TestaNome() => Assert.AreEqual("Picanha", produto.Nome);
+        public void TestaNome() => Assert.AreEqual(p.Nome, produto.Nome);
         [Test]
-        public void TestaPreco() => Assert.AreEqual(13, produto.Preco);
+        public void TestaPreco() => Assert.AreEqual(p.Preco, produto.Preco);
         [Test]
-        public void TestaFabricante() => Assert.AreEqual(fabricante.Nome, produto.Fabricante.Nome);
+        public void TestaFabricante() => Assert.AreEqual(p.Fabricante.Nome, produto.Fabricante.Nome);
     }
 }

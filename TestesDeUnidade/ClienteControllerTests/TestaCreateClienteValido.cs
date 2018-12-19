@@ -22,16 +22,7 @@ namespace TestesDeUnidade.ClienteControllerTests
             mockClientes = new Mock<IClienteRepository>();
             controller = new ClientesController(mockClientes.Object);
             // act
-            clienteViewModel = new ClientesViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                Sobrenome = "defg",
-                CPF = "17997774050",
-                Endereco = "Rua ABCDXYZ, 123",
-                Idade = 30,
-                estadoCivil = EstadoCivil.Casado
-            };
+            clienteViewModel = Generator.ValidClienteViewModel();
             result = await controller.Create(clienteViewModel);
         }
         [Test]

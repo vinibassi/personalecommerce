@@ -24,16 +24,7 @@ namespace TestesDeUnidade.ClienteControllerTests
             mockClientes = new Mock<IClienteRepository>();
             controller = new ClientesController(mockClientes.Object);
             // act
-            clienteViewModel = new ClientesViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                Sobrenome = "defg",
-                CPF = "1794050",
-                Endereco = "Rua ABCDXYZ, 123",
-                Idade = 30,
-                estadoCivil = EstadoCivil.Casado
-            };
+            clienteViewModel = Generator.InvalidCPFClienteViewModel();
             result = await controller.Create(clienteViewModel);
         }
         [Test]

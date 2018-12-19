@@ -1,6 +1,8 @@
 ﻿using System;
 using OpenQA.Selenium;
+using TestesDeUnidade;
 using WebCadastrador.Models;
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Pages.ClientePages
 {
@@ -11,7 +13,7 @@ namespace TestesDeAceitacao.Pages.ClientePages
             SetupGlobal.Driver.Navigate().GoToUrl($"https://localhost:5001/Clientes/Edit/{id}");
         }
 
-        public void ModificaCliente(string nome, string sobrenome, string cpf, string endereco, int idade, EstadoCivil estadoCivil)
+        public void ModificaCliente(ClientesViewModel novoCliente)
         {
             var driver = SetupGlobal.Driver;
             IWebElement nomeCliente = driver.FindElement(By.Id("Nome"));
@@ -19,7 +21,7 @@ namespace TestesDeAceitacao.Pages.ClientePages
             IWebElement cpfCliente = driver.FindElement(By.Id("CPF"));
             IWebElement enderecoCliente = driver.FindElement(By.Id("Endereco"));
             IWebElement idadeCliente = driver.FindElement(By.Id("Idade"));
-            switch (estadoCivil)
+            switch (novoCliente.estadoCivil)
             {
                 case EstadoCivil.Solteiro:
                     driver.FindElement(By.CssSelector("[value=Solteiro]")).Click();
@@ -39,11 +41,11 @@ namespace TestesDeAceitacao.Pages.ClientePages
             enderecoCliente.Clear();
             idadeCliente.Clear();
 
-            nomeCliente.SendKeys(nome);
-            sobrenomeCliente.SendKeys(sobrenome);
-            cpfCliente.SendKeys(cpf);
-            enderecoCliente.SendKeys(endereco);
-            idadeCliente.SendKeys(idade.ToString());
+            nomeCliente.SendKeys(novoCliente.Nome);
+            sobrenomeCliente.SendKeys(novoCliente.Sobrenome);
+            cpfCliente.SendKeys(novoCliente.CPF);
+            enderecoCliente.SendKeys(novoCliente.Endereco);
+            idadeCliente.SendKeys(novoCliente.Idade.ToString());
 
             driver.FindElement(By.CssSelector("body > div > div.row > div > form > div:nth-child(8) > input")).Click();
         }

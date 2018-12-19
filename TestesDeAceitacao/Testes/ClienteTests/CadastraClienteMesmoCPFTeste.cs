@@ -2,13 +2,15 @@
 using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages;
+using TestesDeUnidade;
 using WebCadastrador.Models;
+using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes.ClienteTests
 {
     class CadastraClienteMesmoCPFTeste
     {
-        private Cliente novoCliente;
+        private ClientesViewModel novoCliente;
         private WebCadastradorContext context;
         private NewClientesPage page;
 
@@ -19,22 +21,19 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             var builder = new DbContextOptionsBuilder<WebCadastradorContext>()
                 .UseLazyLoadingProxies()
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
-
             context = new WebCadastradorContext(builder.Options);
             context.Clientes.Clear();
-            context.Clientes.Add(new Cliente
-            {
-                Nome = "Paulo",
-                Sobrenome = "Guedes",
-                CPF = "00870021087",
-                Endereco = "Rua abcdxyz, 23",
-                Idade = 20,
-                EstadoCivil = EstadoCivil.Casado
-            });
+
+            var c = Generator.ValidCliente();
+            context.Clientes.Add(c);
             context.SaveChanges();
+
             page = new NewClientesPage();
+            novoCliente = Generator.ValidClienteViewModel();
+            novoCliente.CPF = c.CPF;
+            //act
             page.Navigate();
-            page.Cadastra("dasdsadsadsa", "SAKDJASKD", "00870021087", "Rua abcdwxyz, 14", 15, EstadoCivil.Divorciado);
+            page.Cadastra(novoCliente);
         }
         [Test]
         public void TestaQuantidadeClientes() => Assert.AreEqual(1, context.Clientes.Count());

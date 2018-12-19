@@ -27,13 +27,7 @@ namespace TestesDeUnidade.ProdutoController
             mockFabricantes = new Mock<IFabricanteRepository>();
             controller = new ProdutosController(mockProdutos.Object, mockFabricantes.Object);
             // act
-            produtoEditViewModel = new ProdutoEditViewModel
-            {
-                Id = 1,
-                FabricanteId = 2,
-                Nome = "abc",
-                Preco = 49.99m
-            };
+            produtoEditViewModel = Generator.InvalidProdutoEditVM();
             result = await controller.Edit(produtoEditViewModel);
         }
         [Test]

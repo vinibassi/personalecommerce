@@ -23,16 +23,7 @@ namespace TestesDeUnidade.ClienteControllerTests
             mockClientes = new Mock<IClienteRepository>();
             controller = new ClientesController(mockClientes.Object);
             // act
-            clienteViewModel = new ClientesViewModel
-            {
-                Id = 1,
-                Nome = "abc",
-                Sobrenome = "defg",
-                CPF = "008700",
-                Endereco = "Rua XYZWABC, 123",
-                Idade = 35,
-                estadoCivil = EstadoCivil.Divorciado
-            };
+            clienteViewModel = Generator.InvalidCPFClienteViewModel();
             //act
             result = await controller.Edit(clienteViewModel);
         }
@@ -53,17 +44,5 @@ namespace TestesDeUnidade.ClienteControllerTests
         }
         [Test]
         public void AddFabricanteNãoFoiChamado() => mockClientes.Verify(c => c.UpdateClienteAsync(It.IsAny<Cliente>()), Times.Never);
-        //[Test]
-        //public void ClienteJaExiste()
-        //{
-        //    mockClientes.Verify(c => c.ClientesExists(It.Is<Cliente>(cl => 
-        //        cl.Id == 1  &&
-        //        cl.Nome == "abc" &&
-        //        cl.Sobrenome == "defg" &&
-        //        cl.CPF == "00870021087" &&
-        //        cl.Endereco == "Rua ABCDXYZ, 123" &&
-        //        cl.Idade == 30 &&
-        //        cl.estadoCivil == EstadoCivil.Divorciado)));
-        //}
     }
 }
