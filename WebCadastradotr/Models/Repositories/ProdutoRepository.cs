@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebCadastrador.Data;
 
 namespace WebCadastrador.Models.Repositories
 {

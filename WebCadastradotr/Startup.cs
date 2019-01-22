@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using WebCadastrador.Models;
 using FluentValidation.AspNetCore;
 using WebCadastrador.Models.Repositories;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using WebCadastrador.Data;
 
 namespace WebCadastradotr
 {
@@ -46,16 +45,7 @@ namespace WebCadastradotr
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 });
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = $"/Identity/Account/Login";
-                options.LogoutPath = $"/Identity/Account/Logout";
-                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
-            });
-
-            // using Microsoft.AspNetCore.Identity.UI.Services;
-            services.AddSingleton<IEmailSender, EmailSender>();
-
+           
             services.AddDbContext<WebCadastradorContext>(options =>
             {
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("WebCadastradorContext"));

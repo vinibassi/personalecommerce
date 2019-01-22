@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using WebCadastrador.Models;
 
-namespace WebCadastrador.Models
+namespace WebCadastrador.Data
 {
     public class WebCadastradorContext : IdentityDbContext
     {

@@ -1,10 +1,8 @@
-using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
+using WebCadastrador.Data;
 using WebCadastrador.Models;
 
 [assembly: HostingStartup(typeof(WebCadastrador.Areas.Identity.IdentityHostingStartup))]
@@ -14,10 +12,21 @@ namespace WebCadastrador.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            builder.ConfigureServices((context, services) => {
+            builder.ConfigureServices((context, services) =>
+            {
                 services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<WebCadastradorContext>()
                 .AddDefaultTokenProviders();
+
+                services.ConfigureApplicationCookie(options =>
+                {
+                    options.LoginPath = $"/Identity/Account/Login";
+                    options.LogoutPath = $"/Identity/Account/Logout";
+                    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+                });
+
+                services.AddSingleton<IEmailSender, EmailSender>();
+
             });
         }
     }
