@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WebCadastrador.Controllers;
+using WebCadastrador.Data;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
 

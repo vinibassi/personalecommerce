@@ -4,6 +4,7 @@ using System.Linq;
 using WebCadastrador.Models;
 using TestesDeAceitacao.Pages.FabricantePages;
 using TestesDeUnidade;
+using WebCadastrador.Data;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {

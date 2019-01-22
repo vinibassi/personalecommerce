@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages.FabricantePages;
 using TestesDeUnidade;
+using WebCadastrador.Data;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
 

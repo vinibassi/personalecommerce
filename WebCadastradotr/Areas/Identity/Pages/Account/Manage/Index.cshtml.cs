@@ -8,18 +8,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebCadastrador.Areas.Identity.Data;
 
 namespace WebCadastrador.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -39,6 +40,15 @@ namespace WebCadastrador.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Full name")]
+            public string Name { get; set; }
+
+            [Required]
+            [Display(Name = "Birth Date")]
+            [DataType(DataType.Date)]
+            public DateTime DOB { get; set; }
             [Required]
             [EmailAddress]
             public string Email { get; set; }
@@ -64,6 +74,8 @@ namespace WebCadastrador.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Name = user.Name,
+                DOB = user.DOB,
                 Email = email,
                 PhoneNumber = phoneNumber
             };
@@ -84,6 +96,16 @@ namespace WebCadastrador.Areas.Identity.Pages.Account.Manage
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            if (Input.Name != user.Name)
+            {
+                user.Name = Input.Name;
+            }
+
+            if (Input.DOB != user.DOB)
+            {
+                user.DOB = Input.DOB;
             }
 
             var email = await _userManager.GetEmailAsync(user);
@@ -107,6 +129,7 @@ namespace WebCadastrador.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

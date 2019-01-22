@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using WebCadastrador.Areas.Identity.Data;
 using WebCadastrador.Models;
 
 namespace WebCadastrador.Data
 {
-    public class WebCadastradorContext : IdentityDbContext
+    public class WebCadastradorContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public WebCadastradorContext (DbContextOptions<WebCadastradorContext> options)
             : base(options)

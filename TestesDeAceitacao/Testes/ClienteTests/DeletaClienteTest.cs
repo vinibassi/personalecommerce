@@ -4,6 +4,7 @@ using System.Linq;
 using WebCadastrador.Models;
 using TestesDeAceitacao.Pages.ClientePages;
 using TestesDeUnidade;
+using WebCadastrador.Data;
 
 namespace TestesDeAceitacao.Testes.ClienteTests
 {

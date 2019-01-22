@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebCadastrador.Data;
 
 namespace WebCadastrador.Migrations
 {
     [DbContext(typeof(WebCadastradorContext))]
-    [Migration("20190122144323_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20190122193035_CustomUserData")]
+    partial class CustomUserData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,30 +20,6 @@ namespace WebCadastrador.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -62,57 +39,6 @@ namespace WebCadastrador.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.AppUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -181,6 +107,89 @@ namespace WebCadastrador.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebCadastrador.Areas.Identity.Data.AppRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("WebCadastrador.Areas.Identity.Data.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("CustomTag");
+
+                    b.Property<DateTime>("DOB");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+                });
+
             modelBuilder.Entity("WebCadastrador.Models.Cliente", b =>
                 {
                     b.Property<int>("Id")
@@ -242,7 +251,7 @@ namespace WebCadastrador.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("WebCadastrador.Areas.Identity.Data.AppRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -250,7 +259,7 @@ namespace WebCadastrador.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.AppUser")
+                    b.HasOne("WebCadastrador.Areas.Identity.Data.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -258,7 +267,7 @@ namespace WebCadastrador.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.AppUser")
+                    b.HasOne("WebCadastrador.Areas.Identity.Data.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -266,12 +275,12 @@ namespace WebCadastrador.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("WebCadastrador.Areas.Identity.Data.AppRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.AppUser")
+                    b.HasOne("WebCadastrador.Areas.Identity.Data.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -279,7 +288,7 @@ namespace WebCadastrador.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.AppUser")
+                    b.HasOne("WebCadastrador.Areas.Identity.Data.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

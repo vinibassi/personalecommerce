@@ -6,6 +6,7 @@ using WebCadastrador.Models;
 using WebCadastrador.Controllers;
 using TestesDeUnidade;
 using WebCadastrador.ViewModels;
+using WebCadastrador.Data;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {

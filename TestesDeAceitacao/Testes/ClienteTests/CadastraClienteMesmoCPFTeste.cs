@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages;
 using TestesDeUnidade;
-using WebCadastrador.Models;
+using WebCadastrador.Data;
 using WebCadastrador.ViewModels;
 
 namespace TestesDeAceitacao.Testes.ClienteTests

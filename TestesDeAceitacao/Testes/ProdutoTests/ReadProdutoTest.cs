@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages.ProdutoPages;
 using TestesDeUnidade;
+using WebCadastrador.Data;
 using WebCadastrador.Models;
 
 namespace TestesDeAceitacao.Testes.ProdutoTests

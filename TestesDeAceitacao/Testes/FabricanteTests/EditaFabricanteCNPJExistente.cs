@@ -7,6 +7,7 @@ using WebCadastrador.Controllers;
 using TestesDeAceitacao.Pages.FabricantePages;
 using TestesDeUnidade;
 using WebCadastrador.ViewModels;
+using WebCadastrador.Data;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {
