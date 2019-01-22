@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
 using FluentValidation.AspNetCore;
 using WebCadastrador.Models.Repositories;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace WebCadastradotr
 {
@@ -38,7 +39,22 @@ namespace WebCadastradotr
                 if (!Env.IsEnvironment("Test"))
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .AddRazorPagesOptions(options =>
+                {
+                    options.AllowAreas = true;
+                    options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
+                    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+                });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+
+            // using Microsoft.AspNetCore.Identity.UI.Services;
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddDbContext<WebCadastradorContext>(options =>
             {
@@ -64,6 +80,7 @@ namespace WebCadastradotr
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

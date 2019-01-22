@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WebCadastrador.Models
 {
-    public class WebCadastradorContext : DbContext
+    public class WebCadastradorContext : IdentityDbContext
     {
         public WebCadastradorContext (DbContextOptions<WebCadastradorContext> options)
             : base(options)
@@ -12,6 +13,7 @@ namespace WebCadastrador.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             var converter = new EnumToNumberConverter<EstadoCivil, byte>();
 
             modelBuilder
