@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
@@ -41,6 +42,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Clientes/Create
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult Create()
         {
             return View();
@@ -51,6 +53,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(ClientesViewModel clientesViewModel)
         {
             var clientesValidator = new ClientesValidator();
@@ -85,6 +88,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Clientes/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -115,6 +119,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(ClientesViewModel clientesViewModel)
         {
             var cliente = new Cliente
@@ -161,6 +166,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Clientes/Delete/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -178,6 +184,7 @@ namespace WebCadastrador.Controllers
         }
 
         // POST: Clientes/Delete/5
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ClientesViewModel clientesViewModel)

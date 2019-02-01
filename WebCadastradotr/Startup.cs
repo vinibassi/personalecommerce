@@ -8,6 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using WebCadastrador.Models.Repositories;
 using WebCadastrador.Data;
+using System.Threading.Tasks;
+using System;
+using Microsoft.AspNetCore.Identity;
+using WebCadastrador.Areas.Identity.Data;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace WebCadastradotr
 {
@@ -45,7 +51,7 @@ namespace WebCadastradotr
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 });
-           
+
             services.AddDbContext<WebCadastradorContext>(options =>
             {
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("WebCadastradorContext"));
@@ -53,10 +59,11 @@ namespace WebCadastradotr
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IFabricanteRepository, FabricanteRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using OpenQA.Selenium;
 using TestesDeUnidade;
+using WebCadastrador.Areas.Identity.Data;
 using WebCadastrador.Models;
 using WebCadastrador.ViewModels;
 
@@ -48,6 +52,9 @@ namespace TestesDeAceitacao.Pages
             var erro = driver.FindElement(By.CssSelector("[data-valmsg-for=CPF]"));
             return erro.Text;
         }
+        public void FazLogin()
+        {
 
+        }
     }
 }

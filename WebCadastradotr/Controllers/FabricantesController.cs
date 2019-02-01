@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
@@ -42,6 +43,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Fabricantes/Create
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult Create()
         {
             return View();
@@ -52,6 +54,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(FabricantesViewModel fabricanteViewModel)
         {
             var fabricanteValidator = new FabricanteValidator();
@@ -78,6 +81,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Fabricantes/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,6 +109,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(FabricantesViewModel fabricanteViewModel)
         {
             var fabricante = new Fabricante
@@ -149,6 +154,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Fabricantes/Delete/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -168,6 +174,7 @@ namespace WebCadastrador.Controllers
         // POST: Fabricantes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var fabricante = await fabricanteRepository.FindByIdAsync(id);

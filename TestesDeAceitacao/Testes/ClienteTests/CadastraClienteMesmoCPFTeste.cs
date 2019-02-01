@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System;
 using System.Linq;
 using TestesDeAceitacao.Pages;
 using TestesDeUnidade;
@@ -13,6 +14,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
         private ClientesViewModel novoCliente;
         private WebCadastradorContext context;
         private NewClientesPage page;
+        private IServiceProvider services;
 
         [OneTimeSetUp]
         public void CadastraCliente()

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Produtos/Create
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Fabricantes = (await fabricanteRepository.ListaFabricantesAsync())
@@ -62,7 +64,9 @@ namespace WebCadastrador.Controllers
         // POST: Produtos/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(ProdutoCreateViewModel produtoCreateViewModel)
         {
             if (!produtoCreateViewModel.Preco.ToString().EndsWith("3"))
@@ -89,6 +93,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Produtos/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             var pEditViewModel = new ProdutoEditViewModel();
@@ -118,6 +123,7 @@ namespace WebCadastrador.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(ProdutoEditViewModel produtoEditViewModel)
         {
             if (produtoEditViewModel.Id == 0)
@@ -165,6 +171,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Produtos/Delete/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -183,6 +190,7 @@ namespace WebCadastrador.Controllers
 
         //// POST: Produtos/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var produto = await produtoRepositorio.FindProdutoByIdAsync(id);
