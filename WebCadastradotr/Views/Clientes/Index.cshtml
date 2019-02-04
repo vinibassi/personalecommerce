@@ -1,65 +1,78 @@
 ﻿@model IEnumerable<WebCadastrador.Models.Cliente>
 @using WebCadastrador.Models
-@{
-    ViewData["Title"] = "Index";
-}
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
+    @{
+        ViewData["Title"] = "Index";
+        var canDelete = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.Delete))).Succeeded;
+        var canCreate = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.EditAndCreate))).Succeeded;
+    }
 
-<h2>Lista de Clientes</h2>
+    <h2>Lista de Clientes</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table" id="clientes">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sobrenome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CPF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Endereco)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Idade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstadoCivil)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+    <p>
+        @if (canCreate)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sobrenome)
-            </td>
-            <td>
-                @Formatador.CPF(item.CPF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Endereco)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstadoCivil)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+        <a asp-action="Create">Create New</a>
         }
-    </tbody>
-</table>
+    </p>
+    <table class="table" id="clientes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sobrenome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CPF)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Endereco)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Idade)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EstadoCivil)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sobrenome)
+                    </td>
+                    <td>
+                        @Formatador.CPF(item.CPF)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Endereco)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Idade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstadoCivil)
+                    </td>
+                    <td>
+                        @if (canCreate)
+                        {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                        }|
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        @if (canDelete)
+                        {
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

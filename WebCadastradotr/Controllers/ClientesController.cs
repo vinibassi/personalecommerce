@@ -6,6 +6,7 @@ using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
 using WebCadastrador.Models.Validations;
 using WebCadastrador.ViewModels;
+using WebCadastradotr;
 
 namespace WebCadastrador.Controllers
 {
@@ -19,12 +20,14 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Clientes
+        [Authorize(nameof(AuthPolicies.ViewOnly))]
         public async Task<IActionResult> Index()
         {
             return View(await clienteRepository.ListaClientesAsync());
         }
 
         // GET: Clientes/Details/5
+        [Authorize(nameof(AuthPolicies.ViewOnly))]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,7 +45,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Clientes/Create
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public IActionResult Create()
         {
             return View();
@@ -53,7 +56,8 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
+
         public async Task<IActionResult> Create(ClientesViewModel clientesViewModel)
         {
             var clientesValidator = new ClientesValidator();
@@ -88,7 +92,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Clientes/Edit/5
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -119,7 +123,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Edit(ClientesViewModel clientesViewModel)
         {
             var cliente = new Cliente
@@ -166,7 +170,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Clientes/Delete/5
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.Delete))]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -184,9 +188,9 @@ namespace WebCadastrador.Controllers
         }
 
         // POST: Clientes/Delete/5
-        [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(nameof(AuthPolicies.Delete))]
         public async Task<IActionResult> DeleteConfirmed(ClientesViewModel clientesViewModel)
         {
             var cliente = await clienteRepository.FindClienteByIdAsync(clientesViewModel.Id);

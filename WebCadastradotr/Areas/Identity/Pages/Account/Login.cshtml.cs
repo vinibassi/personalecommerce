@@ -18,6 +18,7 @@ namespace WebCadastrador.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<AppUser> userManager;
 
         public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger)
         {
@@ -77,6 +78,7 @@ namespace WebCadastrador.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    //await userManager.AddToRoleAsync( , "Employee");
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

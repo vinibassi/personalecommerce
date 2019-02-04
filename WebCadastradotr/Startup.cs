@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using WebCadastrador.Areas.Identity.Data;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebCadastradotr
 {
@@ -51,6 +52,14 @@ namespace WebCadastradotr
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(nameof(AuthPolicies.Delete), policy => policy.RequireAuthenticatedUser().RequireRole("Admin"));
+                options.AddPolicy(nameof(AuthPolicies.EditAndCreate), policy =>
+                    policy.RequireAuthenticatedUser().RequireAssertion(c => c.User.IsInRole("Manager") || c.User.IsInRole("Admin")));
+                options.AddPolicy(nameof(AuthPolicies.ViewOnly), policy => policy.RequireAuthenticatedUser());
+            });
 
             services.AddDbContext<WebCadastradorContext>(options =>
             {

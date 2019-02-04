@@ -16,7 +16,7 @@ namespace WebCadastradotr
         {
             var webHost = CreateWebHostBuilder(args).Build();
             using (var scope = webHost.Services.CreateScope())
-                await CreateRolesandUsersAsync(scope.ServiceProvider);
+                await CreateRolesandAddToUsersAsync(scope.ServiceProvider);
             await webHost.RunAsync();
         }
 
@@ -25,75 +25,66 @@ namespace WebCadastradotr
                 .UseStartup<Startup>();
 
 
-        private async static Task CreateRolesandUsersAsync(IServiceProvider serviceProvider)
+        private async static Task CreateRolesandAddToUsersAsync(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
             var logger = serviceProvider.GetRequiredService<ILogger<Startup>>();
-            bool roleExists = await roleManager.RoleExistsAsync("Admin");
-            if (!roleExists)
-            {
-                // first we create Admin rool    
-                var role = new AppRole();
-                role.Name = "Admin";
-                var createRoleResult = await roleManager.CreateAsync(role);
-                LogError(logger, createRoleResult, "Error creating role admin:");
-            }
-            //Here we create a Admin super user who will maintain the website                   
 
-            var viniUser = await userManager.FindByEmailAsync("vini@vini.com");
-            await userManager.AddToRoleAsync(viniUser, "Admin");
-
-            var user = new AppUser
-            {
-                UserName = "default",
-                Email = "default@default.com"
-            };
+            await CreateRole(serviceProvider, "Admin");
+            await CreateRole(serviceProvider, "Manager");
+            await CreateRole(serviceProvider, "Employee");
             
-            var userResult = await userManager.CreateAsync(user, "Admin@123");
+            await AddNewUserToRoleAsync(serviceProvider, "admin@admin.com", "Admin");
+            await AddNewUserToRoleAsync(serviceProvider, "manager@manager.com", "Manager");
+            await AddNewUserToRoleAsync(serviceProvider, "employee@employee.com", "Employee");
+        }
 
-            //Add default User to Role Admin    
-            if (userResult.Succeeded)
-            {
-                var addToRoleResult = await userManager.AddToRoleAsync(user, "Admin");
-                LogError(logger, addToRoleResult, "Error adding user to role:");
-            }
-            else
-            {
-                LogError(logger, userResult, "Error creating user:");
-            }
+        private static async Task CreateRole(IServiceProvider serviceProvider, string roleName)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
+            var roleExists = await roleManager.RoleExistsAsync(roleName);
+            var logger = serviceProvider.GetRequiredService<ILogger<Startup>>();
 
-
-            //Creating Manager role     
-            roleExists = await roleManager.RoleExistsAsync("Manager");
             if (!roleExists)
             {
                 var role = new AppRole
                 {
-                    Name = "Manager"
-                };
-                var createManagerRoleResult = await roleManager.CreateAsync(role);
-                LogError(logger, createManagerRoleResult, "Error creating role manager:");
-            }
-
-            //Creating Employee role     
-            roleExists = await roleManager.RoleExistsAsync("Employee");
-            if (!roleExists)
-            {
-                var role = new AppRole
-                {
-                    Name = "Employee"
+                    Name = roleName
                 };
                 var createEmployeeRoleResult = await roleManager.CreateAsync(role);
-                LogError(logger, createEmployeeRoleResult, "Error creating role employee:");
+                LogError(logger, createEmployeeRoleResult, $"Error creating role {roleName}:");
             }
         }
 
-        private static void LogError(ILogger<Startup> logger, IdentityResult createRoleResult, string msg)
+        private static async Task AddNewUserToRoleAsync(IServiceProvider serviceProvider, string email, string role)
         {
-            if (!createRoleResult.Succeeded)
+            var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
+            var logger = serviceProvider.GetRequiredService<ILogger<Startup>>();
+
+            if ((await userManager.FindByEmailAsync(email)) == null)
             {
-                logger.LogCritical($"{msg}\n{createRoleResult.Errors.Aggregate("", (acc, e) => e.Description + "\n")}");
+                var user = new AppUser
+                {
+                    UserName = email,
+                    Email = email
+                };
+
+                var userResult = await userManager.CreateAsync(user, "Pass@123");
+                if (userResult.Succeeded)
+                {
+                    var addToRoleResult = await userManager.AddToRoleAsync(user, role);
+                    LogError(logger, addToRoleResult, "Error adding user to role:");
+                }
+                else LogError(logger, userResult, "Error creating user:");
+            }
+        }
+
+        private static void LogError(ILogger<Startup> logger, IdentityResult result, string msg)
+        {
+            if (!result.Succeeded)
+            {
+                logger.LogCritical($"{msg}\n{result.Errors.Aggregate("", (acc, e) => e.Description + "\n")}");
             }
         }
 

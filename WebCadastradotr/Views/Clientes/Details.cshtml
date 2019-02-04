@@ -1,7 +1,9 @@
 ﻿@model WebCadastrador.Models.Cliente
-
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
 @{
     ViewData["Title"] = "Details";
+    var canEdit = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.EditAndCreate))).Succeeded;
 }
 
 <h2>Details</h2>
@@ -49,6 +51,10 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    @if (canEdit)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    }
+    |
     <a asp-action="Index">Back to List</a>
 </div>

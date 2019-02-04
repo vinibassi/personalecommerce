@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
+using WebCadastradotr;
 
 namespace WebCadastrador.Controllers
 {
@@ -19,13 +20,13 @@ namespace WebCadastrador.Controllers
             this.produtoRepositorio = produtoRepositorio;
             this.fabricanteRepository = fabricanteRepository;
         }
-
         // GET: Produtos
+        [Authorize(nameof(AuthPolicies.ViewOnly))]
         public async Task<IActionResult> Index()
         {
             return View(await produtoRepositorio.ListaProdutosAsync());
         }
-
+        [Authorize(nameof(AuthPolicies.ViewOnly))]
         // GET: Produtos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,7 +53,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Produtos/Create
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Create()
         {
             ViewBag.Fabricantes = (await fabricanteRepository.ListaFabricantesAsync())
@@ -66,7 +67,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Create(ProdutoCreateViewModel produtoCreateViewModel)
         {
             if (!produtoCreateViewModel.Preco.ToString().EndsWith("3"))
@@ -93,7 +94,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Produtos/Edit/5
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Edit(int? id)
         {
             var pEditViewModel = new ProdutoEditViewModel();
@@ -123,7 +124,7 @@ namespace WebCadastrador.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Edit(ProdutoEditViewModel produtoEditViewModel)
         {
             if (produtoEditViewModel.Id == 0)
@@ -171,7 +172,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Produtos/Delete/5
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.Delete))]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -190,7 +191,7 @@ namespace WebCadastrador.Controllers
 
         //// POST: Produtos/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.Delete))]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var produto = await produtoRepositorio.FindProdutoByIdAsync(id);

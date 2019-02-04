@@ -1,13 +1,20 @@
 ﻿@model IEnumerable<WebCadastrador.Models.Fabricante>
 @using WebCadastrador.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
 @{
     ViewData["Title"] = "Index";
+    var canDelete = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.Delete))).Succeeded;
+    var canCreate = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.EditAndCreate))).Succeeded;
 }
 
 <h2>Lista de Fabricantes</h2>
 
 <p>
+    @if (canCreate)
+    {
     <a asp-action="Create">Adicionar fabricante</a>
+    }
 </p>
 <table class="table">
     <thead>
@@ -25,23 +32,30 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Formatador.CNPJ(item.CNPJ)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Endereco)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Formatador.CNPJ(item.CNPJ)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco)
+                </td>
+                <td>
+                    @if (canCreate)
+                    {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    } |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    @if (canDelete)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

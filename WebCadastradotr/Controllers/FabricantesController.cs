@@ -6,6 +6,7 @@ using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
 using WebCadastrador.Models.Validations;
 using WebCadastrador.ViewModels;
+using WebCadastradotr;
 
 namespace WebCadastrador.Controllers
 {
@@ -20,13 +21,16 @@ namespace WebCadastrador.Controllers
             this.fabricanteRepository = fabricanteRepository;
         }
 
+
         // GET: Fabricantes
+        [Authorize(nameof(AuthPolicies.ViewOnly))]
         public async Task<IActionResult> Index()
         {
             return View(await fabricanteRepository.ListaFabricantesAsync());
         }
 
         // GET: Fabricantes/Details/5
+        [Authorize(nameof(AuthPolicies.ViewOnly))]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,7 +47,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Fabricantes/Create
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public IActionResult Create()
         {
             return View();
@@ -54,7 +58,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Create(FabricantesViewModel fabricanteViewModel)
         {
             var fabricanteValidator = new FabricanteValidator();
@@ -81,7 +85,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Fabricantes/Edit/5
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,7 +113,7 @@ namespace WebCadastrador.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.EditAndCreate))]
         public async Task<IActionResult> Edit(FabricantesViewModel fabricanteViewModel)
         {
             var fabricante = new Fabricante
@@ -154,7 +158,7 @@ namespace WebCadastrador.Controllers
         }
 
         // GET: Fabricantes/Delete/5
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.Delete))]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -174,7 +178,7 @@ namespace WebCadastrador.Controllers
         // POST: Fabricantes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(nameof(AuthPolicies.Delete))]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var fabricante = await fabricanteRepository.FindByIdAsync(id);

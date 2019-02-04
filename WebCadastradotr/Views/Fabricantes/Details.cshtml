@@ -1,7 +1,9 @@
 ﻿@model WebCadastrador.Models.Fabricante
-
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
 @{
     ViewData["Title"] = "Details";
+    var canEdit = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.EditAndCreate))).Succeeded;
 }
 
 <h2>Details</h2>
@@ -31,23 +33,26 @@
     </dl>
     @if (Model.Produtos.Any())
     {
-    <div>
-        <h4>
-            @Html.DisplayNameFor(model => model.Produtos)
-        </h4>
-        <ul>
-            @foreach (var p in Model.Produtos)
-            {
-                <a href="/Produtos/Details/@p.Id">
-                     <li>  @p.Nome </li>
-                </a>
-            }
-        </ul>
-    </div>
+        <div>
+            <h4>
+                @Html.DisplayNameFor(model => model.Produtos)
+            </h4>
+            <ul>
+                @foreach (var p in Model.Produtos)
+                {
+                    <a href="/Produtos/Details/@p.Id">
+                        <li>  @p.Nome </li>
+                    </a>
+                }
+            </ul>
+        </div>
     }
-    
+
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    @if (canEdit)
+    {
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+    }|
     <a asp-action="Index">Back to List</a>
 </div>
