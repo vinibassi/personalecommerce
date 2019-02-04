@@ -40,6 +40,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             novoCliente = Generator.ValidClienteViewModel();
             novoCliente.CPF = c2.CPF;
             //act
+            page.GoToAndLogin();
             page.NavegaToEdit(cliente1.Id);
             page.ModificaCliente(novoCliente);
         }

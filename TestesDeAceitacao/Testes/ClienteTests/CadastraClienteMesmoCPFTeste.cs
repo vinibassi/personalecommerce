@@ -34,6 +34,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             novoCliente = Generator.ValidClienteViewModel();
             novoCliente.CPF = c.CPF;
             //act
+            page.GoToAndLogin();
             page.Navigate();
             page.Cadastra(novoCliente);
         }

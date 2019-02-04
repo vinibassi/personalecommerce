@@ -29,6 +29,7 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             var page = new DeleteFabricantePage();
             var id = context.Fabricante.First().Id;
             //act
+            page.GoToAndLogin();
             page.NavigateToDeletePage(id);
             page.DeletaFabricante();
         }

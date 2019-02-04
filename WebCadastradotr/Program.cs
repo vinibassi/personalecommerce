@@ -41,12 +41,15 @@ namespace WebCadastradotr
             }
             //Here we create a Admin super user who will maintain the website                   
 
+            var viniUser = await userManager.FindByEmailAsync("vini@vini.com");
+            await userManager.AddToRoleAsync(viniUser, "Admin");
+
             var user = new AppUser
             {
                 UserName = "default",
                 Email = "default@default.com"
             };
-
+            
             var userResult = await userManager.CreateAsync(user, "Admin@123");
 
             //Add default User to Role Admin    

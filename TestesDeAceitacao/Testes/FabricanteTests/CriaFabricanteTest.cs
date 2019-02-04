@@ -31,6 +31,8 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             var page = new NewFabricantePage();
             novoFabricante = Generator.ValidFabricanteViewModel();
             //act
+
+            page.GoToAndLogin();
             page.Navigate();
             page.Cadastra(novoFabricante);
             fabricante = context.Fabricante.FirstOrDefault();

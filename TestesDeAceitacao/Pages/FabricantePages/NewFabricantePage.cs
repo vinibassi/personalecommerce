@@ -26,5 +26,14 @@ namespace TestesDeAceitacao.Pages
             var erro = driver.FindElement(By.CssSelector("[data-valmsg-for=CNPJ]"));
             return erro.Text;
         }
+        public void GoToAndLogin()
+        {
+            var driver = SetupGlobal.Driver;
+            driver.Navigate().GoToUrl("https://localhost:5001/Identity/Account/Login");
+            driver.FindElement(By.Id("Input_Email")).SendKeys("vini@vini.com");
+            driver.FindElement(By.Id("Input_Password")).SendKeys("Pipoca@123");
+            driver.FindElement(By.Id("login")).Click();
+        }
     }
+
 }

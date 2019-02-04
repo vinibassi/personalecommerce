@@ -37,8 +37,9 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
             context.SaveChanges();
             produto = context.Produto.First();
             var id = context.Produto.First().Id;
-            //act
             var page = new DeleteProdutoPage();
+            //act
+            page.GoToAndLogin();
             page.NavigateToDeletePage(id);
             page.DeletaFabricante();
         }

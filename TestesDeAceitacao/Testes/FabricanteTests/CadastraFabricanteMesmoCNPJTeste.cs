@@ -37,6 +37,7 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             novoFabricante.CNPJ = f.CNPJ;
 
             //act
+            page.GoToAndLogin();
             page.Navigate();
             page.Cadastra(novoFabricante);
         }

@@ -37,6 +37,7 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
 
             page = new NewProdutoPage();
             //act
+            page.GoToAndLogin();
             page.Visita();
             page.Cadastra(p);
             context = new WebCadastradorContext(builder.Options);
