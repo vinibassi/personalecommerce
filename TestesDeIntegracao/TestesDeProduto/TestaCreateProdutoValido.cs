@@ -51,11 +51,10 @@ namespace TestesDeIntegracao.TestesDeProduto
             produto = context.Produto.FirstOrDefault();
         }
 
-
         [Test]
-        public void TestaResponseRedirect() => response.StatusCode.Should().Be(HttpStatusCode.Redirect);
+        public void TestaResponseOK() => response.StatusCode.Should().Be(HttpStatusCode.OK);
         [Test]
-        public void TestaEnderecoRedirecionamento() => response.Headers.Location.Should().Be("/Produtos");
+        public void FoiRedirecionadoParaHomeDeProdutos() => response.RequestMessage.RequestUri.ToString().Should().Be("http://localhost/Produtos");
         [Test]
         public void TestaId() => Assert.IsNotNull(produto.Id);
         [Test]

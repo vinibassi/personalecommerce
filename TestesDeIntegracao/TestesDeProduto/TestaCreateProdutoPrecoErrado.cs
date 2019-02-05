@@ -52,6 +52,10 @@ namespace TestesDeIntegracao.TestesDeProduto
         }
         [Test]
         public void TestaResponse() => response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        [Test]
+        public void UrlEhAMesma() => response.RequestMessage.RequestUri.ToString().Should().Be("http://localhost/Produtos/Create");
+
         [Test]
         public async Task ReadErro()
         {
