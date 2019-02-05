@@ -46,6 +46,7 @@ namespace WebCadastrador.Controllers
                 Nome = produto.Nome,
                 Preco = produto.Preco,
                 Fabricante = produto.Fabricante,
+                Url = produto.FotoUrl,
                 Id = produto.Id
             };
 
@@ -81,7 +82,8 @@ namespace WebCadastrador.Controllers
                 {
                     Nome = produtoCreateViewModel.Nome,
                     Preco = produtoCreateViewModel.Preco,
-                    Fabricante = fabricante
+                    Fabricante = fabricante,
+                    FotoUrl = produtoCreateViewModel.Url
                 };
                 await produtoRepositorio.AddAsync(produto);
                 return RedirectToAction(nameof(Index));
@@ -116,6 +118,7 @@ namespace WebCadastrador.Controllers
             pEditViewModel.Preco = produto.Preco;
             pEditViewModel.FabricanteId = produto.Fabricante.Id;
             pEditViewModel.Id = produto.Id;
+            pEditViewModel.Url = produto.FotoUrl;
 
             return View(pEditViewModel);
         }
@@ -147,6 +150,7 @@ namespace WebCadastrador.Controllers
                 produto.Nome = produtoEditViewModel.Nome;
                 produto.Preco = produtoEditViewModel.Preco;
                 produto.Fabricante = fabricante;
+                produto.FotoUrl = produtoEditViewModel.Url;
 
                 try
                 {

@@ -11,5 +11,7 @@ namespace WebCadastrador.Models
         public int Fabricante { get; set; }
         [Required]
         public decimal Preco { get; set; }
+        [Required]
+        public string Url { get; set; }
     }
 }

@@ -25,10 +25,12 @@ namespace TestesDeAceitacao.Pages.ProdutoPages
             IWebElement nomeProduto = driver.FindElement(By.Id("Nome"));
             IWebElement precoProduto = driver.FindElement(By.Id("Preco"));
             IWebElement produtoFabricante = driver.FindElement(By.Id("Fabricante"));
+            IWebElement produtoFoto = driver.FindElement(By.Id("Url"));
             var selectElement = new SelectElement(produtoFabricante);
             selectElement.SelectByValue(novoProduto.Fabricante.Id.ToString());
             nomeProduto.SendKeys(novoProduto.Nome);
             precoProduto.SendKeys(novoProduto.Preco.ToString());
+            produtoFoto.SendKeys("https://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg");
             nomeProduto.Submit();
         }
     }
