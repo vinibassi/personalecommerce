@@ -6,5 +6,6 @@
         public string Nome { get; set; }
         public virtual Fabricante Fabricante { get; set; }
         public decimal Preco { get; set; }
+        public string FotoUrl { get; set; }
     }
 }

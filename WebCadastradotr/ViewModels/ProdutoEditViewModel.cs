@@ -6,5 +6,6 @@
         public string Nome { get; set; }
         public int FabricanteId { get; set; }
         public decimal Preco { get; set; }
+        public string Url { get; set; }
     }
 }

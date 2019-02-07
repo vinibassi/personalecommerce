@@ -10,6 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <img src="@Model.Url" asp-append-version="true" />
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -22,14 +23,20 @@
                 <select asp-for="FabricanteId"
                         asp-items="@ViewBag.Fabricantes"></select>
                 <span asp-validation-for="FabricanteId" class="text-danger"></span>
-            </div><div class="form-group">
+            </div>
+            <div class="form-group">
                 <label asp-for="Preco" class="control-label">Preço</label>
                 <input asp-for="Preco" class="form-control" />
                 <span asp-validation-for="Preco" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Url" class="control-label">Image URL</label>
+                <input asp-for="Url" class="form-control" />
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-default"  id="salvarProduto"/>
+                <input type="submit" value="Salvar" class="btn btn-default" id="salvarProduto" />
             </div>
         </form>
     </div>
