@@ -1,4 +1,4 @@
 ﻿namespace WebCadastradotr
 {
-    public enum AuthPolicies { Delete, EditAndCreate, ViewOnly }
+    public enum AuthPolicies { Delete, EditAndCreate, Navigate, ViewOnly }
 }

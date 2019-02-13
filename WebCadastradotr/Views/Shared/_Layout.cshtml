@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService authorizationService
 @{ 
-    var canView = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.ViewOnly))).Succeeded;
+    var canView = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.EditAndCreate))).Succeeded;
 }
 <!DOCTYPE html>
 <html>

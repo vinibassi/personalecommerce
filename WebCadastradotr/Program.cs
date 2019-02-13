@@ -33,11 +33,11 @@ namespace WebCadastradotr
 
             await CreateRole(serviceProvider, "Admin");
             await CreateRole(serviceProvider, "Manager");
-            await CreateRole(serviceProvider, "Employee");
+            await CreateRole(serviceProvider, "User");
             
             await AddNewUserToRoleAsync(serviceProvider, "admin@admin.com", "Admin");
             await AddNewUserToRoleAsync(serviceProvider, "manager@manager.com", "Manager");
-            await AddNewUserToRoleAsync(serviceProvider, "employee@employee.com", "Employee");
+            await AddNewUserToRoleAsync(serviceProvider, "user@user.com", "User");
         }
 
         private static async Task CreateRole(IServiceProvider serviceProvider, string roleName)
