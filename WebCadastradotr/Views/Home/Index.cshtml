@@ -9,36 +9,42 @@
 </head>
 <body>
     <h1>Bem vindx ao webcadastrador!</h1>
-        <table class="table">
-            <thead>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th>
+                    Imagem do Produto
+                </th>
+                <th>
+                    Detalhes do Produto
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Preco)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Nome)
+                        @Html.DisplayFor(model => item.Nome)
                     </th>
-                    <th>
-                        Imagem do Produto
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Preco)
-                    </th>
+                    <td>
+                        <img src="@item.FotoUrl" asp-append-version="true" />
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Preco)
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <th>
-                            @Html.DisplayFor(model => item.Nome)
-                        </th>
-                        <td>
-                            <img src="@item.FotoUrl" asp-append-version="true" />
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => item.Preco)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+        </tbody>
+    </table>
 </body>
 </html>

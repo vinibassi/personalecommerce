@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebCadastrador.Models;
 using WebCadastrador.Models.Repositories;
 using WebCadastradotr.Models;
 
@@ -17,6 +18,31 @@ namespace WebCadastradotr.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await produtoRepositorio.ListaProdutosAsync());
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var produto = await produtoRepositorio.FindProdutoByIdAsync(id.Value);
+
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            var detailsView = new ProdutoDetailsVMUser
+            {
+                Nome = produto.Nome,
+                Preco = produto.Preco,
+                Fabricante = produto.Fabricante,
+                Id = produto.Id
+            };
+
+            return View(detailsView);
         }
 
         public IActionResult About()
