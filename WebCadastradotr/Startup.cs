@@ -59,6 +59,7 @@ namespace WebCadastradotr
                 options.AddPolicy(nameof(AuthPolicies.EditAndCreate), policy =>
                     policy.RequireAuthenticatedUser().RequireAssertion(c => c.User.IsInRole("Manager") || c.User.IsInRole("Admin")));
                 options.AddPolicy(nameof(AuthPolicies.ViewOnly), policy => policy.RequireAuthenticatedUser());
+                options.AddPolicy(nameof(AuthPolicies.Navigate), policy => policy.RequireAuthenticatedUser().RequireRole("User"));
             });
 
             services.AddDbContext<WebCadastradorContext>(options =>

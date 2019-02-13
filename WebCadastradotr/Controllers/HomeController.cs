@@ -1,14 +1,22 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebCadastrador.Models.Repositories;
 using WebCadastradotr.Models;
 
 namespace WebCadastradotr.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IProdutoRepository produtoRepositorio;
+        public HomeController(IProdutoRepository produtoRepositorio)
         {
-            return View();
+            this.produtoRepositorio = produtoRepositorio;
+        }
+        public async Task<IActionResult> Index()
+        {
+            return View(await produtoRepositorio.ListaProdutosAsync());
         }
 
         public IActionResult About()
