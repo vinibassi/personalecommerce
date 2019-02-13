@@ -28,21 +28,21 @@ namespace WebCadastradotr.Controllers
             }
 
             var produto = await produtoRepositorio.FindProdutoByIdAsync(id.Value);
-
             if (produto == null)
             {
                 return NotFound();
             }
 
-            var detailsView = new ProdutoDetailsVMUser
+            var p = new ProdutoDetailsVMUser
             {
                 Nome = produto.Nome,
                 Preco = produto.Preco,
                 Fabricante = produto.Fabricante,
-                Id = produto.Id
+                Id = produto.Id,
+                Url = produto.FotoUrl
             };
 
-            return View(detailsView);
+            return View(p);
         }
 
         public IActionResult About()

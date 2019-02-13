@@ -34,4 +34,10 @@
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Home\Details.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>
