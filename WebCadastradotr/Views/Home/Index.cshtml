@@ -1,10 +1,6 @@
 ﻿@model IEnumerable<WebCadastrador.Models.Produto>
-@using Microsoft.AspNetCore.Authorization
-@inject IAuthorizationService authorizationService
-
 @{
     ViewData["Title"] = "Home Page";
-    var canView = (await authorizationService.AuthorizeAsync(User, nameof(AuthPolicies.ViewOnly))).Succeeded;
 }
 
 
@@ -13,8 +9,6 @@
 </head>
 <body>
     <h1>Bem vindx ao webcadastrador!</h1>
-    @if (canView)
-    {
         <table class="table">
             <thead>
                 <tr>
@@ -46,6 +40,5 @@
                 }
             </tbody>
         </table>
-    }
 </body>
 </html>
