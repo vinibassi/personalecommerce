@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebCadastrador.Data;
 
 namespace WebCadastrador.Migrations
 {
     [DbContext(typeof(WebCadastradorContext))]
-    partial class WebCadastradorContextModelSnapshot : ModelSnapshot
+    [Migration("20190214163826_PedidoModel")]
+    partial class PedidoModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,40 +230,6 @@ namespace WebCadastrador.Migrations
                     b.ToTable("Fabricante");
                 });
 
-            modelBuilder.Entity("WebCadastrador.Models.ItemPedido", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("PedidoId");
-
-                    b.Property<decimal>("PrecoUnitario");
-
-                    b.Property<int?>("ProdutoId");
-
-                    b.Property<int>("Quantidade");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PedidoId");
-
-                    b.HasIndex("ProdutoId");
-
-                    b.ToTable("ItemPedido");
-                });
-
-            modelBuilder.Entity("WebCadastrador.Models.Pedido", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pedido");
-                });
-
             modelBuilder.Entity("WebCadastrador.Models.Produto", b =>
                 {
                     b.Property<int>("Id")
@@ -326,17 +294,6 @@ namespace WebCadastrador.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebCadastrador.Models.ItemPedido", b =>
-                {
-                    b.HasOne("WebCadastrador.Models.Pedido", "Pedido")
-                        .WithMany("Itens")
-                        .HasForeignKey("PedidoId");
-
-                    b.HasOne("WebCadastrador.Models.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("ProdutoId");
                 });
 
             modelBuilder.Entity("WebCadastrador.Models.Produto", b =>

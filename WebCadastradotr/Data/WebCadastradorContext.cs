@@ -25,9 +25,10 @@ namespace WebCadastrador.Data
         }
 
         public DbSet<Produto> Produto { get; set; }
-
         public DbSet<Fabricante> Fabricante { get; set; }
-
         public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Pedido> Pedido { get; set; }
+        public DbSet<ItemPedido> ItemPedido { get; set; }
+
     }
 }

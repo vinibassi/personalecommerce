@@ -8,13 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using WebCadastrador.Models.Repositories;
 using WebCadastrador.Data;
-using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Identity;
-using WebCadastrador.Areas.Identity.Data;
-using Microsoft.Extensions.Logging;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebCadastradotr
 {
@@ -68,6 +62,7 @@ namespace WebCadastradotr
             });
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IFabricanteRepository, FabricanteRepository>();
+            services.AddScoped<IPedidoRepository, PedidoRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
 
         }
