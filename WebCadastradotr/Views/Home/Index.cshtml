@@ -8,7 +8,7 @@
 <head>
 </head>
 <body>
-    <h1>Bem vindx ao webcadastrador!</h1>
+    <h1>Bem vindx ao webcadastrador</h1>
     <table class="table">
         <thead>
             <tr>
@@ -20,6 +20,9 @@
                 </th>
                 <th>
                     Detalhes do Produto
+                </th>
+                <th>
+                    Adicionar ao Carrinho
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Preco)
@@ -38,6 +41,9 @@
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                    </td>
+                    <td>
+                        @Html.ActionLink("Adicionar", "Carrinho", "Pedido", new { id = item.Id })
                     </td>
                     <td>
                         @Html.DisplayFor(model => item.Preco)

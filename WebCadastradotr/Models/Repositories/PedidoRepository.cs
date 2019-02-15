@@ -15,16 +15,8 @@ namespace WebCadastrador.Models.Repositories
             this.context = context;
         }
 
-        public void AddItem(ItemPedido item)
+        public void AddItem(ItemPedido p)
         {
-            var p = new ItemPedido
-            {
-                Id = item.Id,
-                Pedido = item.Pedido,
-                PrecoUnitario = item.PrecoUnitario,
-                Produto = item.Produto,
-                Quantidade = item.Quantidade
-            };
             context.Add(p);
             context.SaveChanges();
         }
