@@ -30,7 +30,7 @@ namespace WebCadastrador.Models.Repositories
            context.Produto.Remove(produto);
            await context.SaveChangesAsync();
         }
-
+        
         public async Task UpdateAsync(Produto produto)
         {
             context.Update(produto);

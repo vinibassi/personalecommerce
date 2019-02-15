@@ -33,5 +33,7 @@
 <div>
     <a asp-action="Index">Voltar para a lista de produtos </a>
     /
-    @Html.ActionLink("Adicionar produto ao carrinho", "Carrinho", "Pedido", new {id = Model.Id})
+    <form asp-controller="Carrinho" asp-action="AddToCart" asp-route-id="@Model.Id" method="post" id="addCart">
+        <a onclick="addCart.submit()" href="#">Adicionar produto ao carrinho</a>
+    </form>
 </div>

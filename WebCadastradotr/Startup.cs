@@ -9,6 +9,7 @@ using FluentValidation.AspNetCore;
 using WebCadastrador.Models.Repositories;
 using WebCadastrador.Data;
 using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace WebCadastradotr
 {
@@ -47,6 +48,10 @@ namespace WebCadastradotr
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 });
 
+            services.AddHttpContextAccessor();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(nameof(AuthPolicies.Delete), policy => policy.RequireAuthenticatedUser().RequireRole("Admin"));
@@ -80,6 +85,7 @@ namespace WebCadastradotr
                 app.UseHsts();
             }
 
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();

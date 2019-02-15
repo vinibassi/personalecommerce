@@ -43,7 +43,7 @@
                         <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
                     </td>
                     <td>
-                        @Html.ActionLink("Adicionar", "Carrinho", "Pedido", new { id = item.Id })
+                        @Html.ActionLink("Adicionar", "AddToCart", "Carrinho", new { id = item.Id })
                     </td>
                     <td>
                         @Html.DisplayFor(model => item.Preco)
