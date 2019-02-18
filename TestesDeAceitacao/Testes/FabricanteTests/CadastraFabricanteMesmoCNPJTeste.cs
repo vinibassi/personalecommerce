@@ -25,6 +25,8 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
                 .UseLazyLoadingProxies()
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WebCadastradorContext-dc88d854-cb2b-41f0-851e-fa57b037f7e8;Trusted_Connection=True;MultipleActiveResultSets=true");
             context = new WebCadastradorContext(builder.Options);
+            context.ItemPedido.Clear();
+            context.Pedido.Clear();
             context.Produto.Clear();
             context.Fabricante.Clear();
 

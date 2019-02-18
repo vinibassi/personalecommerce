@@ -11,7 +11,7 @@ namespace WebCadastrador.Models
         public int Fabricante { get; set; }
         [Required]
         public decimal Preco { get; set; }
-        [Required]
+        [Required, RegularExpression("^https?://.*$", ErrorMessage = "A URL inserida é inválida.")]
         public string Url { get; set; }
     }
 }
