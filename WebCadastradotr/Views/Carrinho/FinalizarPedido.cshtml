@@ -1,0 +1,70 @@
+﻿@using WebCadastrador.Models
+@using WebCadastrador.Areas.Identity.Data
+@model (Pedido, AppUser)
+@{
+    ViewData["Title"] = "FinalizarPedido";
+    var (pedido, user) = Model;
+}
+<h3>Resumo do Pedido</h3>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Nº do Pedido:@(pedido.Id)</h3>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-3" id="email">
+        <h3>Seu e-mail:</h3>
+        <div>@user.Email</div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <h3>Itens Adicionados</h3>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nome
+            </th>
+            <th>
+                Imagem do Produto
+            </th>
+            <th>
+                Fabricante
+            </th>
+            <th>
+                Preço
+            </th>
+            <th>
+                Quantidade
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in pedido.Itens)
+        {
+            <tr>
+                <th>
+                    @(item.Produto.Nome)
+                </th>
+                <td>
+                    <img src="@item.Produto.FotoUrl" asp-append-version="true" />
+                </td>
+                <td>
+                    @(item.Produto.Fabricante.Nome)
+                </td>
+                <td>
+                    @(item.Produto.Preco)
+                </td>
+                <td>
+                    @(item.Quantidade)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

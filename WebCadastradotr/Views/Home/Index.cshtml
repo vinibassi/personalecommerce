@@ -43,7 +43,9 @@
                         <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
                     </td>
                     <td>
-                        @Html.ActionLink("Adicionar", "AddToCart", "Carrinho", new { id = item.Id })
+                        <form asp-controller="Carrinho" asp-action="AddToCart" asp-route-id="@item.Id" method="post" id="addCart">
+                            <a onclick="addCart.submit()" href="#">Adicionar</a>
+                        </form>
                     </td>
                     <td>
                         @Html.DisplayFor(model => item.Preco)

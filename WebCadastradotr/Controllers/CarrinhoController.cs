@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebCadastrador.Areas.Identity.Data;
+using WebCadastrador.Models;
 using WebCadastrador.Models.Carrinho;
 using WebCadastrador.Models.Repositories;
 
@@ -12,8 +16,14 @@ namespace WebCadastrador.Controllers
     public class CarrinhoController : Controller
     {
         private IProdutoRepository produtoRepository;
-
-        public CarrinhoController(IProdutoRepository produtoRepository) => this.produtoRepository = produtoRepository;
+        private IPedidoRepository pedidoRepository;
+        private UserManager<AppUser> userManager;
+        public CarrinhoController(IProdutoRepository produtoRepository, IPedidoRepository pedidoRepository, UserManager<AppUser> userManager)
+        {
+            this.produtoRepository = produtoRepository;
+            this.pedidoRepository = pedidoRepository;
+            this.userManager = userManager;
+        }
 
         public async Task<ActionResult> Index()
         {
@@ -25,8 +35,8 @@ namespace WebCadastrador.Controllers
                 new ItemCarrinho()
                 {
                     Preco = produto.Preco,
-                    Quantidade = 1,
-                    Produto = produto
+                    Produto = produto, 
+                    Quantidade = 1
                 });
             return View(new Carrinho { Produtos = itens });
         }
@@ -39,5 +49,20 @@ namespace WebCadastrador.Controllers
             HttpContext.Session.Set("carrinho", carrinho);
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize]
+        public async Task<IActionResult> FinalizarPedido()
+        {
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            var idProdutos = HttpContext.Session.Get<List<int>>("carrinho");
+            var produtos = await Task.WhenAll(idProdutos.Select(id => produtoRepository.FindProdutoByIdAsync(id)));
+            var pedido = new Pedido();
+            pedidoRepository.CriaPedido(pedido);
+            pedido.AdicionarItens(produtos.ToList());
+            pedido = pedidoRepository.FindById(pedido.Id);
+            return View((pedido, user));
+        }
+
+
     }
 }
