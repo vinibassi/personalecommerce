@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +9,7 @@ using WebCadastrador.Areas.Identity.Data;
 using WebCadastrador.Models;
 using WebCadastrador.Models.Carrinho;
 using WebCadastrador.Models.Repositories;
+using WebCadastrador.ViewModels;
 
 namespace WebCadastrador.Controllers
 {
@@ -18,6 +18,13 @@ namespace WebCadastrador.Controllers
         private IProdutoRepository produtoRepository;
         private IPedidoRepository pedidoRepository;
         private UserManager<AppUser> userManager;
+
+        public List<ItemCarrinho> Itens
+        {
+            get => HttpContext.Session.Get<List<ItemCarrinho>>("carrinho") ?? new List<ItemCarrinho>();
+            set => HttpContext.Session.Set("carrinho", value);
+        }
+
         public CarrinhoController(IProdutoRepository produtoRepository, IPedidoRepository pedidoRepository, UserManager<AppUser> userManager)
         {
             this.produtoRepository = produtoRepository;
@@ -27,26 +34,25 @@ namespace WebCadastrador.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var idProdutosDoCarrinho = HttpContext.Session.Get<List<int>>("carrinho");
-            if (idProdutosDoCarrinho == null)
-                return View(new Carrinho());
-            var produtos = await Task.WhenAll(idProdutosDoCarrinho.Select(id => produtoRepository.FindProdutoByIdAsync(id)));
+            if (!Itens.Any())
+                return View(new CarrinhoViewModel());
+            var produtos = await Task.WhenAll(Itens.Select(itemCarrinho => produtoRepository.FindProdutoByIdAsync(itemCarrinho.ProdutoId)));
             var itens = produtos.Select(produto =>
-                new ItemCarrinho()
+                new ItemCarrinhoViewModel()
                 {
                     Preco = produto.Preco,
-                    Produto = produto, 
+                    Produto = produto,
                     Quantidade = 1
                 });
-            return View(new Carrinho { Produtos = itens });
+            return View(new CarrinhoViewModel { Produtos = itens });
         }
 
         [HttpPost]
         public IActionResult AddToCart(int id)
         {
-            var carrinho = HttpContext.Session.Get<List<int>>("carrinho") ?? new List<int>();
-            carrinho.Add(id);
-            HttpContext.Session.Set("carrinho", carrinho);
+            var carrinho = Itens;
+            carrinho.Add(new ItemCarrinho { ProdutoId = id, Quantidade = 1 });
+            Itens = carrinho;
             return RedirectToAction(nameof(Index));
         }
 
@@ -54,8 +60,8 @@ namespace WebCadastrador.Controllers
         public async Task<IActionResult> FinalizarPedido()
         {
             var user = await userManager.FindByNameAsync(User.Identity.Name);
-            var idProdutos = HttpContext.Session.Get<List<int>>("carrinho");
-            var produtos = await Task.WhenAll(idProdutos.Select(id => produtoRepository.FindProdutoByIdAsync(id)));
+            var itensDoCarrinho = Itens;
+            var produtos = await Task.WhenAll(itensDoCarrinho.Select(itemDoCarrinho => produtoRepository.FindProdutoByIdAsync(itemDoCarrinho.ProdutoId)));
             var pedido = new Pedido();
             pedidoRepository.CriaPedido(pedido);
             pedido.AdicionarItens(produtos.ToList());

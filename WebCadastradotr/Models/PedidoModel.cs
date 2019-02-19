@@ -2,7 +2,7 @@
 
 namespace WebCadastrador.Models
 {
-    public class Pedido
+    public  class Pedido
     {
         public int Id { get; set; }
         public virtual List<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
@@ -20,12 +20,16 @@ namespace WebCadastrador.Models
                 Pedido = this,
                 PrecoUnitario = produto.Preco,
                 Produto = produto,
-                Quantidade = 1
+                Quantidade = TotalDeItens(1)
             };
             Itens.Add(itemPedido);
         }
+        public int TotalDeItens(int qtd)
+        {
+            var novoTotal = Itens.Count + qtd;
+            return novoTotal;
+        }
     }
-
     public class ItemPedido
     {
         public int Id { get; set; }

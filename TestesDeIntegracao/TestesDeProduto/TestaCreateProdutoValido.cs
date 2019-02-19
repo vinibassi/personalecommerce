@@ -18,7 +18,6 @@ namespace TestesDeIntegracao.TestesDeProduto
     class TestaCreateProdutoValido
     {
         private Produto produto;
-        private ProdutoCreateViewModel produtoCreateVM;
         private Fabricante fabricante;
         private HttpResponseMessage response;
         private WebCadastradorContext context;

@@ -17,7 +17,6 @@ namespace TestesDeIntegracao.TestesDeProduto
     class TestaCreateProdutoPrecoErrado
     {
         private Produto produto;
-        private ProdutoCreateViewModel produtoCreateVM;
         private Fabricante fabricante;
         private HttpResponseMessage response;
         private WebCadastradorContext context;
