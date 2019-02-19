@@ -30,7 +30,6 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             var id = context.Clientes.First().Id;
             var page = new DeleteClientPage();
             //act
-            page.GoToAndLogin();
             page.NavigateToDeletePage(id);
             page.DeletaCliente();
         }

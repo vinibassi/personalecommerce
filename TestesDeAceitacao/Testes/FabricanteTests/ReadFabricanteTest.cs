@@ -5,6 +5,7 @@ using WebCadastrador.Models;
 using TestesDeAceitacao.Pages.FabricantePages;
 using TestesDeUnidade;
 using WebCadastrador.Data;
+using FluentAssertions;
 
 namespace TestesDeAceitacao.Testes.FabricanteTests
 {
@@ -13,6 +14,7 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
         private FabricanteCadastrado fabricante;
         private WebCadastradorContext context;
         private Fabricante f;
+        private FabricanteListPage page;
 
         [OneTimeSetUp]
         public void ModificaCliente()
@@ -26,15 +28,21 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             context.Fabricante.Clear();
 
             f = Generator.ValidFabricante();
-            f.CNPJ = "94170922000190";
             context.Fabricante.Add(f);
             context.SaveChanges();
-            var page = new FabricanteListPage();
+            page = new FabricanteListPage();
+         
             //act
             SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Fabricantes");
-            fabricante = page.Fabricante.FirstOrDefault(c => c.CNPJ == "94.170.922/0001-90");
         }
         [Test]
-        public void ReadFabricantes() => Assert.AreEqual(f.Nome, fabricante.Nome);
+        public void ListaContemFabricanteCerto() => page.Fabricante.Single().Should().BeEquivalentTo(new FabricanteCadastrado
+        {
+            Nome = f.Nome,
+            CNPJ = Formatador.CNPJ(f.CNPJ),
+            Endereco = f.Endereco
+        });
+        [Test]
+        public void ListaContemNumeroCertoDeFabricantes() => Assert.AreEqual(1, context.Fabricante.Count());
     }
 }

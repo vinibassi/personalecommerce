@@ -25,11 +25,10 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             var f = Generator.ValidFabricante();
             context.Fabricante.Add(f);
             context.SaveChanges();
-
             var page = new DeleteFabricantePage();
             var id = context.Fabricante.First().Id;
+            
             //act
-            page.GoToAndLogin();
             page.NavigateToDeletePage(id);
             page.DeletaFabricante();
         }

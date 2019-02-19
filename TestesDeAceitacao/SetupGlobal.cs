@@ -22,8 +22,15 @@ namespace TestesDeAceitacao
             Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)/*, options*/);
             factory = new HttpWebAppFactory<Startup>();
             factory.CreateDefaultClient();
+            GoToAndLogin();
         }
-
+        public static void GoToAndLogin()
+        {
+            Driver.Navigate().GoToUrl("https://localhost:5001/Identity/Account/Login");
+            Driver.FindElement(By.Id("Input_Email")).SendKeys("admin@admin.com");
+            Driver.FindElement(By.Id("Input_Password")).SendKeys("Pass@123");
+            Driver.FindElement(By.Id("login")).Click();
+        }
 
         [OneTimeTearDown]
         public static void TearDown()

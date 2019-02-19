@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TestesDeUnidade;
 using WebCadastrador.Controllers;
 using WebCadastrador.Data;
 using WebCadastrador.Models;
@@ -31,15 +32,12 @@ namespace TestesDeIntegracao.TestesDeProduto
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
             var controller = new ProdutosController(new ProdutoRepository(context), new FabricanteRepository(context));
-            // act
-            fabricante = new Fabricante
-            {
-                Nome = "Bassi LTDA",
-                CNPJ = "94170922000190",
-                Endereco = "Rua abcdxyz, 23"
-            };
+
+            fabricante = Generator.ValidFabricante();
             context.Add(fabricante);
             context.SaveChanges();
+            
+            // act
             var content = new FormUrlEncodedContent(new Dictionary<string, string> {
                 {"Nome","abc"},
                 {"Fabricante",fabricante.Id.ToString()},

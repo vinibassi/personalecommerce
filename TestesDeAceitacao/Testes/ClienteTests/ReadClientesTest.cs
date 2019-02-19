@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System.Linq;
 using TestesDeAceitacao.Pages;
@@ -11,6 +12,7 @@ namespace TestesDeAceitacao.Testes.ClienteTests
     [TestFixture]
     class ReadClientesTest
     {
+        private ClientesListPage page;
         private ClienteCadastrado cliente;
         private WebCadastradorContext context;
         private Cliente c;
@@ -26,15 +28,21 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             context.Clientes.Clear();
 
             c = Generator.ValidCliente();
-            c.CPF = "00870021087";
             context.Clientes.Add(c);
             context.SaveChanges();
-            var page = new ClientesListPage();
+
+            page = new ClientesListPage();
             //act
             SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Clientes");
-            cliente = page.Clientes.FirstOrDefault(c => c.CPF == "008.700.210-87");
         }
         [Test]
-        public void ReadClientes() => Assert.AreEqual(c.Sobrenome, cliente.Sobrenome);
+        public void ListaContemClienteCerto() => page.Clientes.Single().Should().BeEquivalentTo(new ClienteCadastrado
+        {
+            Nome = c.Nome,
+            CPF = Formatador.CPF(c.CPF) ,
+            Sobrenome = c.Sobrenome
+        });
+        [Test]
+        public void ListaContemNumeroCertoDeClientes() => Assert.AreEqual(1, context.Clientes.Count());
     }
 }

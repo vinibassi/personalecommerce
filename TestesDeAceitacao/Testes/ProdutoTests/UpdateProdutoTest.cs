@@ -39,7 +39,6 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
             var page = new UpdateProdutoPage();
             var id = context.Produto.First().Id;
             //act
-            page.GoToAndLogin();
             page.NavegaToEdit(id);
             page.ModificaProduto(p);
             produto = context.Produto.First();

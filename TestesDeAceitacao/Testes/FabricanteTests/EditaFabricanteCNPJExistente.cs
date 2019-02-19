@@ -44,7 +44,6 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             novoFabricante.CNPJ = f2.CNPJ;
 
             //ACT
-            page.GoToAndLogin();
             page.NavegaToEdit(fabricante1.Id);
             page.ModificaFabricante(novoFabricante);
 

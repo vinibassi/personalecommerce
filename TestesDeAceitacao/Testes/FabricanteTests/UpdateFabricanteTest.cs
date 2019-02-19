@@ -36,7 +36,6 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             var page = new UpdateFabricantePage();
             var id = context.Fabricante.First().Id;
             //act
-            page.GoToAndLogin();
             page.NavegaToEdit(id);
             page.ModificaFabricante(fabricanteEditado);
             context = new WebCadastradorContext(builder.Options);

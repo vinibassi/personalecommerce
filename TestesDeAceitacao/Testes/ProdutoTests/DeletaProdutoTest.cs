@@ -39,7 +39,6 @@ namespace TestesDeAceitacao.Testes.ProdutoTests
             var id = context.Produto.First().Id;
             var page = new DeleteProdutoPage();
             //act
-            page.GoToAndLogin();
             page.NavigateToDeletePage(id);
             page.DeletaFabricante();
         }

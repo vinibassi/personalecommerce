@@ -11,14 +11,6 @@ namespace TestesDeAceitacao.Pages.ProdutoPages
         {
             SetupGlobal.Driver.Navigate().GoToUrl("https://localhost:5001/Produtos/Create");
         }
-        public void GoToAndLogin()
-        {
-            var driver = SetupGlobal.Driver;
-            driver.Navigate().GoToUrl("https://localhost:5001/Identity/Account/Login");
-            driver.FindElement(By.Id("Input_Email")).SendKeys("admin@admin.com");
-            driver.FindElement(By.Id("Input_Password")).SendKeys("Pass@123");
-            driver.FindElement(By.Id("login")).Click();
-        }
         public void Cadastra(Produto novoProduto)
         {
             var driver = SetupGlobal.Driver;

@@ -37,7 +37,6 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             clienteEditado = Generator.ValidClienteViewModel();
             clienteEditado.estadoCivil = EstadoCivil.Casado;
             //act
-            page.GoToAndLogin();
             page.NavegaToEdit(id);
             page.ModificaCliente(clienteEditado);
 

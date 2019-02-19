@@ -30,14 +30,6 @@ namespace TestesDeAceitacao.Pages.FabricantePages
 
             driver.FindElement(By.CssSelector("body > div > div.row > div > form > div:nth-child(5) > input")).Click();
         }
-        public void GoToAndLogin()
-        {
-            var driver = SetupGlobal.Driver;
-            driver.Navigate().GoToUrl("https://localhost:5001/Identity/Account/Login");
-            driver.FindElement(By.Id("Input_Email")).SendKeys("admin@admin.com");
-            driver.FindElement(By.Id("Input_Password")).SendKeys("Pass@123");
-            driver.FindElement(By.Id("login")).Click();
-        }
         public string LeCnpjError()
         {
             var driver = SetupGlobal.Driver;

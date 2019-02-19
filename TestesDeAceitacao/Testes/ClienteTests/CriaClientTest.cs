@@ -31,7 +31,6 @@ namespace TestesDeAceitacao.Testes.ClienteTests
             novoCliente = Generator.ValidClienteViewModel();
             novoCliente.estadoCivil = EstadoCivil.Casado;
             //act
-            page.GoToAndLogin();
             page.Navigate();
             page.Cadastra(novoCliente);
             clienteCadastrado = context.Clientes.FirstOrDefault();

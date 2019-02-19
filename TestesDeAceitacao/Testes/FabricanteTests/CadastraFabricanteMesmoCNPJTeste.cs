@@ -15,7 +15,6 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
         private WebCadastradorContext context;
         private NewFabricantePage page;
         private FabricantesViewModel novoFabricante;
-        private FabricantesController controller;
 
         [OneTimeSetUp]
         public void CadastraFabricante()
@@ -39,7 +38,6 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
             novoFabricante.CNPJ = f.CNPJ;
 
             //act
-            page.GoToAndLogin();
             page.Navigate();
             page.Cadastra(novoFabricante);
         }

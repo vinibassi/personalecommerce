@@ -15,7 +15,6 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
         private WebCadastradorContext context;
         private FabricantesViewModel novoFabricante;
 
-        // private NewFabricantePage page;
         [OneTimeSetUp]
         public void CadastraFabricante()
         {
@@ -30,9 +29,8 @@ namespace TestesDeAceitacao.Testes.FabricanteTests
 
             var page = new NewFabricantePage();
             novoFabricante = Generator.ValidFabricanteViewModel();
+            
             //act
-
-            page.GoToAndLogin();
             page.Navigate();
             page.Cadastra(novoFabricante);
             fabricante = context.Fabricante.FirstOrDefault();
