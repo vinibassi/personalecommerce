@@ -42,7 +42,7 @@ namespace WebCadastrador.Controllers
                 {
                     Preco = produto.Preco,
                     Produto = produto,
-                    Quantidade = 1
+                    Quantidade = Itens.FirstOrDefault().Quantidade
                 });
             return View(new CarrinhoViewModel { Produtos = itens });
         }
