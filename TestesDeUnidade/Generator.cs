@@ -82,6 +82,7 @@ namespace TestesDeUnidade
                           {
                               o.Nome = f.Commerce.ProductName();
                               o.Preco = f.Random.Int(10, 1000)+ 0.03m;
+                              o.FotoUrl = "https://catzone-tcwebsites.netdna-ssl.com/wp-content/uploads/2017/11/unique-cat-names-thumb-200x100.jpg";
                           });
         private static readonly Faker<ProdutoEditViewModel>  validProdutoEditVM = new Faker<ProdutoEditViewModel>()
             .StrictMode(false)

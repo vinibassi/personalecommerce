@@ -6,28 +6,23 @@ namespace WebCadastrador.Models
     {
         public int Id { get; set; }
         public virtual List<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
-        public void AdicionarItens(List<Produto> produtos)
+        public void AdicionarItens(List<(Produto produto, int quantidade)> produtosEQuantidades)
         {
-            foreach (var p in produtos)
+            foreach (var (p, q) in produtosEQuantidades)
             {
-                AdicionarItem(p);
+                AdicionarItem(p, q);
             }
         }
-        public void AdicionarItem(Produto produto)
+        public void AdicionarItem(Produto produto, int quantidade)
         {
             var itemPedido = new ItemPedido()
             {
                 Pedido = this,
                 PrecoUnitario = produto.Preco,
                 Produto = produto,
-                Quantidade = TotalDeItens(1)
+                Quantidade = quantidade
             };
             Itens.Add(itemPedido);
-        }
-        public int TotalDeItens(int qtd)
-        {
-            var novoTotal = Itens.Count + qtd;
-            return novoTotal;
         }
     }
     public class ItemPedido

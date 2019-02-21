@@ -37,7 +37,9 @@ namespace TestesDeUnidade.ProdutoController
             {
                 Id = produto.Id,
                 Nome = produto.Nome,
-                Preco = produto.Preco
+                Preco = produto.Preco,
+                Url = produto.FotoUrl
+                
             });
         }
         [Test]

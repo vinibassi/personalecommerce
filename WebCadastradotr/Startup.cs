@@ -79,6 +79,10 @@ namespace WebCadastradotr
             {
                 app.UseDeveloperExceptionPage();
             }
+            else if (!Env.IsEnvironment("Test"))
+            {
+                app.UseDeveloperExceptionPage();
+            }
             else
             {
                 app.UseExceptionHandler("/Home/Error");

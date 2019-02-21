@@ -13,7 +13,7 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-md-6">
-                Item
+                Produto
             </div>
             <div class="col-md-2 text-center">
                 Preço Unitário
@@ -34,34 +34,34 @@
         {
             count++;
             total += item.Quantidade * item.Preco;
-            <div class="row row-center linha-produto">
-                <div class="col-md-3">
-                    <img src="@item.Produto.FotoUrl" asp-append-version="true" />
-                </div>
-                <div class="col-md-3">@(item.Produto.Nome)</div>
-                <div class="col-md-2 text-center">R$ @(item.Produto.Preco)</div>
-                <div class="col-md-2 text-center">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default">
-                                <span class="glyphicon-minus"></span>
-                            </button>
-                        </span>
-                        <input type="text" value="@(item.Quantidade)"
-                               class="form-control text-center" />
-                        <span class="input-group-btn">
-                            <button class="btn btn-default">
-                                <span class="glyphicon-plus"></span>
-                            </button>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    R$ <span class="pull-right" subtotal>
-                        @(item.Quantidade * item.Preco)
+        <div class="row row-center linha-produto">
+            <div class="col-md-3" id="produtoNome">@(item.Produto.Nome)</div>
+            <div class="col-md-3">
+                <img src="@item.Produto.FotoUrl" asp-append-version="true" />
+            </div>
+            <div class="col-md-2 text-center" id="produtoPreco" value="@item.Produto.Preco">R$ @(item.Produto.Preco)</div>
+            <div class="col-md-2 text-center">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default">
+                            <span class="glyphicon-minus"></span>
+                        </button>
+                    </span>
+                    <input type="text" id="produtoQuantidade" value="@(item.Quantidade)"
+                           class="form-control text-center" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default">
+                            <span class="glyphicon-plus"></span>
+                        </button>
                     </span>
                 </div>
             </div>
+            <div class="col-md-2">
+                R$ <span class="pull-right" subtotal>
+                    @(item.Quantidade * item.Preco)
+                </span>
+            </div>
+        </div>
         }
 
 

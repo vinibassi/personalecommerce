@@ -25,4 +25,8 @@
   <ItemGroup>
     <ProjectReference Include="..\WebCadastradotr\WebCadastrador.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="CarrinhoControllerTests\" />
+  </ItemGroup>
 </Project>
