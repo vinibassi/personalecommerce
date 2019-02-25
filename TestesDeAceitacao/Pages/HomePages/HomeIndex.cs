@@ -14,7 +14,7 @@ namespace TestesDeAceitacao.Pages.HomePages
         }
         public void AdicionarItemAoCarrinho()
         {
-            SetupGlobal.Driver.FindElement(By.CssSelector("#addCart > a")).Click();
+            SetupGlobal.Driver.FindElement(By.CssSelector("#addLink > a")).Click();
         }
     }
 }

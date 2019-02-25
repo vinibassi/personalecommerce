@@ -19,6 +19,7 @@ namespace TestesDeAceitacao.Testes.CarrinhoTests
         private HomeIndex homePage;
         private CarrinhoIndex carrinhoPage;
         private Produto p;
+        private Fabricante f;
 
         [OneTimeSetUp]
         public void Setup()
@@ -30,8 +31,15 @@ namespace TestesDeAceitacao.Testes.CarrinhoTests
 
             context = new WebCadastradorContext(builder.Options);
             context.Produto.Clear();
+            context.Fabricante.Clear();
             context.SaveChanges();
+
+            f = Generator.ValidFabricante();
+            context.Add(f);
+            context.SaveChanges();
+
             p = Generator.ValidProduto();
+            p.Fabricante = f;
             context.Add(p);
             context.SaveChanges();
 

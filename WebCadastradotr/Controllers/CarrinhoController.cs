@@ -36,15 +36,17 @@ namespace WebCadastrador.Controllers
         {
             if (!Itens.Any())
                 return View(new CarrinhoViewModel());
-            var produtos = await Task.WhenAll(Itens.Select(itemCarrinho => produtoRepository.FindProdutoByIdAsync(itemCarrinho.ProdutoId)));
-            var itens = produtos.Where(p => p != null).Select(produto =>
-                new ItemCarrinhoViewModel()
+            var itensCarrinho = await Task.WhenAll(Itens.Select(async itemCarrinho =>
+            {
+                var produto = await produtoRepository.FindProdutoByIdAsync(itemCarrinho.ProdutoId);
+                return new ItemCarrinhoViewModel()
                 {
                     Preco = produto.Preco,
                     Produto = produto,
-                    Quantidade = Itens.FirstOrDefault().Quantidade
-                });
-            return View(new CarrinhoViewModel { Produtos = itens });
+                    Quantidade = itemCarrinho.Quantidade
+                };
+            }));
+            return View(new CarrinhoViewModel { Produtos = itensCarrinho });
         }
 
         [HttpPost]
