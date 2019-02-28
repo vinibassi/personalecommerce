@@ -10,6 +10,7 @@ using WebCadastrador.Models;
 using WebCadastrador.Models.Carrinho;
 using WebCadastrador.Models.Repositories;
 using WebCadastrador.ViewModels;
+using WebCadastradotr;
 
 namespace WebCadastrador.Controllers
 {
@@ -73,6 +74,19 @@ namespace WebCadastrador.Controllers
             pedido.AdicionarItens(produtosEQuantidades.ToList());
             pedido = pedidoRepository.FindById(pedido.Id);
             return View((pedido, user));
+        }
+
+        [Authorize(nameof(AuthPolicies.Delete))]
+        public async Task <IActionResult> PedidosRelatorio()
+        {
+            var itensDoCarrinho = Itens;
+            var produtosEQuantidades = await Task.WhenAll(itensDoCarrinho.Select(async itemDoCarrinho => (await produtoRepository.FindProdutoByIdAsync(itemDoCarrinho.ProdutoId), itemDoCarrinho.Quantidade)));
+            var pedido = new Pedido();
+            pedidoRepository.CriaPedido(pedido);
+            pedido.AdicionarItens(produtosEQuantidades.ToList());
+            pedido = pedidoRepository.FindById(pedido.Id);
+            var itemPedido = pedido.Itens.First();
+            return View((pedido, itemPedido));
         }
 
 

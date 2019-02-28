@@ -29,6 +29,8 @@ namespace WebCadastrador.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            HttpContext.Session.Clear();
+            ClearCookies();
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
@@ -38,6 +40,14 @@ namespace WebCadastrador.Areas.Identity.Pages.Account
             else
             {
                 return Page();
+            }
+        }
+        public void ClearCookies()
+        {
+            var Cookies = HttpContext.Request.Cookies.Keys;
+            foreach (var cookie in Cookies)
+            {
+                HttpContext.Response.Cookies.Delete(nameof(cookie));
             }
         }
     }

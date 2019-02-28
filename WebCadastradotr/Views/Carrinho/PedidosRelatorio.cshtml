@@ -1,0 +1,39 @@
+﻿@using WebCadastrador.Models
+@model (Pedido, ItemPedido)
+@{
+    ViewData["Title"] = "PedidosRelatorio";
+    var (pedido, itemPedido) = Model;
+}
+
+<h2>Relatório do Pedido</h2>
+
+<div>
+    <h4>Pedido</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Id do Pedido
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => pedido.Id)
+        </dd>
+        <dt>
+            Total de Itens Pedidos
+        </dt>
+        <dd>
+            @pedido.Itens.Count()
+        </dd>
+        <dt>
+            Preço Total
+        </dt>
+        @foreach (var item in pedido.Itens)
+        {
+            <dd>
+                @(itemPedido.PrecoUnitario * itemPedido.Quantidade)
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+</div>
+
