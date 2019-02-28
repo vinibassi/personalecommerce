@@ -9,6 +9,10 @@ namespace TestesDeAceitacao.Pages.CarrinhoPages
 {
     class CarrinhoIndex
     {
+        public void FinalizarPedido()
+        {
+            SetupGlobal.Driver.FindElement(By.Id("finalizaPedido")).Click();
+        }
         public List<ItemCarrinhoAdicionado> ItensDoCarrinho
         {
             get

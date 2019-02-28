@@ -1,25 +1,29 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using TestesDeAceitacao.Pages.CarrinhoPages;
 using TestesDeAceitacao.Pages.HomePages;
 using TestesDeUnidade;
 using WebCadastrador.Data;
 using WebCadastrador.Models;
-using WebCadastrador.Models.Carrinho;
 
 namespace TestesDeAceitacao.Testes.CarrinhoTests
 {
+
     [TestFixture]
-    class TestaAddItemToCart
+    class LoginAteFinalizarPedido
     {
         private WebCadastradorContext context;
         private HomeIndex homePage;
         private CarrinhoIndex carrinhoPage;
         private Produto p;
         private Fabricante f;
+        private FinalizaPedidoPage finalizaPedidoPage;
+        private ItemCarrinhoAdicionado itemCarrinho;
 
         [OneTimeSetUp]
         public void Setup()
@@ -43,23 +47,34 @@ namespace TestesDeAceitacao.Testes.CarrinhoTests
             context.Add(p);
             context.SaveChanges();
 
-
             homePage = new HomeIndex();
             carrinhoPage = new CarrinhoIndex();
-            var finalizaPedidoPage = new FinalizaPedidoPage();
+            finalizaPedidoPage = new FinalizaPedidoPage();
             //act
             homePage.DeletaCookies();
             homePage.Navigate();
             homePage.AdicionarItemAoCarrinho();
+            itemCarrinho = carrinhoPage.ItensDoCarrinho.Single();
+            carrinhoPage.FinalizarPedido();
         }
         [Test]
-        public void ItemCarrinhoFoiAdicionado() => carrinhoPage.ItensDoCarrinho.Single().Should().BeEquivalentTo(new ItemCarrinhoAdicionado
-        {
-            Preco = p.Preco,
-            Produto = p.Nome,
-            Quantidade = 1
-        });
+        public void TestaNumeroDeItens() => Assert.AreEqual(1, finalizaPedidoPage.ItensPedidos.Count);
         [Test]
-        public void ListaContemNumeroCertoDeItens() => Assert.AreEqual(1, carrinhoPage.ItensDoCarrinho.Count());
+        public void TestaItemPedidoIgualItemCarrinho()
+        {
+            finalizaPedidoPage.ItensPedidos.Single().Should().BeEquivalentTo(new ItemPedidoAdicionado
+            {
+                Preco = itemCarrinho.Preco,
+                Quantidade = itemCarrinho.Quantidade,
+                Produto = itemCarrinho.Produto
+            });
+        }
+        //[Test]
+        //public void ItemCarrinhoIgualProdutoAdicionado() => itemCarrinho.Should().BeEquivalentTo(new ItemCarrinhoAdicionado
+        //{
+        //    Preco = p.Preco,
+        //    Produto = p.Nome,
+        //    Quantidade = 1
+        //});
     }
 }

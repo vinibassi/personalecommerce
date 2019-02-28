@@ -44,7 +44,7 @@
                     </td>
                     <td>
                         <form asp-controller="Carrinho" asp-action="AddToCart" asp-route-id="@item.Id" method="post" class="addLink">
-                            <a onclick="$(this).closest('form').submit()" href="#">Adicionar</a>
+                            <a id="addItem" onclick="$(this).closest('form').submit()" href="#">Adicionar</a>
                         </form>
                     </td>
                     <td>
