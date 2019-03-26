@@ -1,8 +1,8 @@
 ﻿@using WebCadastrador.Models
-@model (Pedido, ItemPedido)
+@model Pedido
 @{
     ViewData["Title"] = "PedidosRelatorio";
-    var (pedido, itemPedido) = Model;
+    var pedido = Model;
 }
 
 <h2>Relatório do Pedido</h2>
@@ -29,7 +29,7 @@
         @foreach (var item in pedido.Itens)
         {
             <dd>
-                @(itemPedido.PrecoUnitario * itemPedido.Quantidade)
+                @(item.PrecoUnitario * item.Quantidade)
             </dd>
         }
     </dl>

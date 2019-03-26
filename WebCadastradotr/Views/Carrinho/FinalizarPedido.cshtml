@@ -90,6 +90,10 @@
 </table>
 @if (isAdmin)
 {
+    <form asp-controller="Carrinho" asp-action="PedidosRelatorio" asp-route-id="@pedido" method="post" class="criaRelatorio">
+        <a id="relatorioBtn" onclick="$(this).closest('form').submit()" href="#">Relatório de Pedidos</a>
+    </form>
+
     <a class="btn btn-success" asp-action="PedidosRelatorio" id="pedidosRelatorio">
         Relatório de Pedidos
     </a>

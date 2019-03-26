@@ -63,6 +63,26 @@ namespace WebCadastrador.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public IActionResult AddItemButton(int id)
+        {
+            var carrinho = Itens;
+            var item = carrinho.FirstOrDefault(itemCarrinho => itemCarrinho.ProdutoId == id);
+            item.Quantidade++;
+            Itens = carrinho;
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult RemoveItemButton(int id)
+        {
+            var carrinho = Itens;
+            var item = carrinho.FirstOrDefault(itemCarrinho => itemCarrinho.ProdutoId == id);
+            item.Quantidade--;
+            Itens = carrinho;
+            return RedirectToAction(nameof(Index));
+        }
+
         [Authorize]
         public async Task<IActionResult> FinalizarPedido()
         {
@@ -77,16 +97,14 @@ namespace WebCadastrador.Controllers
         }
 
         [Authorize(nameof(AuthPolicies.Delete))]
-        public async Task <IActionResult> PedidosRelatorio()
+        public async Task<IActionResult> PedidosRelatorio(Pedido p)
         {
             var itensDoCarrinho = Itens;
+            var pedido = p;
             var produtosEQuantidades = await Task.WhenAll(itensDoCarrinho.Select(async itemDoCarrinho => (await produtoRepository.FindProdutoByIdAsync(itemDoCarrinho.ProdutoId), itemDoCarrinho.Quantidade)));
-            var pedido = new Pedido();
-            pedidoRepository.CriaPedido(pedido);
             pedido.AdicionarItens(produtosEQuantidades.ToList());
-            pedido = pedidoRepository.FindById(pedido.Id);
-            var itemPedido = pedido.Itens.First();
-            return View((pedido, itemPedido));
+
+            return View(pedido);
         }
 
 

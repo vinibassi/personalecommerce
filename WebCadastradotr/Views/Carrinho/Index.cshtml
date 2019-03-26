@@ -43,18 +43,23 @@
                 <div class="col-md-2 text-center" id="produtoPreco" value="@item.Produto.Preco">R$ @(item.Produto.Preco)</div>
                 <div class="col-md-2 text-center">
                     <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default">
-                                <span class="glyphicon-minus"></span>
-                            </button>
-                        </span>
+                        <div class="input-group-btn">
+                            <form asp-controller="Carrinho" asp-action="RemoveItemButton" asp-route-id="@item.Produto.Id" method="post" class="rmvQtd">
+                                <button class="btn btn-default">
+                                    <span class="glyphicon-minus" id="removeItem"></span>
+                                </button>
+                            </form>
+                        </div>
                         <input type="text" id="produtoQuantidade" value="@(item.Quantidade)"
                                class="form-control text-center" />
-                        <span class="input-group-btn">
-                            <button class="btn btn-default">
-                                <span class="glyphicon-plus"></span>
-                            </button>
-                        </span>
+                        <div class="input-group-btn">
+                            <form asp-controller="Carrinho" asp-action="AddItemButton" asp-route-id="@item.Produto.Id" method="post" class="addQtd">
+                                <button class="btn btn-default">
+                                    <span class="glyphicon-plus" id="addItem"></span>
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -88,10 +93,9 @@
         <div class="pull-right">
             <a class="btn btn-success" @Html.ActionLink("Adicionar mais produtos ao carrinho", "Index", "Home")>
             </a>
-                <a class="btn btn-success" asp-action="FinalizarPedido" id="finalizaPedido">
-                    Finalizar Pedido
-                </a>
+            <a class="btn btn-success" asp-action="FinalizarPedido" id="finalizaPedido">
+                Finalizar Pedido
+            </a>
         </div>
     </div>
 </div>
-
